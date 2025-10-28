@@ -125,18 +125,18 @@
   - [X] 1.6.4: Configurar `LOGOUT_REDIRECT_URL`
   - [X] 1.6.5: Testar logout
 
-- [ ] **Tarefa 1.7: Backend de Autenticação por Email**
-  - [ ] 1.7.1: Criar `EmailBackend` em `accounts/backends.py`
-  - [ ] 1.7.2: Implementar método `authenticate`
-  - [ ] 1.7.3: Configurar `AUTHENTICATION_BACKENDS`
-  - [ ] 1.7.4: Testar autenticação por email
+- [X] **Tarefa 1.7: Backend de Autenticação por Email**
+  - [X] 1.7.1: Criar `EmailBackend` em `accounts/backends.py`
+  - [X] 1.7.2: Implementar método `authenticate`
+  - [X] 1.7.3: Configurar `AUTHENTICATION_BACKENDS`
+  - [X] 1.7.4: Testar autenticação por email
 
-- [ ] **Tarefa 1.8: Testes de Integração**
-  - [ ] 1.8.1: Testar fluxo completo
-  - [ ] 1.8.2: Testar acesso a páginas protegidas
-  - [ ] 1.8.3: Testar logout e redirecionamento
-  - [ ] 1.8.4: Validar mensagens
-  - [ ] 1.8.5: Validar responsividade
+- [X] **Tarefa 1.8: Testes de Integração**
+  - [X] 1.8.1: Testar fluxo completo
+  - [X] 1.8.2: Testar acesso a páginas protegidas
+  - [X] 1.8.3: Testar logout e redirecionamento
+  - [X] 1.8.4: Validar mensagens
+  - [X] 1.8.5: Validar responsividade
 
 ---
 
