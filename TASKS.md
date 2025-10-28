@@ -103,27 +103,27 @@
   - [X] 1.4.11: Incluir URLs em `core/urls.py`
   - [X] 1.4.12: Testar cadastro
 
-- [ ] **Tarefa 1.5: Formulário de Login**
-  - [ ] 1.5.1: Criar `CustomAuthenticationForm`
-  - [ ] 1.5.2: Configurar campo para aceitar email
-  - [ ] 1.5.3: Adicionar classes CSS
-  - [ ] 1.5.4: Criar view `LoginView`
-  - [ ] 1.5.5: Criar template `login.html`
-  - [ ] 1.5.6: Implementar layout
-  - [ ] 1.5.7: Adicionar link "Esqueci minha senha"
-  - [ ] 1.5.8: Adicionar link "Cadastre-se"
-  - [ ] 1.5.9: Configurar redirecionamento
-  - [ ] 1.5.10: Adicionar URL `/login/`
-  - [ ] 1.5.11: Configurar `LOGIN_URL`
-  - [ ] 1.5.12: Configurar `LOGIN_REDIRECT_URL`
-  - [ ] 1.5.13: Testar login
+- [X] **Tarefa 1.5: Formulário de Login**
+  - [X] 1.5.1: Criar `CustomAuthenticationForm`
+  - [X] 1.5.2: Configurar campo para aceitar email
+  - [X] 1.5.3: Adicionar classes CSS
+  - [X] 1.5.4: Criar view `LoginView`
+  - [X] 1.5.5: Criar template `login.html`
+  - [X] 1.5.6: Implementar layout
+  - [X] 1.5.7: Adicionar link "Esqueci minha senha"
+  - [X] 1.5.8: Adicionar link "Cadastre-se"
+  - [X] 1.5.9: Configurar redirecionamento
+  - [X] 1.5.10: Adicionar URL `/login/`
+  - [X] 1.5.11: Configurar `LOGIN_URL`
+  - [X] 1.5.12: Configurar `LOGIN_REDIRECT_URL`
+  - [X] 1.5.13: Testar login
 
-- [ ] **Tarefa 1.6: Funcionalidade de Logout**
-  - [ ] 1.6.1: Criar view `LogoutView`
-  - [ ] 1.6.2: Configurar redirecionamento
-  - [ ] 1.6.3: Adicionar URL `/logout/`
-  - [ ] 1.6.4: Configurar `LOGOUT_REDIRECT_URL`
-  - [ ] 1.6.5: Testar logout
+- [X] **Tarefa 1.6: Funcionalidade de Logout**
+  - [X] 1.6.1: Criar view `LogoutView`
+  - [X] 1.6.2: Configurar redirecionamento
+  - [X] 1.6.3: Adicionar URL `/logout/`
+  - [X] 1.6.4: Configurar `LOGOUT_REDIRECT_URL`
+  - [X] 1.6.5: Testar logout
 
 - [ ] **Tarefa 1.7: Backend de Autenticação por Email**
   - [ ] 1.7.1: Criar `EmailBackend` em `accounts/backends.py`
