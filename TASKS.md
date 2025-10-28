@@ -89,19 +89,19 @@
   - [X] 1.3.9: Configurar URL raiz
   - [X] 1.3.10: Testar em diferentes telas
 
-- [ ] **Tarefa 1.4: Formulário de Cadastro de Usuário**
-  - [ ] 1.4.1: Criar `CustomUserCreationForm`
-  - [ ] 1.4.2: Configurar campos do formulário
-  - [ ] 1.4.3: Adicionar validação de senha
-  - [ ] 1.4.4: Adicionar classes CSS aos widgets
-  - [ ] 1.4.5: Criar view `SignUpView`
-  - [ ] 1.4.6: Criar template `signup.html`
-  - [ ] 1.4.7: Implementar layout do formulário
-  - [ ] 1.4.8: Adicionar mensagens de erro
-  - [ ] 1.4.9: Configurar redirecionamento
-  - [ ] 1.4.10: Adicionar URL `/signup/`
-  - [ ] 1.4.11: Incluir URLs em `core/urls.py`
-  - [ ] 1.4.12: Testar cadastro
+- [X] **Tarefa 1.4: Formulário de Cadastro de Usuário**
+  - [X] 1.4.1: Criar `CustomUserCreationForm`
+  - [X] 1.4.2: Configurar campos do formulário
+  - [X] 1.4.3: Adicionar validação de senha
+  - [X] 1.4.4: Adicionar classes CSS aos widgets
+  - [X] 1.4.5: Criar view `SignUpView`
+  - [X] 1.4.6: Criar template `signup.html`
+  - [X] 1.4.7: Implementar layout do formulário
+  - [X] 1.4.8: Adicionar mensagens de erro
+  - [X] 1.4.9: Configurar redirecionamento
+  - [X] 1.4.10: Adicionar URL `/signup/`
+  - [X] 1.4.11: Incluir URLs em `core/urls.py`
+  - [X] 1.4.12: Testar cadastro
 
 - [ ] **Tarefa 1.5: Formulário de Login**
   - [ ] 1.5.1: Criar `CustomAuthenticationForm`

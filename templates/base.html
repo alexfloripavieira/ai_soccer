@@ -22,6 +22,17 @@
     <div id="app" class="relative flex min-h-screen flex-col">
       {% block header %}{% endblock %}
       <main class="flex-1">
+        {% if messages %}
+          <div class="mx-auto w-full max-w-4xl px-6 pt-8">
+            <div class="space-y-3">
+              {% for message in messages %}
+                <div class="rounded-2xl border border-green-400/40 bg-green-500/10 px-5 py-4 text-sm text-green-200 shadow-lg shadow-green-950/30">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
         {% block content %}{% endblock %}
       </main>
       {% block footer %}{% endblock %}
