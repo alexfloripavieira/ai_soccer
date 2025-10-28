@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-gray-900">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AI Soccer{% endblock %}</title>
+
+  <!-- Fonte Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen text-gray-100 bg-gray-900 antialiased" style="font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';">
+  <div id="app" class="min-h-screen">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
+

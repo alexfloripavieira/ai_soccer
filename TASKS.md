@@ -60,22 +60,22 @@
 ### Sprint 1: Sistema de Autenticação e Landing Page
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 1.1: Configuração do Modelo de Usuário Customizado**
-  - [ ] 1.1.1: Criar modelo `CustomUser` em `accounts/models.py`
-  - [ ] 1.1.2: Configurar `USERNAME_FIELD = 'email'`
-  - [ ] 1.1.3: Adicionar campos `created_at` e `updated_at`
-  - [ ] 1.1.4: Tornar campo `email` obrigatório e único
-  - [ ] 1.1.5: Configurar `AUTH_USER_MODEL` em `settings.py`
-  - [ ] 1.1.6: Criar migração inicial
-  - [ ] 1.1.7: Executar migração
+- [X] **Tarefa 1.1: Configuração do Modelo de Usuário Customizado**
+  - [X] 1.1.1: Criar modelo `CustomUser` em `accounts/models.py`
+  - [X] 1.1.2: Configurar `USERNAME_FIELD = 'email'`
+  - [X] 1.1.3: Adicionar campos `created_at` e `updated_at`
+  - [X] 1.1.4: Tornar campo `email` obrigatório e único
+  - [X] 1.1.5: Configurar `AUTH_USER_MODEL` em `settings.py`
+  - [X] 1.1.6: Criar migração inicial
+  - [X] 1.1.7: Executar migração
 
-- [ ] **Tarefa 1.2: Criação do Template Base**
-  - [ ] 1.2.1: Criar arquivo `templates/base.html`
-  - [ ] 1.2.2: Adicionar carregamento do TailwindCSS
-  - [ ] 1.2.3: Configurar blocos Django
-  - [ ] 1.2.4: Adicionar meta tags responsivas
-  - [ ] 1.2.5: Configurar classes para fundo escuro
-  - [ ] 1.2.6: Adicionar fonte Inter via Google Fonts
+- [X] **Tarefa 1.2: Criação do Template Base**
+  - [X] 1.2.1: Criar arquivo `templates/base.html`
+  - [X] 1.2.2: Adicionar carregamento do TailwindCSS
+  - [X] 1.2.3: Configurar blocos Django
+  - [X] 1.2.4: Adicionar meta tags responsivas
+  - [X] 1.2.5: Configurar classes para fundo escuro
+  - [X] 1.2.6: Adicionar fonte Inter via Google Fonts
 
 - [ ] **Tarefa 1.3: Desenvolvimento da Landing Page**
   - [ ] 1.3.1: Criar view `HomeView` em `accounts/views.py`
