@@ -1,0 +1,30 @@
+{
+  "name": "ai_soccer_project",
+  "version": "1.0.0",
+  "description": "Sistema de Gestão Esportiva baseado em Inteligência Artificial para análise de Performance, Scouting e Business no futebol profissional.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexfloripavieira/ai_soccer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/alexfloripavieira/ai_soccer/issues"
+  },
+  "homepage": "https://github.com/alexfloripavieira/ai_soccer#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
+  }
+}

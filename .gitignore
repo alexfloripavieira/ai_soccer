@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.python-version
+
+# Environments
+.venv/
+venv/
+env/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# Node / Frontend
+node_modules/
+dist/
+.parcel-cache/
+.next/
+.nuxt/
+
+# Tailwind build output
+static/css/output.css
+
+# Editors/OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
