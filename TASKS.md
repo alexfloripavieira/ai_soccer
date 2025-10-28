@@ -77,17 +77,17 @@
   - [X] 1.2.5: Configurar classes para fundo escuro
   - [X] 1.2.6: Adicionar fonte Inter via Google Fonts
 
-- [ ] **Tarefa 1.3: Desenvolvimento da Landing Page**
-  - [ ] 1.3.1: Criar view `HomeView` em `accounts/views.py`
-  - [ ] 1.3.2: Criar template `templates/home.html`
-  - [ ] 1.3.3: Implementar seção hero
-  - [ ] 1.3.4: Adicionar logo "AI Soccer" com gradiente
-  - [ ] 1.3.5: Criar seção de funcionalidades
-  - [ ] 1.3.6: Adicionar ícones ou ilustrações
-  - [ ] 1.3.7: Implementar seção de CTA
-  - [ ] 1.3.8: Garantir responsividade
-  - [ ] 1.3.9: Configurar URL raiz
-  - [ ] 1.3.10: Testar em diferentes telas
+- [X] **Tarefa 1.3: Desenvolvimento da Landing Page**
+  - [X] 1.3.1: Criar view `HomeView` em `accounts/views.py`
+  - [X] 1.3.2: Criar template `templates/home.html`
+  - [X] 1.3.3: Implementar seção hero
+  - [X] 1.3.4: Adicionar logo "AI Soccer" com gradiente
+  - [X] 1.3.5: Criar seção de funcionalidades
+  - [X] 1.3.6: Adicionar ícones ou ilustrações
+  - [X] 1.3.7: Implementar seção de CTA
+  - [X] 1.3.8: Garantir responsividade
+  - [X] 1.3.9: Configurar URL raiz
+  - [X] 1.3.10: Testar em diferentes telas
 
 - [ ] **Tarefa 1.4: Formulário de Cadastro de Usuário**
   - [ ] 1.4.1: Criar `CustomUserCreationForm`

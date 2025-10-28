@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}AI Soccer - Gestão Inteligente do Futebol{% endblock %}
+
+{% block content %}
+<div class="relative overflow-hidden">
+  <section class="relative isolate px-6 pt-24 pb-20 lg:px-8">
+    <div class="absolute inset-0 -z-10 overflow-hidden">
+      <div class="absolute left-1/2 top-[-10rem] h-[32rem] w-[70rem] -translate-x-1/2 bg-gradient-to-tr from-green-500/40 via-blue-500/30 to-purple-600/30 blur-3xl"></div>
+    </div>
+    <div class="mx-auto max-w-4xl text-center">
+      <span class="inline-flex items-center rounded-full bg-slate-800/70 px-4 py-1 text-sm font-medium text-slate-300 ring-1 ring-slate-700/80 ring-offset-0">
+        Plataforma completa para clubes modernos
+      </span>
+      <h1 class="mt-8 text-4xl font-bold tracking-tight text-slate-100 sm:text-5xl">
+        <span class="bg-gradient-to-r from-green-400 via-teal-400 to-blue-500 bg-clip-text text-transparent">
+          AI Soccer
+        </span>
+        eleva a gestão esportiva com dados e inteligência artificial
+      </h1>
+      <p class="mt-6 text-lg leading-7 text-slate-300">
+        Centralize desempenho, scouting e negócios em um único painel intuitivo. Tome decisões rápidas com insights confiáveis e mantenha toda a equipe alinhada em tempo real.
+      </p>
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a href="#recursos" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-200 hover:scale-105 hover:shadow-xl">
+          Conheça os recursos
+        </a>
+        <a href="#contato" class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-8 py-3 text-base font-semibold text-slate-200 transition-all duration-200 hover:border-green-400 hover:text-green-300">
+          Fale com nossa equipe
+        </a>
+      </div>
+    </div>
+    <div class="mx-auto mt-16 max-w-5xl">
+      <div class="grid gap-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-blue-900/30 ring-1 ring-slate-800 backdrop-blur sm:grid-cols-3">
+        <div class="flex flex-col items-center text-center">
+          <span class="text-4xl font-bold text-green-400">12x</span>
+          <p class="mt-2 text-sm text-slate-400">Mais agilidade nas decisões técnicas</p>
+        </div>
+        <div class="flex flex-col items-center text-center">
+          <span class="text-4xl font-bold text-blue-400">+35%</span>
+          <p class="mt-2 text-sm text-slate-400">Melhora no monitoramento de atletas</p>
+        </div>
+        <div class="flex flex-col items-center text-center">
+          <span class="text-4xl font-bold text-teal-300">24/7</span>
+          <p class="mt-2 text-sm text-slate-400">Acesso seguro em qualquer dispositivo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recursos" class="px-6 py-20 lg:px-8">
+    <div class="mx-auto max-w-5xl text-center">
+      <h2 class="text-3xl font-semibold text-slate-100 sm:text-4xl">Tudo que sua comissão precisa em um só lugar</h2>
+      <p class="mt-4 text-base text-slate-400">
+        Organize dados de desempenho, acompanhe scouts e alinhe decisões estratégicas com toda a equipe em tempo real.
+      </p>
+    </div>
+    <div class="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-green-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10 text-green-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5l6.75 6.75L21 7.5" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Performance em Tempo Real</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Integre dados de treinos, cargas, bem-estar e relatórios físicos para acompanhar a evolução de cada atleta com transparência.
+        </p>
+      </article>
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-blue-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v-2.25A3.75 3.75 0 0 0 12 11.25h-1.5" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 6.75h1.5A3.75 3.75 0 0 1 12 10.5v7.5" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 21h-15" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Scouting Inteligente</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Registre avaliações, compare atletas observados e mantenha o histórico das oportunidades em um pipeline visual e organizado.
+        </p>
+      </article>
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-teal-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 5.25h15M4.5 18.75h15M4.5 5.25v13.5M19.5 5.25v13.5" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.75h6M9 14.25h6" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Gestão de Negócios</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Controle contratos, negociações e indicadores financeiros com transparência e colaboração entre departamentos.
+        </p>
+      </article>
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-green-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10 text-green-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3 1.5" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Alertas Inteligentes</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Receba notificações automáticas sobre risco de lesão, performance fora da curva e oportunidades críticas de mercado.
+        </p>
+      </article>
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-blue-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2.25 2.25L9 9" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9l2.25 2.25L21 6" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 18l6-6 4.5 4.5L21 9" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Fluxos Colaborativos</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Defina processos visuais para cada área, acompanhe responsáveis e garanta que nenhuma atividade fique sem acompanhamento.
+        </p>
+      </article>
+      <article class="group relative rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-900/40 transition-all duration-200 hover:-translate-y-1 hover:border-purple-400/60">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-300">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 9h12" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Insights com IA</h3>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Utilize modelos preditivos para identificar talentos, prevenir lesões e planejar investimentos com maior precisão.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="px-6 pb-20 lg:px-8">
+    <div class="mx-auto max-w-6xl rounded-3xl bg-gradient-to-r from-green-500/80 via-teal-500/80 to-blue-600/80 p-1 shadow-2xl shadow-blue-900/40">
+      <div class="grid gap-8 rounded-3xl bg-slate-950/90 px-8 py-12 sm:px-12 lg:grid-cols-2 lg:items-center">
+        <div>
+          <h2 class="text-3xl font-semibold text-slate-50">Resultados que transformam o vestiário</h2>
+          <p class="mt-4 text-base text-slate-300">
+            "Desde que implementamos o AI Soccer, gerenciar o elenco ficou muito mais simples. Os relatórios chegam antes da reunião começar e conseguimos ajustar o treino em minutos."</p>
+          <p class="mt-4 text-sm font-medium text-slate-200">— Rodrigo Lima, Diretor de Performance</p>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-lg">
+          <dl class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <dt class="text-sm text-slate-400">Tempo de análise</dt>
+              <dd class="mt-2 text-3xl font-semibold text-slate-100">-45%</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate-400">Retorno sobre investimento</dt>
+              <dd class="mt-2 text-3xl font-semibold text-slate-100">+3.2x</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate-400">Uso diário</dt>
+              <dd class="mt-2 text-3xl font-semibold text-slate-100">92%</dd>
+            </div>
+            <div>
+              <dt class="text-sm text-slate-400">Satisfação</dt>
+              <dd class="mt-2 text-3xl font-semibold text-slate-100">NPS 68</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" class="px-6 pb-24 lg:px-8">
+    <div class="mx-auto max-w-5xl rounded-3xl border border-slate-800 bg-slate-900/80 px-8 py-16 text-center shadow-xl">
+      <h2 class="text-3xl font-semibold text-slate-100">Pronto para mudar a forma como seu clube trabalha?</h2>
+      <p class="mt-4 text-base text-slate-400">
+        Solicite uma demonstração personalizada e descubra como o AI Soccer pode acelerar os resultados da sua equipe técnica e diretiva.
+      </p>
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+        <a href="mailto:contato@aisoccer.com" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-8 py-3 text-base font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105">
+          Agendar demonstração
+        </a>
+        <a href="#" class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-8 py-3 text-base font-semibold text-slate-200 transition-all duration-200 hover:border-green-400 hover:text-green-300">
+          Baixar material
+        </a>
+      </div>
+      <p class="mt-8 text-xs uppercase tracking-widest text-slate-500">Seguro · Multiplataforma · Suporte dedicado</p>
+    </div>
+  </section>
+</div>
+{% endblock %}

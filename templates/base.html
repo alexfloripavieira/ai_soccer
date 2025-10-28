@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-gray-900">
+{% load static %}
+<html lang="pt-BR" class="h-full bg-slate-950">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0f172a">
   <title>{% block title %}AI Soccer{% endblock %}</title>
 
-  <!-- Fonte Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  {% load static %}
   <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
-  {% block extra_head %}{% endblock %}
+  {% block extra_css %}{% endblock %}
 </head>
-<body class="min-h-screen text-gray-100 bg-gray-900 antialiased" style="font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';">
-  <div id="app" class="min-h-screen">
-    {% block content %}{% endblock %}
+<body class="min-h-screen bg-slate-950 text-slate-100 antialiased" style="font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';">
+  <div class="relative min-h-screen bg-slate-900">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-blue-500/10"></div>
+    <div id="app" class="relative flex min-h-screen flex-col">
+      {% block header %}{% endblock %}
+      <main class="flex-1">
+        {% block content %}{% endblock %}
+      </main>
+      {% block footer %}{% endblock %}
+    </div>
   </div>
 
-  {% block extra_scripts %}{% endblock %}
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
-
