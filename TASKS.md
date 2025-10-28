@@ -49,11 +49,11 @@
   - [X] 0.6.8: Executar build inicial do CSS
   - [X] 0.6.9: Verificar se `output.css` foi gerado
 
-- [ ] **Tarefa 0.7: Configuração do Git**
-  - [ ] 0.7.1: Inicializar repositório Git
-  - [ ] 0.7.2: Criar arquivo `.gitignore`
-  - [ ] 0.7.3: Adicionar padrões ao `.gitignore`
-  - [ ] 0.7.4: Fazer commit inicial
+- [x] **Tarefa 0.7: Configuração do Git**
+  - [x] 0.7.1: Inicializar repositório Git
+  - [x] 0.7.2: Criar arquivo `.gitignore`
+  - [x] 0.7.3: Adicionar padrões ao `.gitignore`
+  - [x] 0.7.4: Fazer commit inicial
 
 ---
 
