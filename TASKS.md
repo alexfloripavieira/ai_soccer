@@ -143,46 +143,46 @@
 ### Sprint 2: Dashboard Principal e Navegação
 **Duração**: 1 semana
 
-- [ ] **Tarefa 2.1: Criação do Template Base do Dashboard**
-  - [ ] 2.1.1: Criar `templates/dashboard/base_dashboard.html`
-  - [ ] 2.1.2: Implementar sidebar fixa
-  - [ ] 2.1.3: Adicionar logo no topo da sidebar
-  - [ ] 2.1.4: Implementar área de conteúdo principal
-  - [ ] 2.1.5: Adicionar navbar superior
-  - [ ] 2.1.6: Adicionar botão de logout
-  - [ ] 2.1.7: Implementar menu mobile
-  - [ ] 2.1.8: Adicionar classes responsivas
-  - [ ] 2.1.9: Testar navegação
+- [X] **Tarefa 2.1: Criação do Template Base do Dashboard**
+  - [X] 2.1.1: Criar `templates/dashboard/base_dashboard.html`
+  - [X] 2.1.2: Implementar sidebar fixa
+  - [X] 2.1.3: Adicionar logo no topo da sidebar
+  - [X] 2.1.4: Implementar área de conteúdo principal
+  - [X] 2.1.5: Adicionar navbar superior
+  - [X] 2.1.6: Adicionar botão de logout
+  - [X] 2.1.7: Implementar menu mobile
+  - [X] 2.1.8: Adicionar classes responsivas
+  - [X] 2.1.9: Testar navegação
 
-- [ ] **Tarefa 2.2: Dashboard Principal (Home)**
-  - [ ] 2.2.1: Criar view `DashboardView`
-  - [ ] 2.2.2: Criar template `dashboard/home.html`
-  - [ ] 2.2.3: Implementar seção de boas-vindas
-  - [ ] 2.2.4: Adicionar cards para módulos
-  - [ ] 2.2.5: Criar seção de resumo geral
-  - [ ] 2.2.6: Adicionar grid responsivo
-  - [ ] 2.2.7: Implementar hover effects
-  - [ ] 2.2.8: Adicionar URL `/dashboard/`
-  - [ ] 2.2.9: Testar acesso ao dashboard
-  - [ ] 2.2.10: Validar redirecionamento
+- [X] **Tarefa 2.2: Dashboard Principal (Home)**
+  - [X] 2.2.1: Criar view `DashboardView`
+  - [X] 2.2.2: Criar template `dashboard/home.html`
+  - [X] 2.2.3: Implementar seção de boas-vindas
+  - [X] 2.2.4: Adicionar cards para módulos
+  - [X] 2.2.5: Criar seção de resumo geral
+  - [X] 2.2.6: Adicionar grid responsivo
+  - [X] 2.2.7: Implementar hover effects
+  - [X] 2.2.8: Adicionar URL `/dashboard/`
+  - [X] 2.2.9: Testar acesso ao dashboard
+  - [X] 2.2.10: Validar redirecionamento
 
-- [ ] **Tarefa 2.3: Componente de Navegação Reutilizável**
-  - [ ] 2.3.1: Criar `templates/components/sidebar.html`
-  - [ ] 2.3.2: Implementar lógica de item ativo
-  - [ ] 2.3.3: Adicionar ícones aos itens
-  - [ ] 2.3.4: Criar `templates/components/navbar.html`
-  - [ ] 2.3.5: Implementar dropdown de usuário
-  - [ ] 2.3.6: Integrar componentes
-  - [ ] 2.3.7: Testar navegação
+- [X] **Tarefa 2.3: Componente de Navegação Reutilizável**
+  - [X] 2.3.1: Criar `templates/components/sidebar.html`
+  - [X] 2.3.2: Implementar lógica de item ativo
+  - [X] 2.3.3: Adicionar ícones aos itens
+  - [X] 2.3.4: Criar `templates/components/navbar.html`
+  - [X] 2.3.5: Implementar dropdown de usuário
+  - [X] 2.3.6: Integrar componentes
+  - [X] 2.3.7: Testar navegação
 
-- [ ] **Tarefa 2.4: Página de Perfil do Usuário**
-  - [ ] 2.4.1: Criar view `ProfileView`
-  - [ ] 2.4.2: Criar template `accounts/profile.html`
-  - [ ] 2.4.3: Exibir informações do usuário
-  - [ ] 2.4.4: Adicionar botão "Editar Perfil"
-  - [ ] 2.4.5: Adicionar URL `/profile/`
-  - [ ] 2.4.6: Adicionar link no navbar
-  - [ ] 2.4.7: Testar visualização
+- [X] **Tarefa 2.4: Página de Perfil do Usuário**
+  - [X] 2.4.1: Criar view `ProfileView`
+  - [X] 2.4.2: Criar template `accounts/profile.html`
+  - [X] 2.4.3: Exibir informações do usuário
+  - [X] 2.4.4: Adicionar botão "Editar Perfil"
+  - [X] 2.4.5: Adicionar URL `/profile/`
+  - [X] 2.4.6: Adicionar link no navbar
+  - [X] 2.4.7: Testar visualização
 
 ---
 

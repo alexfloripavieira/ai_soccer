@@ -1,14 +1,15 @@
 """Account views."""
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib.auth.views import LogoutView as AuthLogoutView
 
-from .forms import CustomAuthenticationForm, CustomUserCreationForm
+from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProfileUpdateForm
 
 
 class HomeView(TemplateView):
@@ -39,9 +40,6 @@ class LoginView(SuccessMessageMixin, AuthLoginView):
         messages.success(self.request, self.success_message)
         return response
 
-    def get_success_url(self):
-        return reverse_lazy('home')
-
 
 class LogoutView(AuthLogoutView):
     """Ends the session and redirects to landing page."""
@@ -56,3 +54,43 @@ class LogoutView(AuthLogoutView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    """Protected dashboard view accessible only to authenticated users."""
+
+    template_name = 'dashboard/home.html'
+    login_url = '/login/'
+
+    def get_context_data(self, **kwargs):
+        """Add user-specific data to the dashboard context."""
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    """Display current user profile summary."""
+
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        full_name = ' '.join(part for part in [user.first_name, user.last_name] if part)
+        context['profile_full_name'] = full_name or user.email
+        return context
+
+
+class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Allow users to update basic profile information."""
+
+    form_class = ProfileUpdateForm
+    template_name = 'accounts/profile_edit.html'
+    success_message = 'Perfil atualizado com sucesso!'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:profile')

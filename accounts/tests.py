@@ -45,7 +45,7 @@ class AuthFlowTests(TestCase):
             follow=True,
         )
 
-        self.assertRedirects(response, self.home_url, status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse('accounts:dashboard'), status_code=302, target_status_code=200)
         self.assertIn(SESSION_KEY, self.client.session)
 
         messages = list(response.context['messages'])
@@ -80,3 +80,79 @@ class AuthFlowTests(TestCase):
 
         self.assertContains(signup_response, 'lg:grid-cols-2')
         self.assertContains(login_response, 'lg:grid-cols-2')
+
+    def test_navbar_for_anonymous_user(self):
+        response = self.client.get(self.home_url)
+
+        self.assertContains(response, 'Entrar')
+        self.assertContains(response, 'Criar conta')
+
+    def test_navbar_for_authenticated_user(self):
+        user = get_user_model().objects.create_user(
+            email='nav@example.com',
+            password='SenhaSegura123',
+            first_name='Nav',
+            last_name='User',
+        )
+        self.client.login(email=user.email, password='SenhaSegura123')
+
+        response = self.client.get(self.home_url)
+
+        self.assertContains(response, 'Meu perfil')
+        self.assertContains(response, 'Sair')
+
+    def test_profile_view_requires_login(self):
+        response = self.client.get(reverse('accounts:profile'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('accounts:login'), response.url)
+
+    def test_profile_view_shows_user_details(self):
+        user = get_user_model().objects.create_user(
+            email='profile@example.com',
+            password='SenhaSegura123',
+            first_name='Perfil',
+            last_name='Teste',
+        )
+        self.client.login(email=user.email, password='SenhaSegura123')
+
+        response = self.client.get(reverse('accounts:profile'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Perfil Teste')
+        self.assertContains(response, 'Editar perfil')
+        self.assertContains(response, 'profile@example.com')
+
+    def test_profile_edit_requires_login(self):
+        response = self.client.get(reverse('accounts:profile-edit'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('accounts:login'), response.url)
+
+    def test_profile_edit_updates_data(self):
+        user = get_user_model().objects.create_user(
+            email='update@example.com',
+            password='SenhaSegura123',
+            first_name='Nome',
+            last_name='Antigo',
+        )
+        self.client.login(email=user.email, password='SenhaSegura123')
+
+        response = self.client.post(
+            reverse('accounts:profile-edit'),
+            {
+                'first_name': 'Nome Atualizado',
+                'last_name': 'Novo',
+                'email': 'update@example.com',
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse('accounts:profile'), status_code=302, target_status_code=200)
+
+        user.refresh_from_db()
+        self.assertEqual(user.first_name, 'Nome Atualizado')
+        self.assertEqual(user.last_name, 'Novo')
+
+        messages = list(response.context['messages'])
+        self.assertTrue(any('Perfil atualizado com sucesso' in str(message) for message in messages))

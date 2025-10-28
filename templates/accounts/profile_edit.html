@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil - AI Soccer{% endblock %}
+
+{% block content %}
+<section class="px-6 py-12 lg:px-10">
+  <div class="mx-auto max-w-4xl rounded-3xl border border-slate-800 bg-slate-950/85 p-8 shadow-2xl shadow-slate-950/40 backdrop-blur">
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold text-slate-100">Editar perfil</h1>
+        <p class="mt-2 text-sm text-slate-400">Atualize suas informações pessoais para personalizar sua experiência.</p>
+      </div>
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-blue-500 text-xl font-semibold text-white shadow-lg shadow-green-500/40">
+        {{ request.user.first_name|default:request.user.email|first|upper }}
+      </span>
+    </div>
+
+    <form method="post" class="space-y-8">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <ul class="space-y-1">
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <div class="grid gap-6 md:grid-cols-2">
+        {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-semibold text-slate-200">
+              {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+              <ul class="mt-2 space-y-1 text-xs text-red-300">
+                {% for error in field.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <a href="{% url 'accounts:profile' %}" class="inline-flex items-center justify-center rounded-xl border border-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:text-slate-100">
+          Cancelar
+        </a>
+        <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-green-500/30 transition-all duration-150 hover:shadow-xl">
+          Salvar alterações
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

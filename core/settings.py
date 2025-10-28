@@ -66,6 +66,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.navigation",
             ],
         },
     },
@@ -134,7 +135,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Authentication redirects
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'accounts:dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Authentication backends
