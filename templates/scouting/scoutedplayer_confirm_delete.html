@@ -1,0 +1,70 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Remover {{ object.name }} - AI Soccer{% endblock %}
+
+{% block page_title %}Remover Jogador{% endblock %}
+
+{% block dashboard_content %}
+<div class="mx-auto max-w-3xl space-y-6">
+  <div class="rounded-2xl border border-red-500/30 bg-red-500/5 p-6 shadow-lg shadow-red-900/40">
+    <div class="flex items-start gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-500/20 text-red-300">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15.75h.007v.008H12Zm9.013-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h2 class="text-xl font-semibold text-red-200">Tem certeza que deseja remover este jogador?</h2>
+        <p class="mt-2 text-sm text-red-100/80">
+          Esta ação irá remover todas as informações salvas para <strong class="font-semibold">{{ object.name }}</strong> do módulo de scouting.
+          Confirme apenas se o jogador não deve mais ser acompanhado.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+    <dl class="grid gap-4 text-sm text-slate-300 md:grid-cols-2">
+      <div>
+        <dt class="text-xs uppercase text-slate-500">Jogador</dt>
+        <dd class="mt-1 text-base font-semibold text-slate-100">{{ object.name }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase text-slate-500">Status atual</dt>
+        <dd class="mt-1">
+          <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ object.status_badge_class }}">
+            {{ object.get_status_display }}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase text-slate-500">Clube</dt>
+        <dd class="mt-1">{{ object.current_club|default:'Sem clube informado' }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase text-slate-500">Valor de mercado</dt>
+        <dd class="mt-1">
+          {% if object.market_value %}
+            R$ {{ object.market_value|floatformat:2 }}
+          {% else %}
+            <span class="text-slate-500">Não informado</span>
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <form method="post" class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+    {% csrf_token %}
+    <a href="{% url 'scouting:player_detail' object.pk %}"
+       class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+      Cancelar
+    </a>
+    <button type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600/90 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-900/40 transition-all duration-150 hover:bg-red-600">
+      Confirmar exclusão
+    </button>
+  </form>
+</div>
+{% endblock %}

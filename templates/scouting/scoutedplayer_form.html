@@ -1,0 +1,78 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}{% if object %}Editar Jogador{% else %}Novo Jogador Observado{% endif %} - AI Soccer{% endblock %}
+
+{% block page_title %}{% if object %}Editar Jogador{% else %}Novo Jogador{% endif %}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mx-auto max-w-4xl space-y-6">
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+    <div class="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-100">
+          {% if object %}
+            Atualizar informações do jogador
+          {% else %}
+            Cadastro de novo talento observado
+          {% endif %}
+        </h2>
+        <p class="text-sm text-slate-400">Preencha os dados coletados pela equipe de scouting</p>
+      </div>
+      <a href="{% url 'scouting:player_list' %}"
+         class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+        Voltar para lista
+      </a>
+    </div>
+
+    <form method="post"
+          enctype="multipart/form-data"
+          class="space-y-6">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="grid gap-6 md:grid-cols-2">
+        {% for field in form.visible_fields %}
+          <div class="{% if field.name == 'notes' %}md:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-300">
+              {{ field.label }}
+              {% if field.field.required %}
+                <span class="text-red-400">*</span>
+              {% endif %}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+              <p class="mt-1 text-xs text-slate-500">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+              <p class="mt-2 text-xs text-red-300">{{ field.errors|striptags }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <a href="{% url 'scouting:player_list' %}"
+           class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+          Cancelar
+        </a>
+        <button type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-green-900/50 transition-all duration-150 hover:shadow-xl">
+          {% if object %}Salvar alterações{% else %}Cadastrar jogador{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  {% if object and object.photo %}
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+      <h3 class="text-lg font-semibold text-slate-100">Foto atual</h3>
+      <p class="mt-1 text-sm text-slate-400">Pré-visualização da imagem cadastrada.</p>
+      <img src="{{ object.photo.url }}" alt="Foto do jogador {{ object.name }}" class="mt-4 h-60 w-full rounded-xl object-cover object-center">
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

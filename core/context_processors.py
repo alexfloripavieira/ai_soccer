@@ -14,6 +14,8 @@ def navigation(request):
 
     performance_list_url = reverse('performance:athlete_list')
     performance_create_url = reverse('performance:athlete_create')
+    scouted_player_list_url = reverse('scouting:player_list')
+    scouted_player_create_url = reverse('scouting:player_create')
 
     sidebar_items: List[Dict[str, Any]] = [
         {
@@ -56,9 +58,22 @@ def navigation(request):
         },
         {
             'label': 'Scouting',
-            'href': '/scouting/',
+            'href': scouted_player_list_url,
             'icon': 'radar',
             'pattern': '/scouting/',
+            'children': [
+                {
+                    'label': 'Jogadores observados',
+                    'href': scouted_player_list_url,
+                    'pattern': '/scouting/jogadores/',
+                    'exclude_patterns': ['/scouting/jogadores/novo/'],
+                },
+                {
+                    'label': 'Cadastrar jogador',
+                    'href': scouted_player_create_url,
+                    'pattern': '/scouting/jogadores/novo/',
+                },
+            ],
         },
         {
             'label': 'Business',

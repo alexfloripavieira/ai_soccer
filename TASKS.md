@@ -408,50 +408,52 @@
 ### Sprint 6: Módulo de Scouting - Jogadores Observados
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 6.1: Modelo de Jogador Observado**
-  - [ ] 6.1.1: Criar modelo `ScoutedPlayer` em `scouting/models.py`
-  - [ ] 6.1.2: Adicionar campo `name` (CharField)
-  - [ ] 6.1.3: Adicionar campo `birth_date` (DateField)
-  - [ ] 6.1.4: Adicionar campo `nationality` (CharField)
-  - [ ] 6.1.5: Adicionar choices para `position`
-  - [ ] 6.1.6: Adicionar campo `current_club` (CharField)
-  - [ ] 6.1.7: Adicionar campo `market_value` (DecimalField, opcional)
-  - [ ] 6.1.8: Adicionar campo `notes` (TextField)
-  - [ ] 6.1.9: Adicionar choices para `status` (MONITORANDO, INTERESSADO, NEGOCIANDO)
-  - [ ] 6.1.10: Adicionar campo `photo` (ImageField, opcional)
-  - [ ] 6.1.11: Adicionar campos de auditoria
-  - [ ] 6.1.12: Adicionar campo `created_by`
-  - [ ] 6.1.13: Criar método `age()`
-  - [ ] 6.1.14: Criar método `__str__`
-  - [ ] 6.1.15: Configurar Meta
-  - [ ] 6.1.16: Criar e aplicar migrações
-  - [ ] 6.1.17: Registrar no admin
+- [X] Sprint 6 concluída
 
-- [ ] **Tarefa 6.2: CRUD de Jogadores Observados**
-  - [ ] 6.2.1: Criar `ScoutedPlayerForm`
-  - [ ] 6.2.2: Configurar campos e validações
-  - [ ] 6.2.3: Adicionar classes CSS
-  - [ ] 6.2.4: Criar view `ScoutedPlayerListView`
-  - [ ] 6.2.5: Criar template de listagem
-  - [ ] 6.2.6: Implementar busca por nome e clube
-  - [ ] 6.2.7: Implementar filtro por posição
-  - [ ] 6.2.8: Implementar filtro por status
-  - [ ] 6.2.9: Adicionar ordenação por valor de mercado
-  - [ ] 6.2.10: Criar view `ScoutedPlayerCreateView`
-  - [ ] 6.2.11: Criar template de formulário
-  - [ ] 6.2.12: Implementar upload de foto
-  - [ ] 6.2.13: Criar view `ScoutedPlayerDetailView`
-  - [ ] 6.2.14: Criar template de detalhes
-  - [ ] 6.2.15: Criar views de edição e exclusão
-  - [ ] 6.2.16: Adicionar URLs em `scouting/urls.py`
-  - [ ] 6.2.17: Incluir URLs em `core/urls.py`
-  - [ ] 6.2.18: Testar CRUD completo
+- [X] **Tarefa 6.1: Modelo de Jogador Observado**
+  - [X] 6.1.1: Criar modelo `ScoutedPlayer` em `scouting/models.py`
+  - [X] 6.1.2: Adicionar campo `name` (CharField)
+  - [X] 6.1.3: Adicionar campo `birth_date` (DateField)
+  - [X] 6.1.4: Adicionar campo `nationality` (CharField)
+  - [X] 6.1.5: Adicionar choices para `position`
+  - [X] 6.1.6: Adicionar campo `current_club` (CharField)
+  - [X] 6.1.7: Adicionar campo `market_value` (DecimalField, opcional)
+  - [X] 6.1.8: Adicionar campo `notes` (TextField)
+  - [X] 6.1.9: Adicionar choices para `status` (MONITORANDO, INTERESSADO, NEGOCIANDO)
+  - [X] 6.1.10: Adicionar campo `photo` (ImageField, opcional)
+  - [X] 6.1.11: Adicionar campos de auditoria
+  - [X] 6.1.12: Adicionar campo `created_by`
+  - [X] 6.1.13: Criar método `age()`
+  - [X] 6.1.14: Criar método `__str__`
+  - [X] 6.1.15: Configurar Meta
+  - [X] 6.1.16: Criar e aplicar migrações
+  - [X] 6.1.17: Registrar no admin
 
-- [ ] **Tarefa 6.3: Integração com Menu**
-  - [ ] 6.3.1: Adicionar item "Scouting" no menu
-  - [ ] 6.3.2: Criar submenu "Jogadores Observados"
-  - [ ] 6.3.3: Atualizar lógica de highlight
-  - [ ] 6.3.4: Testar navegação
+- [X] **Tarefa 6.2: CRUD de Jogadores Observados**
+  - [X] 6.2.1: Criar `ScoutedPlayerForm`
+  - [X] 6.2.2: Configurar campos e validações
+  - [X] 6.2.3: Adicionar classes CSS
+  - [X] 6.2.4: Criar view `ScoutedPlayerListView`
+  - [X] 6.2.5: Criar template de listagem
+  - [X] 6.2.6: Implementar busca por nome e clube
+  - [X] 6.2.7: Implementar filtro por posição
+  - [X] 6.2.8: Implementar filtro por status
+  - [X] 6.2.9: Adicionar ordenação por valor de mercado
+  - [X] 6.2.10: Criar view `ScoutedPlayerCreateView`
+  - [X] 6.2.11: Criar template de formulário
+  - [X] 6.2.12: Implementar upload de foto
+  - [X] 6.2.13: Criar view `ScoutedPlayerDetailView`
+  - [X] 6.2.14: Criar template de detalhes
+  - [X] 6.2.15: Criar views de edição e exclusão
+  - [X] 6.2.16: Adicionar URLs em `scouting/urls.py`
+  - [X] 6.2.17: Incluir URLs em `core/urls.py`
+  - [X] 6.2.18: Testar CRUD completo
+
+- [X] **Tarefa 6.3: Integração com Menu**
+  - [X] 6.3.1: Adicionar item "Scouting" no menu
+  - [X] 6.3.2: Criar submenu "Jogadores Observados"
+  - [X] 6.3.3: Atualizar lógica de highlight
+  - [X] 6.3.4: Testar navegação
 
 ---
 
