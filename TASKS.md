@@ -524,27 +524,29 @@
 ### Sprint 8: Módulo de Scouting - Comparação de Jogadores
 **Duração**: 1 semana
 
-- [ ] **Tarefa 8.1: Funcionalidade de Comparação**
-  - [ ] 8.1.1: Criar view `PlayerComparisonView`
-  - [ ] 8.1.2: Adicionar parâmetros para receber IDs de jogadores
-  - [ ] 8.1.3: Validar: máximo 3 jogadores para comparar
-  - [ ] 8.1.4: Buscar dados dos jogadores
-  - [ ] 8.1.5: Buscar última avaliação de cada jogador
-  - [ ] 8.1.6: Criar template `player_comparison.html`
-  - [ ] 8.1.7: Implementar tabela comparativa lado a lado
-  - [ ] 8.1.8: Exibir dados pessoais
-  - [ ] 8.1.9: Exibir scores técnicos
-  - [ ] 8.1.10: Criar gráfico radar comparativo
-  - [ ] 8.1.11: Destacar melhor jogador em cada métrica
-  - [ ] 8.1.12: Adicionar URL `/scouting/compare/`
-  - [ ] 8.1.13: Testar comparação
+- [X] **Tarefa 8.1: Funcionalidade de Comparação**
+  - [X] 8.1.1: Criar view `PlayerComparisonView`
+  - [X] 8.1.2: Adicionar parâmetros para receber IDs de jogadores
+  - [X] 8.1.3: Validar: máximo 3 jogadores para comparar
+  - [X] 8.1.4: Buscar dados dos jogadores
+  - [X] 8.1.5: Buscar última avaliação de cada jogador
+  - [X] 8.1.6: Criar template `player_comparison.html`
+  - [X] 8.1.7: Implementar tabela comparativa lado a lado
+  - [X] 8.1.8: Exibir dados pessoais
+  - [X] 8.1.9: Exibir scores técnicos
+  - [X] 8.1.10: Criar gráfico radar comparativo
+  - [X] 8.1.11: Destacar melhor jogador em cada métrica
+  - [X] 8.1.12: Adicionar URL `/scouting/compare/`
+  - [X] 8.1.13: Testar comparação
 
-- [ ] **Tarefa 8.2: Interface de Seleção**
-  - [ ] 8.2.1: Adicionar checkboxes na listagem de jogadores
-  - [ ] 8.2.2: Adicionar botão "Comparar Selecionados"
-  - [ ] 8.2.3: Implementar JavaScript para validação
-  - [ ] 8.2.4: Implementar envio via GET para página de comparação
-  - [ ] 8.2.5: Testar seleção e redirecionamento
+- [X] **Tarefa 8.2: Interface de Seleção**
+  - [X] 8.2.1: Adicionar checkboxes na listagem de jogadores
+  - [X] 8.2.2: Adicionar botão "Comparar Selecionados"
+  - [X] 8.2.3: Implementar JavaScript para validação
+  - [X] 8.2.4: Implementar envio via GET para página de comparação
+  - [X] 8.2.5: Testar seleção e redirecionamento
+
+- [X] Sprint 8 concluída
 
 ---
 

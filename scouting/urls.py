@@ -3,6 +3,7 @@
 from django.urls import path
 
 from scouting.views import (
+    PlayerComparisonView,
     ScoutedPlayerCreateView,
     ScoutedPlayerDeleteView,
     ScoutedPlayerDetailView,
@@ -20,6 +21,7 @@ app_name = 'scouting'
 
 urlpatterns = [
     path('dashboard/', ScoutingDashboardView.as_view(), name='dashboard'),
+    path('compare/', PlayerComparisonView.as_view(), name='player_compare'),
     path('jogadores/', ScoutedPlayerListView.as_view(), name='player_list'),
     path('jogadores/novo/', ScoutedPlayerCreateView.as_view(), name='player_create'),
     path('jogadores/<int:pk>/', ScoutedPlayerDetailView.as_view(), name='player_detail'),

@@ -1,0 +1,212 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Comparação de Jogadores - AI Soccer{% endblock %}
+
+{% block page_title %}Comparação de Jogadores{% endblock %}
+
+{% block dashboard_content %}
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h2 class="text-3xl font-bold text-slate-100">Análise comparativa</h2>
+      <p class="text-sm text-slate-400">Visualize lado a lado os destaques dos jogadores selecionados</p>
+    </div>
+    <a href="{% url 'scouting:player_list' %}"
+       class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+      Voltar para listagem
+    </a>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for entry in comparison_entries %}
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 shadow-lg shadow-slate-950/40">
+        <div class="flex items-center gap-4">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-blue-500 text-lg font-semibold text-white shadow-lg shadow-green-900/40">
+            {{ entry.player.name|first|upper }}
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-100">{{ entry.player.name }}</h3>
+            <p class="text-xs text-slate-400">{{ entry.player.get_position_display }} · {{ entry.player.nationality }}</p>
+          </div>
+        </div>
+        <dl class="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-300">
+          <div>
+            <dt class="text-xs uppercase text-slate-500">Idade</dt>
+            <dd>{{ entry.player.age }} anos</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase text-slate-500">Clube</dt>
+            <dd>{{ entry.player.current_club|default:'Sem clube' }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase text-slate-500">Status</dt>
+            <dd>
+              <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ entry.player.status_badge_class }}">
+                {{ entry.player.get_status_display }}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase text-slate-500">Valor de mercado</dt>
+            <dd>
+              {% if entry.player.market_value %}
+                R$ {{ entry.player.market_value|floatformat:2 }}
+              {% else %}
+                <span class="text-slate-500">Não informado</span>
+              {% endif %}
+            </dd>
+          </div>
+        </dl>
+        {% if entry.last_report %}
+          <div class="mt-4 rounded-xl border border-slate-800/60 bg-slate-900/70 p-4 text-sm text-slate-200">
+            <p class="text-xs uppercase text-slate-500">Último relatório</p>
+            <p class="mt-1 font-semibold text-slate-100">{{ entry.last_report.report_date|date:'d/m/Y' }}</p>
+            <p class="mt-1 text-xs text-slate-400">{{ entry.last_report.match_or_event }}</p>
+          </div>
+        {% else %}
+          <div class="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-100">
+            Sem relatórios cadastrados para este jogador.
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-xl font-semibold text-slate-100">Comparativo técnico</h3>
+        <p class="text-sm text-slate-400">Indicadores mais altos recebem destaque automático</p>
+      </div>
+    </div>
+    <div class="mt-6 overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-800">
+        <thead>
+          <tr class="bg-slate-900">
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Métrica</th>
+            {% for entry in comparison_entries %}
+              <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">{{ entry.player.name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          {% for row in score_rows %}
+            <tr>
+              <td class="px-6 py-4 text-sm font-medium text-slate-200">{{ row.label }}</td>
+              {% for value in row.values %}
+                {% if value is not None and value == row.best_value %}
+                  <td class="px-6 py-4 text-sm font-semibold text-green-200">
+                    <span class="inline-flex items-center gap-2 rounded-lg border border-green-500/40 bg-green-500/15 px-3 py-2">
+                      <svg class="h-4 w-4 text-green-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {{ value }}
+                    </span>
+                  </td>
+                {% elif value is not None %}
+                  <td class="px-6 py-4 text-sm text-slate-200">{{ value }}</td>
+                {% else %}
+                  <td class="px-6 py-4 text-sm text-slate-500">—</td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if has_reports %}
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-100">Gráfico radar de habilidades</h3>
+          <p class="text-sm text-slate-400">Visualize a distribuição dos scores técnicos, físicos, táticos, mentais e de potencial</p>
+        </div>
+      </div>
+      <div class="mt-6">
+        <canvas id="player-comparison-radar" class="w-full"></canvas>
+      </div>
+    </div>
+    {{ score_labels|json_script:'comparison-chart-labels' }}
+    {{ chart_datasets|json_script:'comparison-chart-datasets' }}
+  {% endif %}
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-xl font-semibold text-slate-100">Próximos passos</h3>
+        <p class="text-sm text-slate-400">Aprofunde a avaliação ou ajuste a seleção de atletas</p>
+      </div>
+    </div>
+    <div class="mt-4 grid gap-3 md:grid-cols-2">
+      {% for entry in comparison_entries %}
+        <a href="{% url 'scouting:player_detail' entry.player.pk %}"
+           class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3 text-sm text-slate-200 transition-all duration-150 hover:border-slate-600 hover:text-white">
+          <span>Ver perfil de {{ entry.player.name }}</span>
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{% if has_reports %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" integrity="sha384-1V8YIfJfnS417hKjFY6pFIheN4mqCpKZXDN9icuYxcDRr1IAdZjAWeA9d7FpC18m" crossorigin="anonymous"></script>
+<script>
+  (function() {
+    const labelsNode = document.getElementById('comparison-chart-labels');
+    const datasetsNode = document.getElementById('comparison-chart-datasets');
+    if (!labelsNode || !datasetsNode) {
+      return;
+    }
+    const labels = JSON.parse(labelsNode.textContent);
+    const datasets = JSON.parse(datasetsNode.textContent);
+    const canvas = document.getElementById('player-comparison-radar');
+    if (!canvas) {
+      return;
+    }
+    new window.Chart(canvas, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+            grid: { color: 'rgba(148, 163, 184, 0.2)' },
+            suggestedMin: 0,
+            suggestedMax: 10,
+            ticks: {
+              stepSize: 2,
+              showLabelBackdrop: false,
+              color: '#cbd5f5',
+            },
+            pointLabels: {
+              color: '#e2e8f0',
+              font: { size: 12, weight: 500 },
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#e2e8f0',
+              usePointStyle: true,
+            },
+          },
+        },
+      },
+    });
+  })();
+</script>
+{% endif %}
+{% endblock %}

@@ -3,7 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Count, ExpressionWrapper, F, FloatField, Max, Q, Value
+from django.db.models import Prefetch
 from django.db.models.functions import Coalesce
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -80,6 +82,173 @@ class ScoutedPlayerListView(LoginRequiredMixin, ListView):
                 'current_position': self.request.GET.get('position', ''),
                 'current_status': self.request.GET.get('status', ''),
                 'current_order': self.request.GET.get('order', ''),
+            }
+        )
+        return context
+
+
+class PlayerComparisonView(LoginRequiredMixin, TemplateView):
+    """Compare up to three scouted players side by side."""
+
+    template_name = 'scouting/player_comparison.html'
+    login_url = reverse_lazy('accounts:login')
+    score_labels_map = {
+        'technical_score': 'Técnica',
+        'physical_score': 'Física',
+        'tactical_score': 'Tática',
+        'mental_score': 'Mental',
+        'potential_score': 'Potencial',
+    }
+
+    def _extract_player_ids(self):
+        """Return sanitized list of selected player IDs preserving order."""
+        raw_ids = self.request.GET.getlist('players')
+        sanitized = []
+        for raw_id in raw_ids:
+            if raw_id.isdigit():
+                sanitized.append(int(raw_id))
+        return sanitized
+
+    def get(self, request, *args, **kwargs):
+        player_ids = self._extract_player_ids()
+        if not player_ids:
+            messages.warning(request, 'Selecione ao menos dois jogadores para comparar.')
+            return redirect('scouting:player_list')
+        if len(player_ids) < 2:
+            messages.warning(request, 'Selecione ao menos dois jogadores para comparar.')
+            return redirect('scouting:player_list')
+        if len(player_ids) > 3:
+            messages.warning(
+                request,
+                'É possível comparar no máximo 3 jogadores. Os três primeiros selecionados foram utilizados.',
+            )
+            player_ids = player_ids[:3]
+        self.selected_ids = player_ids
+        return super().get(request, *args, **kwargs)
+
+    def get_players(self):
+        """Fetch players including their latest reports keeping selection order."""
+        reports_prefetch = Prefetch(
+            'reports',
+            queryset=ScoutingReport.objects.select_related('created_by').order_by('-report_date', '-created_at'),
+            to_attr='ordered_reports',
+        )
+        players_qs = (
+            ScoutedPlayer.objects.filter(pk__in=self.selected_ids)
+            .select_related('created_by')
+            .prefetch_related(reports_prefetch)
+        )
+        players = list(players_qs)
+        if len(players) != len(self.selected_ids):
+            messages.warning(
+                self.request,
+                'Alguns jogadores selecionados não foram encontrados. Compare novamente se necessário.',
+            )
+        players.sort(key=lambda player: self.selected_ids.index(player.pk))
+        if len(players) < 2:
+            messages.warning(
+                self.request,
+                'Não foi possível carregar jogadores suficientes para a comparação.',
+            )
+            return []
+        return players
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        score_fields = ScoutingReportForm.SCORE_FIELDS
+        context.update(
+            {
+                'comparison_entries': [],
+                'score_rows': [],
+                'score_labels': [self.score_labels_map[field] for field in score_fields],
+                'score_fields': score_fields,
+                'chart_datasets': [],
+                'has_reports': False,
+            }
+        )
+        players = self.get_players()
+        if len(players) < 2:
+            return context
+
+        comparison_entries = []
+        for player in players:
+            reports = getattr(player, 'ordered_reports', [])
+            last_report = reports[0] if reports else None
+            scores = {
+                field: getattr(last_report, field, None) if last_report else None
+                for field in score_fields
+            }
+            comparison_entries.append(
+                {
+                    'player': player,
+                    'last_report': last_report,
+                    'scores': scores,
+                }
+            )
+
+        score_rows = []
+        for field in score_fields:
+            values = []
+            best_value = None
+            for entry in comparison_entries:
+                value = entry['scores'].get(field)
+                values.append(value)
+                if value is not None:
+                    best_value = value if best_value is None else max(best_value, value)
+            score_rows.append(
+                {
+                    'field': field,
+                    'label': self.score_labels_map[field],
+                    'values': values,
+                    'best_value': best_value,
+                }
+            )
+
+        chart_palette = [
+            {
+                'border': 'rgba(16, 185, 129, 0.8)',
+                'background': 'rgba(16, 185, 129, 0.25)',
+                'point': '#10b981',
+            },
+            {
+                'border': 'rgba(59, 130, 246, 0.8)',
+                'background': 'rgba(59, 130, 246, 0.25)',
+                'point': '#3b82f6',
+            },
+            {
+                'border': 'rgba(236, 72, 153, 0.8)',
+                'background': 'rgba(236, 72, 153, 0.25)',
+                'point': '#ec4899',
+            },
+        ]
+        chart_datasets = []
+        for idx, entry in enumerate(comparison_entries):
+            palette = chart_palette[idx % len(chart_palette)]
+            data = [
+                entry['scores'].get(field) if entry['scores'].get(field) is not None else 0
+                for field in score_fields
+            ]
+            has_values = any(entry['scores'].get(field) is not None for field in score_fields)
+            chart_datasets.append(
+                {
+                    'label': entry['player'].name,
+                    'data': data,
+                    'borderColor': palette['border'],
+                    'backgroundColor': palette['background'],
+                    'pointBackgroundColor': palette['point'],
+                    'pointBorderColor': palette['border'],
+                    'hidden': not has_values,
+                }
+            )
+
+        context.update(
+            {
+                'comparison_entries': comparison_entries,
+                'score_rows': score_rows,
+                'chart_datasets': chart_datasets,
+                'has_reports': any(
+                    entry['last_report'] is not None for entry in comparison_entries
+                ),
             }
         )
         return context
