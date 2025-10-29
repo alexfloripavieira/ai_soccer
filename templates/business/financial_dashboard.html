@@ -31,12 +31,12 @@
     <div class="rounded-2xl border border-green-500/40 bg-green-500/10 p-6 shadow-lg shadow-green-900/20">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-green-200">Total Receitas</p>
-        <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="h-5 w-5 flex-shrink-0 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
         </svg>
       </div>
-      <p class="mt-3 text-3xl font-bold text-slate-100 tabular-nums">
-        R$ {{ total_revenue|currency_ptbr }}
+      <p class="mt-3 text-2xl font-bold text-slate-100 tabular-nums break-words" title="R$ {{ total_revenue|currency_ptbr }}">
+        {{ total_revenue|currency_abbreviated }}
       </p>
       <p class="mt-1 text-xs text-green-200/80">Todas as receitas registradas</p>
     </div>
@@ -45,12 +45,12 @@
     <div class="rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-red-200">Total Despesas</p>
-        <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="h-5 w-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
         </svg>
       </div>
-      <p class="mt-3 text-3xl font-bold text-slate-100 tabular-nums">
-        R$ {{ total_expenses|currency_ptbr }}
+      <p class="mt-3 text-2xl font-bold text-slate-100 tabular-nums break-words" title="R$ {{ total_expenses|currency_ptbr }}">
+        {{ total_expenses|currency_abbreviated }}
       </p>
       <p class="mt-1 text-xs text-red-200/80">Todas as despesas registradas</p>
     </div>
@@ -60,12 +60,12 @@
       <div class="rounded-2xl border border-blue-500/40 bg-gradient-to-br from-green-500/10 to-blue-500/10 p-6 shadow-lg shadow-blue-900/20">
         <div class="flex items-center justify-between">
           <p class="text-xs font-semibold uppercase tracking-widest text-blue-200">Saldo Líquido</p>
-          <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-5 w-5 flex-shrink-0 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="mt-3 text-3xl font-bold text-slate-100 tabular-nums">
-          R$ {{ net_balance|currency_ptbr }}
+        <p class="mt-3 text-2xl font-bold text-slate-100 tabular-nums break-words" title="R$ {{ net_balance|currency_ptbr }}">
+          {{ net_balance|currency_abbreviated }}
         </p>
         <p class="mt-1 text-xs text-blue-200/80">Receitas - Despesas</p>
       </div>
@@ -73,12 +73,12 @@
       <div class="rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20">
         <div class="flex items-center justify-between">
           <p class="text-xs font-semibold uppercase tracking-widest text-red-200">Saldo Líquido</p>
-          <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="h-5 w-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <p class="mt-3 text-3xl font-bold text-slate-100 tabular-nums">
-          R$ {{ net_balance|currency_ptbr }}
+        <p class="mt-3 text-2xl font-bold text-slate-100 tabular-nums break-words" title="R$ {{ net_balance|currency_ptbr }}">
+          {{ net_balance|currency_abbreviated }}
         </p>
         <p class="mt-1 text-xs text-red-200/80">Receitas - Despesas</p>
       </div>
@@ -88,12 +88,12 @@
     <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 shadow-lg shadow-emerald-900/20">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-emerald-200">Valor do Elenco</p>
-        <svg class="h-5 w-5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="h-5 w-5 flex-shrink-0 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <p class="mt-3 text-3xl font-bold text-slate-100 tabular-nums">
-        R$ {{ total_squad_value|currency_ptbr }}
+      <p class="mt-3 text-2xl font-bold text-slate-100 tabular-nums break-words" title="R$ {{ total_squad_value|currency_ptbr }}">
+        {{ total_squad_value|currency_abbreviated }}
       </p>
       <p class="mt-1 text-xs text-emerald-200/80">
         {{ athletes_without_value }} atleta{% if athletes_without_value != 1 %}s{% endif %} sem avaliação
@@ -124,7 +124,9 @@
         <p class="mt-1 text-xs text-slate-400">Últimos 12 meses cadastrados</p>
       </div>
       {% if monthly_revenues %}
-        <canvas id="monthlyRevenueChart" class="w-full" height="250"></canvas>
+        <div class="relative h-64 w-full">
+          <canvas id="monthlyRevenueChart"></canvas>
+        </div>
       {% else %}
         <div class="flex h-64 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/50">
           <div class="text-center">
@@ -144,7 +146,9 @@
         <p class="mt-1 text-xs text-slate-400">Distribuição dos tipos de receita</p>
       </div>
       {% if total_revenue > 0 %}
-        <canvas id="revenueCategoryChart" class="w-full" height="250"></canvas>
+        <div class="relative h-64 w-full">
+          <canvas id="revenueCategoryChart"></canvas>
+        </div>
       {% else %}
         <div class="flex h-64 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/50">
           <div class="text-center">
@@ -440,153 +444,193 @@
 
 {% block extra_js %}
 <script>
-  {# Chart.js configuration for Monthly Revenue Bar Chart #}
-  {% if monthly_revenues %}
-    const monthlyRevenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
-    const monthlyRevenueChart = new Chart(monthlyRevenueCtx, {
-      type: 'bar',
-      data: {
-        labels: [
-          {% for revenue in monthly_revenues reversed %}
-            '{{ revenue.get_month_display|slice:":3" }}/{{ revenue.year }}'{% if not forloop.last %},{% endif %}
-          {% endfor %}
-        ],
-        datasets: [{
-          label: 'Receita Total',
-          data: [
-            {% for revenue in monthly_revenues reversed %}
-              {{ revenue.total_revenue }}{% if not forloop.last %},{% endif %}
-            {% endfor %}
-          ],
-          backgroundColor: 'rgba(16, 185, 129, 0.6)',
-          borderColor: 'rgba(16, 185, 129, 1)',
-          borderWidth: 1,
-          borderRadius: 6,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            backgroundColor: 'rgba(15, 23, 42, 0.95)',
-            titleColor: '#f1f5f9',
-            bodyColor: '#cbd5e1',
-            borderColor: 'rgba(16, 185, 129, 0.4)',
-            borderWidth: 1,
-            padding: 12,
-            displayColors: false,
-            callbacks: {
-              label: function(context) {
-                return 'R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              color: '#94a3b8',
-              callback: function(value) {
-                return 'R$ ' + value.toLocaleString('pt-BR');
-              }
-            },
-            grid: {
-              color: 'rgba(51, 65, 85, 0.4)',
-              drawBorder: false
-            }
-          },
-          x: {
-            ticks: {
-              color: '#94a3b8'
-            },
-            grid: {
-              display: false
-            }
-          }
-        }
-      }
-    });
-  {% endif %}
+  // Prevent multiple chart instances
+  let monthlyRevenueChart = null;
+  let revenueCategoryChart = null;
 
-  {# Chart.js configuration for Revenue by Category Pie Chart #}
-  {% if total_revenue > 0 %}
-    const revenueCategoryCtx = document.getElementById('revenueCategoryChart').getContext('2d');
-    const revenueCategoryChart = new Chart(revenueCategoryCtx, {
-      type: 'doughnut',
-      data: {
-        labels: [
-          {% for category, amount in revenue_by_category.items %}
-            {% if amount > 0 %}
-              '{{ category }}'{% if not forloop.last %},{% endif %}
-            {% endif %}
-          {% endfor %}
-        ],
-        datasets: [{
-          data: [
-            {% for category, amount in revenue_by_category.items %}
-              {% if amount > 0 %}
-                {{ amount }}{% if not forloop.last %},{% endif %}
-              {% endif %}
-            {% endfor %}
-          ],
-          backgroundColor: [
-            'rgba(16, 185, 129, 0.8)',   // Green
-            'rgba(59, 130, 246, 0.8)',   // Blue
-            'rgba(139, 92, 246, 0.8)',   // Purple
-            'rgba(251, 191, 36, 0.8)',   // Amber
-            'rgba(236, 72, 153, 0.8)',   // Pink
-            'rgba(20, 184, 166, 0.8)',   // Teal
-          ],
-          borderColor: [
-            'rgba(16, 185, 129, 1)',
-            'rgba(59, 130, 246, 1)',
-            'rgba(139, 92, 246, 1)',
-            'rgba(251, 191, 36, 1)',
-            'rgba(236, 72, 153, 1)',
-            'rgba(20, 184, 166, 1)',
-          ],
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: '#cbd5e1',
-              padding: 15,
-              font: {
-                size: 12
-              }
-            }
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    {# Chart.js configuration for Monthly Revenue Bar Chart #}
+    {% if monthly_revenues %}
+      const monthlyRevenueCanvas = document.getElementById('monthlyRevenueChart');
+      if (monthlyRevenueCanvas) {
+        // Destroy existing chart if it exists
+        if (monthlyRevenueChart) {
+          monthlyRevenueChart.destroy();
+        }
+
+        const monthlyRevenueCtx = monthlyRevenueCanvas.getContext('2d');
+        monthlyRevenueChart = new Chart(monthlyRevenueCtx, {
+          type: 'bar',
+          data: {
+            labels: [
+              {% for revenue in monthly_revenues reversed %}
+                '{{ revenue.get_month_display|slice:":3" }}/{{ revenue.year }}'{% if not forloop.last %},{% endif %}
+              {% endfor %}
+            ],
+            datasets: [{
+              label: 'Receita Total',
+              data: [
+                {% for revenue in monthly_revenues reversed %}
+                  {{ revenue.total_revenue }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+              ],
+              backgroundColor: 'rgba(16, 185, 129, 0.6)',
+              borderColor: 'rgba(16, 185, 129, 1)',
+              borderWidth: 1,
+              borderRadius: 6,
+            }]
           },
-          tooltip: {
-            backgroundColor: 'rgba(15, 23, 42, 0.95)',
-            titleColor: '#f1f5f9',
-            bodyColor: '#cbd5e1',
-            borderColor: 'rgba(16, 185, 129, 0.4)',
-            borderWidth: 1,
-            padding: 12,
-            callbacks: {
-              label: function(context) {
-                const label = context.label || '';
-                const value = context.parsed || 0;
-                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percentage = ((value / total) * 100).toFixed(1);
-                return label + ': R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' (' + percentage + '%)';
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            interaction: {
+              intersect: false,
+              mode: 'index'
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#cbd5e1',
+                borderColor: 'rgba(16, 185, 129, 0.4)',
+                borderWidth: 1,
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                  label: function(context) {
+                    if (context.parsed.y !== null) {
+                      return 'R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    }
+                    return '';
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: '#94a3b8',
+                  callback: function(value) {
+                    return 'R$ ' + value.toLocaleString('pt-BR');
+                  }
+                },
+                grid: {
+                  color: 'rgba(51, 65, 85, 0.4)',
+                  drawBorder: false
+                }
+              },
+              x: {
+                ticks: {
+                  color: '#94a3b8'
+                },
+                grid: {
+                  display: false
+                }
               }
             }
           }
-        }
+        });
       }
-    });
-  {% endif %}
+    {% endif %}
+
+    {# Chart.js configuration for Revenue by Category Pie Chart #}
+    {% if total_revenue > 0 %}
+      const revenueCategoryCanvas = document.getElementById('revenueCategoryChart');
+      if (revenueCategoryCanvas) {
+        // Destroy existing chart if it exists
+        if (revenueCategoryChart) {
+          revenueCategoryChart.destroy();
+        }
+
+        const revenueCategoryCtx = revenueCategoryCanvas.getContext('2d');
+        revenueCategoryChart = new Chart(revenueCategoryCtx, {
+          type: 'doughnut',
+          data: {
+            labels: [
+              {% for category, amount in revenue_by_category.items %}
+                {% if amount > 0 %}
+                  '{{ category }}'{% if not forloop.last %},{% endif %}
+                {% endif %}
+              {% endfor %}
+            ],
+            datasets: [{
+              data: [
+                {% for category, amount in revenue_by_category.items %}
+                  {% if amount > 0 %}
+                    {{ amount }}{% if not forloop.last %},{% endif %}
+                  {% endif %}
+                {% endfor %}
+              ],
+              backgroundColor: [
+                'rgba(16, 185, 129, 0.8)',   // Green
+                'rgba(59, 130, 246, 0.8)',   // Blue
+                'rgba(139, 92, 246, 0.8)',   // Purple
+                'rgba(251, 191, 36, 0.8)',   // Amber
+                'rgba(236, 72, 153, 0.8)',   // Pink
+                'rgba(20, 184, 166, 0.8)',   // Teal
+              ],
+              borderColor: [
+                'rgba(16, 185, 129, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(139, 92, 246, 1)',
+                'rgba(251, 191, 36, 1)',
+                'rgba(236, 72, 153, 1)',
+                'rgba(20, 184, 166, 1)',
+              ],
+              borderWidth: 2,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 1.5,
+            interaction: {
+              intersect: false,
+              mode: 'point'
+            },
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  color: '#cbd5e1',
+                  padding: 15,
+                  font: {
+                    size: 11
+                  },
+                  boxWidth: 12,
+                  boxHeight: 12
+                }
+              },
+              tooltip: {
+                enabled: true,
+                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                titleColor: '#f1f5f9',
+                bodyColor: '#cbd5e1',
+                borderColor: 'rgba(16, 185, 129, 0.4)',
+                borderWidth: 1,
+                padding: 12,
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.parsed || 0;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
+                    return label + ': R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' (' + percentage + '%)';
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+    {% endif %}
+  });
 </script>
 {% endblock %}

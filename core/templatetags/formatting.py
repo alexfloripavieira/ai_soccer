@@ -59,3 +59,45 @@ def decimal_ptbr(value: Any, decimal_places: int = 2) -> str:
         decimal_places = 2
 
     return _format_number(number, decimal_places)
+
+
+@register.filter
+def currency_abbreviated(value: Any) -> str:
+    """
+    Format currency values with abbreviations for large numbers.
+
+    Examples:
+        999.99 -> 'R$ 999,99'
+        1500.00 -> 'R$ 1,50 mil'
+        1500000.00 -> 'R$ 1,50 mi'
+        1500000000.00 -> 'R$ 1,50 bi'
+        1500000000000.00 -> 'R$ 1,50 tri'
+    """
+    number = _coerce_decimal(value)
+    if number is None:
+        return 'R$ 0,00'
+
+    # Get absolute value for comparison
+    abs_number = abs(number)
+    sign = '-' if number < 0 else ''
+
+    # Define thresholds and suffixes
+    if abs_number >= Decimal('1000000000000'):  # Trillion (trilhão)
+        divided = abs_number / Decimal('1000000000000')
+        formatted = _format_number(divided, 2)
+        return f'{sign}R$ {formatted} tri'
+    elif abs_number >= Decimal('1000000000'):  # Billion (bilhão)
+        divided = abs_number / Decimal('1000000000')
+        formatted = _format_number(divided, 2)
+        return f'{sign}R$ {formatted} bi'
+    elif abs_number >= Decimal('1000000'):  # Million (milhão)
+        divided = abs_number / Decimal('1000000')
+        formatted = _format_number(divided, 2)
+        return f'{sign}R$ {formatted} mi'
+    elif abs_number >= Decimal('1000'):  # Thousand (mil)
+        divided = abs_number / Decimal('1000')
+        formatted = _format_number(divided, 2)
+        return f'{sign}R$ {formatted} mil'
+    else:  # Less than 1000
+        formatted = _format_number(abs_number, 2)
+        return f'{sign}R$ {formatted}'
