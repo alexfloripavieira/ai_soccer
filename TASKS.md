@@ -189,94 +189,786 @@
 ### Sprint 3: Módulo de Performance - Gestão de Atletas
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 3.1: Modelo de Atleta**
-  - [ ] 3.1.1: Criar modelo `Athlete` em `performance/models.py`
-  - [ ] 3.1.2: Adicionar campos básicos
-  - [ ] 3.1.3: Adicionar campos físicos
-  - [ ] 3.1.4: Adicionar campos de auditoria
-  - [ ] 3.1.5: Adicionar campo `created_by`
-  - [ ] 3.1.6: Criar método `__str__`
-  - [ ] 3.1.7: Criar método `age`
-  - [ ] 3.1.8: Criar e aplicar migrações
-  - [ ] 3.1.9: Registrar no admin
+- [X] **Tarefa 3.1: Modelo de Atleta**
+  - [X] 3.1.1: Criar modelo `Athlete` em `performance/models.py`
+  - [X] 3.1.2: Adicionar campos básicos
+  - [X] 3.1.3: Adicionar campos físicos
+  - [X] 3.1.4: Adicionar campos de auditoria
+  - [X] 3.1.5: Adicionar campo `created_by`
+  - [X] 3.1.6: Criar método `__str__`
+  - [X] 3.1.7: Criar método `age`
+  - [X] 3.1.8: Criar e aplicar migrações
+  - [X] 3.1.9: Registrar no admin
 
-- [ ] **Tarefa 3.2: Listagem de Atletas**
-  - [ ] 3.2.1: Criar view `AthleteListView`
-  - [ ] 3.2.2: Criar template `athlete_list.html`
-  - [ ] 3.2.3: Implementar tabela responsiva
-  - [ ] 3.2.4: Adicionar botão "Adicionar Atleta"
-  - [ ] 3.2.5: Implementar links de ação
-  - [ ] 3.2.6: Adicionar paginação
-  - [ ] 3.2.7: Adicionar busca por nome
-  - [ ] 3.2.8: Adicionar filtro por posição
-  - [ ] 3.2.9: Implementar estado vazio
-  - [ ] 3.2.10: Adicionar URL
-  - [ ] 3.2.11: Incluir URLs em `core/urls.py`
-  - [ ] 3.2.12: Testar listagem
+- [X] **Tarefa 3.2: Listagem de Atletas**
+  - [X] 3.2.1: Criar view `AthleteListView`
+  - [X] 3.2.2: Criar template `athlete_list.html`
+  - [X] 3.2.3: Implementar tabela responsiva
+  - [X] 3.2.4: Adicionar botão "Adicionar Atleta"
+  - [X] 3.2.5: Implementar links de ação
+  - [X] 3.2.6: Adicionar paginação
+  - [X] 3.2.7: Adicionar busca por nome
+  - [X] 3.2.8: Adicionar filtro por posição
+  - [X] 3.2.9: Implementar estado vazio
+  - [X] 3.2.10: Adicionar URL
+  - [X] 3.2.11: Incluir URLs em `core/urls.py`
+  - [X] 3.2.12: Testar listagem
 
-- [ ] **Tarefa 3.3: Formulário de Cadastro**
-  - [ ] 3.3.1: Criar `AthleteForm`
-  - [ ] 3.3.2: Configurar campos
-  - [ ] 3.3.3: Adicionar validação de data
-  - [ ] 3.3.4: Adicionar validação de valores
-  - [ ] 3.3.5: Adicionar classes CSS
-  - [ ] 3.3.6: Criar view `AthleteCreateView`
-  - [ ] 3.3.7: Configurar `created_by`
-  - [ ] 3.3.8: Criar template de formulário
-  - [ ] 3.3.9: Implementar layout
-  - [ ] 3.3.10: Adicionar botões
-  - [ ] 3.3.11: Configurar redirecionamento
-  - [ ] 3.3.12: Adicionar URL
-  - [ ] 3.3.13: Testar cadastro
+- [X] **Tarefa 3.3: Formulário de Cadastro**
+  - [X] 3.3.1: Criar `AthleteForm`
+  - [X] 3.3.2: Configurar campos
+  - [X] 3.3.3: Adicionar validação de data
+  - [X] 3.3.4: Adicionar validação de valores
+  - [X] 3.3.5: Adicionar classes CSS
+  - [X] 3.3.6: Criar view `AthleteCreateView`
+  - [X] 3.3.7: Configurar `created_by`
+  - [X] 3.3.8: Criar template de formulário
+  - [X] 3.3.9: Implementar layout
+  - [X] 3.3.10: Adicionar botões
+  - [X] 3.3.11: Configurar redirecionamento
+  - [X] 3.3.12: Adicionar URL
+  - [X] 3.3.13: Testar cadastro
 
-- [ ] **Tarefa 3.4: Página de Detalhes**
-  - [ ] 3.4.1: Criar view `AthleteDetailView`
-  - [ ] 3.4.2: Criar template de detalhes
-  - [ ] 3.4.3: Exibir informações em cards
-  - [ ] 3.4.4: Criar seção "Dados Pessoais"
-  - [ ] 3.4.5: Criar seção "Dados Físicos"
-  - [ ] 3.4.6: Adicionar placeholders
-  - [ ] 3.4.7: Adicionar botões de ação
-  - [ ] 3.4.8: Adicionar URL
-  - [ ] 3.4.9: Testar visualização
+- [X] **Tarefa 3.4: Página de Detalhes**
+  - [X] 3.4.1: Criar view `AthleteDetailView`
+  - [X] 3.4.2: Criar template de detalhes
+  - [X] 3.4.3: Exibir informações em cards
+  - [X] 3.4.4: Criar seção "Dados Pessoais"
+  - [X] 3.4.5: Criar seção "Dados Físicos"
+  - [X] 3.4.6: Adicionar placeholders
+  - [X] 3.4.7: Adicionar botões de ação
+  - [X] 3.4.8: Adicionar URL
+  - [X] 3.4.9: Testar visualização
 
-- [ ] **Tarefa 3.5: Edição de Atleta**
-  - [ ] 3.5.1: Criar view `AthleteUpdateView`
-  - [ ] 3.5.2: Reutilizar template
-  - [ ] 3.5.3: Adicionar título de edição
-  - [ ] 3.5.4: Configurar redirecionamento
-  - [ ] 3.5.5: Adicionar URL
-  - [ ] 3.5.6: Testar edição
+- [X] **Tarefa 3.5: Edição de Atleta**
+  - [X] 3.5.1: Criar view `AthleteUpdateView`
+  - [X] 3.5.2: Reutilizar template
+  - [X] 3.5.3: Adicionar título de edição
+  - [X] 3.5.4: Configurar redirecionamento
+  - [X] 3.5.5: Adicionar URL
+  - [X] 3.5.6: Testar edição
 
-- [ ] **Tarefa 3.6: Exclusão de Atleta**
-  - [ ] 3.6.1: Criar view `AthleteDeleteView`
-  - [ ] 3.6.2: Criar template de confirmação
-  - [ ] 3.6.3: Implementar modal
-  - [ ] 3.6.4: Adicionar botões
-  - [ ] 3.6.5: Configurar redirecionamento
-  - [ ] 3.6.6: Adicionar URL
-  - [ ] 3.6.7: Testar exclusão
+- [X] **Tarefa 3.6: Exclusão de Atleta**
+  - [X] 3.6.1: Criar view `AthleteDeleteView`
+  - [X] 3.6.2: Criar template de confirmação
+  - [X] 3.6.3: Implementar modal
+  - [X] 3.6.4: Adicionar botões
+  - [X] 3.6.5: Configurar redirecionamento
+  - [X] 3.6.6: Adicionar URL
+  - [X] 3.6.7: Testar exclusão
 
-- [ ] **Tarefa 3.7: Integração com Menu**
-  - [ ] 3.7.1: Adicionar item "Performance"
-  - [ ] 3.7.2: Criar submenu
-  - [ ] 3.7.3: Atualizar lógica de highlight
-  - [ ] 3.7.4: Testar navegação
+- [X] **Tarefa 3.7: Integração com Menu**
+  - [X] 3.7.1: Adicionar item "Performance"
+  - [X] 3.7.2: Criar submenu
+  - [X] 3.7.3: Atualizar lógica de highlight
+  - [X] 3.7.4: Testar navegação
 
 ---
 
-### Sprints 4-16: [Continuação conforme PRD original]
+### Sprint 4: Módulo de Performance - Treinos e Cargas
+**Duração**: 2 semanas
 
-_As demais sprints seguem a mesma estrutura detalhada, cobrindo:_
-- Sprint 4: Treinos e Cargas
-- Sprint 5: Lesões e Dashboard de Performance
-- Sprint 6-8: Módulo de Scouting
-- Sprint 9-10: Módulo de Business
-- Sprint 11: Integração entre Módulos
-- Sprint 12: Recursos Adicionais
-- Sprint 13: Modelos Preditivos (IA)
-- Sprint 14: Testes
-- Sprint 15: Polimento
-- Sprint 16: Deploy
+- [ ] **Tarefa 4.1: Modelo de Carga de Treinamento**
+  - [ ] 4.1.1: Criar modelo `TrainingLoad` em `performance/models.py`
+  - [ ] 4.1.2: Adicionar ForeignKey para `Athlete`
+  - [ ] 4.1.3: Adicionar campo `training_date` (DateField)
+  - [ ] 4.1.4: Adicionar campo `duration_minutes` (PositiveIntegerField)
+  - [ ] 4.1.5: Adicionar campo `distance_km` (DecimalField)
+  - [ ] 4.1.6: Adicionar campo `heart_rate_avg` (PositiveIntegerField, opcional)
+  - [ ] 4.1.7: Adicionar campo `heart_rate_max` (PositiveIntegerField, opcional)
+  - [ ] 4.1.8: Adicionar choices para `intensity_level` (BAIXA, MEDIA, ALTA, MAXIMA)
+  - [ ] 4.1.9: Adicionar campos `created_at` e `updated_at`
+  - [ ] 4.1.10: Adicionar campo `created_by`
+  - [ ] 4.1.11: Criar método `__str__`
+  - [ ] 4.1.12: Criar método `fatigue_index()` para cálculo de fadiga
+  - [ ] 4.1.13: Configurar Meta (verbose_name, ordering)
+  - [ ] 4.1.14: Criar e aplicar migrações
+  - [ ] 4.1.15: Registrar no admin
+
+- [ ] **Tarefa 4.2: Formulário de Carga de Treinamento**
+  - [ ] 4.2.1: Criar `TrainingLoadForm` em `performance/forms.py`
+  - [ ] 4.2.2: Configurar campos do formulário
+  - [ ] 4.2.3: Adicionar widget DateInput com type='date'
+  - [ ] 4.2.4: Adicionar validação: data não pode ser futura
+  - [ ] 4.2.5: Adicionar validação: duration_minutes > 0
+  - [ ] 4.2.6: Adicionar validação: distance_km >= 0
+  - [ ] 4.2.7: Adicionar validação: heart_rate_avg <= heart_rate_max
+  - [ ] 4.2.8: Adicionar classes CSS aos widgets
+  - [ ] 4.2.9: Configurar help_text para campos
+  - [ ] 4.2.10: Testar validações
+
+- [ ] **Tarefa 4.3: Listagem de Cargas de Treinamento**
+  - [ ] 4.3.1: Criar view `TrainingLoadListView`
+  - [ ] 4.3.2: Configurar filtro por atleta
+  - [ ] 4.3.3: Adicionar ordenação por data (mais recente primeiro)
+  - [ ] 4.3.4: Criar template `training_load_list.html`
+  - [ ] 4.3.5: Implementar tabela responsiva
+  - [ ] 4.3.6: Exibir nome do atleta com link
+  - [ ] 4.3.7: Exibir data, duração e distância
+  - [ ] 4.3.8: Exibir nível de intensidade com badge colorido
+  - [ ] 4.3.9: Adicionar botão "Adicionar Carga"
+  - [ ] 4.3.10: Implementar filtro por período (última semana, mês, etc)
+  - [ ] 4.3.11: Adicionar paginação
+  - [ ] 4.3.12: Adicionar URL `/performance/training-loads/`
+  - [ ] 4.3.13: Testar listagem
+
+- [ ] **Tarefa 4.4: Cadastro de Carga de Treinamento**
+  - [ ] 4.4.1: Criar view `TrainingLoadCreateView`
+  - [ ] 4.4.2: Configurar formulário
+  - [ ] 4.4.3: Configurar `created_by` automaticamente
+  - [ ] 4.4.4: Criar template `training_load_form.html`
+  - [ ] 4.4.5: Implementar layout do formulário
+  - [ ] 4.4.6: Adicionar seletor de atleta
+  - [ ] 4.4.7: Adicionar campos de frequência cardíaca
+  - [ ] 4.4.8: Implementar mensagens de sucesso
+  - [ ] 4.4.9: Configurar redirecionamento
+  - [ ] 4.4.10: Adicionar URL `/performance/training-loads/add/`
+  - [ ] 4.4.11: Testar cadastro
+
+- [ ] **Tarefa 4.5: Edição e Exclusão de Cargas**
+  - [ ] 4.5.1: Criar view `TrainingLoadUpdateView`
+  - [ ] 4.5.2: Reutilizar template de formulário
+  - [ ] 4.5.3: Adicionar URL de edição
+  - [ ] 4.5.4: Criar view `TrainingLoadDeleteView`
+  - [ ] 4.5.5: Criar template de confirmação
+  - [ ] 4.5.6: Adicionar URL de exclusão
+  - [ ] 4.5.7: Testar edição e exclusão
+
+- [ ] **Tarefa 4.6: Visualização de Cargas por Atleta**
+  - [ ] 4.6.1: Adicionar aba "Cargas de Treino" na página de detalhes do atleta
+  - [ ] 4.6.2: Listar últimas 10 cargas
+  - [ ] 4.6.3: Exibir gráfico de barras de intensidade (opcional)
+  - [ ] 4.6.4: Calcular e exibir média de duração
+  - [ ] 4.6.5: Calcular e exibir distância total
+  - [ ] 4.6.6: Adicionar botão "Ver todas as cargas"
+  - [ ] 4.6.7: Testar visualização
+
+---
+
+### Sprint 5: Módulo de Performance - Lesões e Dashboard
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 5.1: Modelo de Registro de Lesão**
+  - [ ] 5.1.1: Criar modelo `InjuryRecord` em `performance/models.py`
+  - [ ] 5.1.2: Adicionar ForeignKey para `Athlete`
+  - [ ] 5.1.3: Adicionar campo `injury_date` (DateField)
+  - [ ] 5.1.4: Adicionar choices para `injury_type` (MUSCULAR, ARTICULAR, OSSEA, etc)
+  - [ ] 5.1.5: Adicionar choices para `body_part` (JOELHO, TORNOZELO, COXA, etc)
+  - [ ] 5.1.6: Adicionar choices para `severity_level` (LEVE, MODERADA, GRAVE)
+  - [ ] 5.1.7: Adicionar campo `description` (TextField, opcional)
+  - [ ] 5.1.8: Adicionar campo `expected_return` (DateField, opcional)
+  - [ ] 5.1.9: Adicionar campo `actual_return` (DateField, opcional)
+  - [ ] 5.1.10: Adicionar campos de auditoria
+  - [ ] 5.1.11: Adicionar campo `created_by`
+  - [ ] 5.1.12: Criar método `__str__`
+  - [ ] 5.1.13: Criar método `days_out()` para calcular tempo afastado
+  - [ ] 5.1.14: Configurar Meta
+  - [ ] 5.1.15: Criar e aplicar migrações
+  - [ ] 5.1.16: Registrar no admin
+
+- [ ] **Tarefa 5.2: CRUD de Lesões**
+  - [ ] 5.2.1: Criar `InjuryRecordForm`
+  - [ ] 5.2.2: Configurar validações de datas
+  - [ ] 5.2.3: Adicionar classes CSS
+  - [ ] 5.2.4: Criar view `InjuryRecordListView`
+  - [ ] 5.2.5: Criar template de listagem
+  - [ ] 5.2.6: Implementar filtro por atleta
+  - [ ] 5.2.7: Implementar filtro por gravidade
+  - [ ] 5.2.8: Criar view `InjuryRecordCreateView`
+  - [ ] 5.2.9: Criar template de formulário
+  - [ ] 5.2.10: Criar views de edição e exclusão
+  - [ ] 5.2.11: Adicionar URLs
+  - [ ] 5.2.12: Testar CRUD completo
+
+- [ ] **Tarefa 5.3: Dashboard de Performance**
+  - [ ] 5.3.1: Criar view `PerformanceDashboardView`
+  - [ ] 5.3.2: Calcular total de atletas
+  - [ ] 5.3.3: Calcular atletas ativos vs lesionados
+  - [ ] 5.3.4: Calcular média de idade
+  - [ ] 5.3.5: Buscar últimas cargas de treino
+  - [ ] 5.3.6: Buscar lesões recentes
+  - [ ] 5.3.7: Criar template `performance_dashboard.html`
+  - [ ] 5.3.8: Implementar cards de estatísticas
+  - [ ] 5.3.9: Criar seção "Alertas" (atletas com carga excessiva)
+  - [ ] 5.3.10: Criar tabela de últimas atividades
+  - [ ] 5.3.11: Adicionar URL `/performance/dashboard/`
+  - [ ] 5.3.12: Atualizar menu de navegação
+  - [ ] 5.3.13: Testar dashboard
+
+- [ ] **Tarefa 5.4: Integração de Lesões na Página do Atleta**
+  - [ ] 5.4.1: Adicionar aba "Histórico de Lesões"
+  - [ ] 5.4.2: Listar lesões do atleta
+  - [ ] 5.4.3: Exibir status (recuperado ou em recuperação)
+  - [ ] 5.4.4: Calcular total de dias afastado
+  - [ ] 5.4.5: Adicionar indicador visual de atleta lesionado
+  - [ ] 5.4.6: Testar visualização
+
+---
+
+### Sprint 6: Módulo de Scouting - Jogadores Observados
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 6.1: Modelo de Jogador Observado**
+  - [ ] 6.1.1: Criar modelo `ScoutedPlayer` em `scouting/models.py`
+  - [ ] 6.1.2: Adicionar campo `name` (CharField)
+  - [ ] 6.1.3: Adicionar campo `birth_date` (DateField)
+  - [ ] 6.1.4: Adicionar campo `nationality` (CharField)
+  - [ ] 6.1.5: Adicionar choices para `position`
+  - [ ] 6.1.6: Adicionar campo `current_club` (CharField)
+  - [ ] 6.1.7: Adicionar campo `market_value` (DecimalField, opcional)
+  - [ ] 6.1.8: Adicionar campo `notes` (TextField)
+  - [ ] 6.1.9: Adicionar choices para `status` (MONITORANDO, INTERESSADO, NEGOCIANDO)
+  - [ ] 6.1.10: Adicionar campo `photo` (ImageField, opcional)
+  - [ ] 6.1.11: Adicionar campos de auditoria
+  - [ ] 6.1.12: Adicionar campo `created_by`
+  - [ ] 6.1.13: Criar método `age()`
+  - [ ] 6.1.14: Criar método `__str__`
+  - [ ] 6.1.15: Configurar Meta
+  - [ ] 6.1.16: Criar e aplicar migrações
+  - [ ] 6.1.17: Registrar no admin
+
+- [ ] **Tarefa 6.2: CRUD de Jogadores Observados**
+  - [ ] 6.2.1: Criar `ScoutedPlayerForm`
+  - [ ] 6.2.2: Configurar campos e validações
+  - [ ] 6.2.3: Adicionar classes CSS
+  - [ ] 6.2.4: Criar view `ScoutedPlayerListView`
+  - [ ] 6.2.5: Criar template de listagem
+  - [ ] 6.2.6: Implementar busca por nome e clube
+  - [ ] 6.2.7: Implementar filtro por posição
+  - [ ] 6.2.8: Implementar filtro por status
+  - [ ] 6.2.9: Adicionar ordenação por valor de mercado
+  - [ ] 6.2.10: Criar view `ScoutedPlayerCreateView`
+  - [ ] 6.2.11: Criar template de formulário
+  - [ ] 6.2.12: Implementar upload de foto
+  - [ ] 6.2.13: Criar view `ScoutedPlayerDetailView`
+  - [ ] 6.2.14: Criar template de detalhes
+  - [ ] 6.2.15: Criar views de edição e exclusão
+  - [ ] 6.2.16: Adicionar URLs em `scouting/urls.py`
+  - [ ] 6.2.17: Incluir URLs em `core/urls.py`
+  - [ ] 6.2.18: Testar CRUD completo
+
+- [ ] **Tarefa 6.3: Integração com Menu**
+  - [ ] 6.3.1: Adicionar item "Scouting" no menu
+  - [ ] 6.3.2: Criar submenu "Jogadores Observados"
+  - [ ] 6.3.3: Atualizar lógica de highlight
+  - [ ] 6.3.4: Testar navegação
+
+---
+
+### Sprint 7: Módulo de Scouting - Relatórios de Observação
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 7.1: Modelo de Relatório de Scouting**
+  - [ ] 7.1.1: Criar modelo `ScoutingReport` em `scouting/models.py`
+  - [ ] 7.1.2: Adicionar ForeignKey para `ScoutedPlayer`
+  - [ ] 7.1.3: Adicionar ForeignKey para `User` (scout que criou)
+  - [ ] 7.1.4: Adicionar campo `report_date` (DateField)
+  - [ ] 7.1.5: Adicionar campo `match_or_event` (CharField)
+  - [ ] 7.1.6: Adicionar campo `technical_score` (IntegerField, 0-10)
+  - [ ] 7.1.7: Adicionar campo `physical_score` (IntegerField, 0-10)
+  - [ ] 7.1.8: Adicionar campo `tactical_score` (IntegerField, 0-10)
+  - [ ] 7.1.9: Adicionar campo `mental_score` (IntegerField, 0-10)
+  - [ ] 7.1.10: Adicionar campo `potential_score` (IntegerField, 0-10)
+  - [ ] 7.1.11: Adicionar campo `strengths` (TextField)
+  - [ ] 7.1.12: Adicionar campo `weaknesses` (TextField)
+  - [ ] 7.1.13: Adicionar campo `recommendation` (TextField)
+  - [ ] 7.1.14: Adicionar campos de auditoria
+  - [ ] 7.1.15: Criar método `overall_score()` (média dos scores)
+  - [ ] 7.1.16: Criar método `__str__`
+  - [ ] 7.1.17: Configurar Meta
+  - [ ] 7.1.18: Criar e aplicar migrações
+  - [ ] 7.1.19: Registrar no admin
+
+- [ ] **Tarefa 7.2: CRUD de Relatórios**
+  - [ ] 7.2.1: Criar `ScoutingReportForm`
+  - [ ] 7.2.2: Adicionar validação: scores entre 0 e 10
+  - [ ] 7.2.3: Adicionar classes CSS
+  - [ ] 7.2.4: Criar view `ScoutingReportListView`
+  - [ ] 7.2.5: Criar template de listagem
+  - [ ] 7.2.6: Implementar filtro por jogador
+  - [ ] 7.2.7: Implementar filtro por scout
+  - [ ] 7.2.8: Criar view `ScoutingReportCreateView`
+  - [ ] 7.2.9: Criar template de formulário
+  - [ ] 7.2.10: Implementar seção de scores com sliders
+  - [ ] 7.2.11: Criar view `ScoutingReportDetailView`
+  - [ ] 7.2.12: Criar template de detalhes
+  - [ ] 7.2.13: Exibir gráfico radar dos scores
+  - [ ] 7.2.14: Criar views de edição e exclusão
+  - [ ] 7.2.15: Adicionar URLs
+  - [ ] 7.2.16: Testar CRUD completo
+
+- [ ] **Tarefa 7.3: Integração de Relatórios na Página do Jogador**
+  - [ ] 7.3.1: Adicionar aba "Relatórios" na página de detalhes
+  - [ ] 7.3.2: Listar relatórios do jogador
+  - [ ] 7.3.3: Calcular média geral dos scores
+  - [ ] 7.3.4: Exibir evolução dos scores (se múltiplos relatórios)
+  - [ ] 7.3.5: Adicionar botão "Novo Relatório"
+  - [ ] 7.3.6: Testar visualização
+
+- [ ] **Tarefa 7.4: Dashboard de Scouting**
+  - [ ] 7.4.1: Criar view `ScoutingDashboardView`
+  - [ ] 7.4.2: Calcular total de jogadores observados
+  - [ ] 7.4.3: Calcular jogadores por status
+  - [ ] 7.4.4: Buscar top 5 jogadores por overall_score
+  - [ ] 7.4.5: Criar template do dashboard
+  - [ ] 7.4.6: Implementar cards de estatísticas
+  - [ ] 7.4.7: Criar seção de recomendações prioritárias
+  - [ ] 7.4.8: Adicionar URL `/scouting/dashboard/`
+  - [ ] 7.4.9: Atualizar menu
+  - [ ] 7.4.10: Testar dashboard
+
+---
+
+### Sprint 8: Módulo de Scouting - Comparação de Jogadores
+**Duração**: 1 semana
+
+- [ ] **Tarefa 8.1: Funcionalidade de Comparação**
+  - [ ] 8.1.1: Criar view `PlayerComparisonView`
+  - [ ] 8.1.2: Adicionar parâmetros para receber IDs de jogadores
+  - [ ] 8.1.3: Validar: máximo 3 jogadores para comparar
+  - [ ] 8.1.4: Buscar dados dos jogadores
+  - [ ] 8.1.5: Buscar última avaliação de cada jogador
+  - [ ] 8.1.6: Criar template `player_comparison.html`
+  - [ ] 8.1.7: Implementar tabela comparativa lado a lado
+  - [ ] 8.1.8: Exibir dados pessoais
+  - [ ] 8.1.9: Exibir scores técnicos
+  - [ ] 8.1.10: Criar gráfico radar comparativo
+  - [ ] 8.1.11: Destacar melhor jogador em cada métrica
+  - [ ] 8.1.12: Adicionar URL `/scouting/compare/`
+  - [ ] 8.1.13: Testar comparação
+
+- [ ] **Tarefa 8.2: Interface de Seleção**
+  - [ ] 8.2.1: Adicionar checkboxes na listagem de jogadores
+  - [ ] 8.2.2: Adicionar botão "Comparar Selecionados"
+  - [ ] 8.2.3: Implementar JavaScript para validação
+  - [ ] 8.2.4: Implementar envio via GET para página de comparação
+  - [ ] 8.2.5: Testar seleção e redirecionamento
+
+---
+
+### Sprint 9: Módulo de Business - Gestão de Clubes
+**Duração**: 1 semana
+
+- [ ] **Tarefa 9.1: Modelo de Clube**
+  - [ ] 9.1.1: Criar modelo `Club` em `business/models.py`
+  - [ ] 9.1.2: Adicionar campo `name` (CharField, único)
+  - [ ] 9.1.3: Adicionar campo `country` (CharField)
+  - [ ] 9.1.4: Adicionar campo `city` (CharField)
+  - [ ] 9.1.5: Adicionar choices para `division` (PRIMEIRA, SEGUNDA, etc)
+  - [ ] 9.1.6: Adicionar campo `logo` (ImageField, opcional)
+  - [ ] 9.1.7: Adicionar campos de auditoria
+  - [ ] 9.1.8: Adicionar campo `created_by`
+  - [ ] 9.1.9: Criar método `__str__`
+  - [ ] 9.1.10: Configurar Meta
+  - [ ] 9.1.11: Criar e aplicar migrações
+  - [ ] 9.1.12: Registrar no admin
+
+- [ ] **Tarefa 9.2: CRUD de Clubes**
+  - [ ] 9.2.1: Criar `ClubForm`
+  - [ ] 9.2.2: Configurar campos e validações
+  - [ ] 9.2.3: Adicionar classes CSS
+  - [ ] 9.2.4: Criar view `ClubListView`
+  - [ ] 9.2.5: Criar template de listagem
+  - [ ] 9.2.6: Implementar busca por nome e país
+  - [ ] 9.2.7: Implementar filtro por divisão
+  - [ ] 9.2.8: Criar view `ClubCreateView`
+  - [ ] 9.2.9: Criar template de formulário
+  - [ ] 9.2.10: Criar view `ClubDetailView`
+  - [ ] 9.2.11: Criar template de detalhes
+  - [ ] 9.2.12: Criar views de edição e exclusão
+  - [ ] 9.2.13: Adicionar URLs em `business/urls.py`
+  - [ ] 9.2.14: Incluir URLs em `core/urls.py`
+  - [ ] 9.2.15: Testar CRUD completo
+
+- [ ] **Tarefa 9.3: Integração com Menu**
+  - [ ] 9.3.1: Adicionar item "Business" no menu
+  - [ ] 9.3.2: Criar submenu "Clubes"
+  - [ ] 9.3.3: Atualizar lógica de highlight
+  - [ ] 9.3.4: Testar navegação
+
+---
+
+### Sprint 10: Módulo de Business - Registros Financeiros e Receitas
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 10.1: Modelo de Registro Financeiro**
+  - [ ] 10.1.1: Criar modelo `FinancialRecord` em `business/models.py`
+  - [ ] 10.1.2: Adicionar ForeignKey para `Club`
+  - [ ] 10.1.3: Adicionar campo `record_date` (DateField)
+  - [ ] 10.1.4: Adicionar choices para `category` (SALARIOS, TRANSFERENCIAS, etc)
+  - [ ] 10.1.5: Adicionar campo `amount` (DecimalField)
+  - [ ] 10.1.6: Adicionar choices para `transaction_type` (RECEITA, DESPESA)
+  - [ ] 10.1.7: Adicionar campo `description` (TextField)
+  - [ ] 10.1.8: Adicionar campos de auditoria
+  - [ ] 10.1.9: Adicionar campo `created_by`
+  - [ ] 10.1.10: Criar método `__str__`
+  - [ ] 10.1.11: Configurar Meta
+  - [ ] 10.1.12: Criar e aplicar migrações
+  - [ ] 10.1.13: Registrar no admin
+
+- [ ] **Tarefa 10.2: CRUD de Registros Financeiros**
+  - [ ] 10.2.1: Criar `FinancialRecordForm`
+  - [ ] 10.2.2: Configurar validações
+  - [ ] 10.2.3: Adicionar classes CSS
+  - [ ] 10.2.4: Criar view `FinancialRecordListView`
+  - [ ] 10.2.5: Criar template de listagem
+  - [ ] 10.2.6: Implementar filtro por clube
+  - [ ] 10.2.7: Implementar filtro por tipo de transação
+  - [ ] 10.2.8: Implementar filtro por período
+  - [ ] 10.2.9: Calcular totais de receitas e despesas
+  - [ ] 10.2.10: Criar view `FinancialRecordCreateView`
+  - [ ] 10.2.11: Criar template de formulário
+  - [ ] 10.2.12: Criar views de edição e exclusão
+  - [ ] 10.2.13: Adicionar URLs
+  - [ ] 10.2.14: Testar CRUD completo
+
+- [ ] **Tarefa 10.3: Modelo de Receita Mensal**
+  - [ ] 10.3.1: Criar modelo `Revenue` em `business/models.py`
+  - [ ] 10.3.2: Adicionar ForeignKey para `Club`
+  - [ ] 10.3.3: Adicionar campo `year` (PositiveIntegerField)
+  - [ ] 10.3.4: Adicionar campo `month` (PositiveIntegerField, 1-12)
+  - [ ] 10.3.5: Adicionar campo `ticketing` (DecimalField)
+  - [ ] 10.3.6: Adicionar campo `sponsorship` (DecimalField)
+  - [ ] 10.3.7: Adicionar campo `broadcasting` (DecimalField)
+  - [ ] 10.3.8: Adicionar campo `merchandising` (DecimalField)
+  - [ ] 10.3.9: Adicionar campos de auditoria
+  - [ ] 10.3.10: Criar método `total_revenue()`
+  - [ ] 10.3.11: Criar método `__str__`
+  - [ ] 10.3.12: Configurar Meta com unique_together (club, year, month)
+  - [ ] 10.3.13: Criar e aplicar migrações
+  - [ ] 10.3.14: Registrar no admin
+
+- [ ] **Tarefa 10.4: CRUD de Receitas**
+  - [ ] 10.4.1: Criar `RevenueForm`
+  - [ ] 10.4.2: Configurar validações
+  - [ ] 10.4.3: Criar view `RevenueListView`
+  - [ ] 10.4.4: Criar template de listagem
+  - [ ] 10.4.5: Implementar filtro por clube e ano
+  - [ ] 10.4.6: Exibir total mensal
+  - [ ] 10.4.7: Criar view `RevenueCreateView`
+  - [ ] 10.4.8: Criar template de formulário
+  - [ ] 10.4.9: Criar views de edição e exclusão
+  - [ ] 10.4.10: Adicionar URLs
+  - [ ] 10.4.11: Testar CRUD completo
+
+- [ ] **Tarefa 10.5: Dashboard Financeiro**
+  - [ ] 10.5.1: Criar view `FinancialDashboardView`
+  - [ ] 10.5.2: Calcular receitas totais por clube
+  - [ ] 10.5.3: Calcular despesas totais por clube
+  - [ ] 10.5.4: Calcular saldo (receitas - despesas)
+  - [ ] 10.5.5: Buscar receitas dos últimos 12 meses
+  - [ ] 10.5.6: Criar template do dashboard
+  - [ ] 10.5.7: Implementar gráfico de barras de receitas mensais
+  - [ ] 10.5.8: Implementar gráfico de pizza por categoria
+  - [ ] 10.5.9: Adicionar cards de resumo
+  - [ ] 10.5.10: Adicionar URL `/business/dashboard/`
+  - [ ] 10.5.11: Atualizar menu
+  - [ ] 10.5.12: Testar dashboard
+
+---
+
+### Sprint 11: Integração entre Módulos
+**Duração**: 1 semana
+
+- [ ] **Tarefa 11.1: Integração Performance → Business**
+  - [ ] 11.1.1: Adicionar campo `market_value` no modelo `Athlete`
+  - [ ] 11.1.2: Criar migração para adicionar o campo
+  - [ ] 11.1.3: Atualizar formulário de atleta
+  - [ ] 11.1.4: Exibir valor de mercado na página de detalhes
+  - [ ] 11.1.5: Criar view `AthleteValuationView`
+  - [ ] 11.1.6: Calcular valor total do elenco
+  - [ ] 11.1.7: Criar template de valorização
+  - [ ] 11.1.8: Adicionar URL `/performance/valuation/`
+  - [ ] 11.1.9: Adicionar item no menu
+  - [ ] 11.1.10: Testar integração
+
+- [ ] **Tarefa 11.2: Integração Scouting → Performance**
+  - [ ] 11.2.1: Criar funcionalidade "Contratar Jogador"
+  - [ ] 11.2.2: Adicionar botão na página de detalhes do jogador observado
+  - [ ] 11.2.3: Criar view `ConvertToAthleteView`
+  - [ ] 11.2.4: Copiar dados do ScoutedPlayer para Athlete
+  - [ ] 11.2.5: Marcar ScoutedPlayer como "CONTRATADO"
+  - [ ] 11.2.6: Adicionar URL
+  - [ ] 11.2.7: Implementar mensagem de confirmação
+  - [ ] 11.2.8: Testar conversão
+
+- [ ] **Tarefa 11.3: Dashboard Principal Unificado**
+  - [ ] 11.3.1: Atualizar `DashboardView`
+  - [ ] 11.3.2: Adicionar widget de performance
+  - [ ] 11.3.3: Adicionar widget de scouting
+  - [ ] 11.3.4: Adicionar widget de business
+  - [ ] 11.3.5: Criar seção "Atividades Recentes"
+  - [ ] 11.3.6: Listar últimos atletas cadastrados
+  - [ ] 11.3.7: Listar últimas lesões
+  - [ ] 11.3.8: Listar últimos relatórios de scouting
+  - [ ] 11.3.9: Implementar layout responsivo
+  - [ ] 11.3.10: Testar dashboard unificado
+
+---
+
+### Sprint 12: Recursos Adicionais e Melhorias
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 12.1: Sistema de Notificações**
+  - [ ] 12.1.1: Instalar pacote `django-notifications-hq`
+  - [ ] 12.1.2: Adicionar ao INSTALLED_APPS
+  - [ ] 12.1.3: Executar migrações
+  - [ ] 12.1.4: Criar notificação ao cadastrar lesão
+  - [ ] 12.1.5: Criar notificação ao completar relatório de scouting
+  - [ ] 12.1.6: Criar view `NotificationListView`
+  - [ ] 12.1.7: Criar template de notificações
+  - [ ] 12.1.8: Adicionar ícone de notificações no navbar
+  - [ ] 12.1.9: Implementar badge com contador
+  - [ ] 12.1.10: Adicionar URL `/notifications/`
+  - [ ] 12.1.11: Testar notificações
+
+- [ ] **Tarefa 12.2: Exportação de Dados**
+  - [ ] 12.2.1: Instalar pacote `openpyxl` para Excel
+  - [ ] 12.2.2: Criar view `ExportAthletesView`
+  - [ ] 12.2.3: Gerar arquivo Excel com dados de atletas
+  - [ ] 12.2.4: Adicionar botão "Exportar" na listagem
+  - [ ] 12.2.5: Criar view `ExportTrainingLoadsView`
+  - [ ] 12.2.6: Criar view `ExportScoutingReportsView`
+  - [ ] 12.2.7: Adicionar URLs de exportação
+  - [ ] 12.2.8: Testar downloads
+
+- [ ] **Tarefa 12.3: Busca Global**
+  - [ ] 12.3.1: Criar view `GlobalSearchView`
+  - [ ] 12.3.2: Implementar busca em múltiplos modelos
+  - [ ] 12.3.3: Criar template de resultados
+  - [ ] 12.3.4: Adicionar campo de busca no navbar
+  - [ ] 12.3.5: Implementar AJAX para busca dinâmica
+  - [ ] 12.3.6: Adicionar URL `/search/`
+  - [ ] 12.3.7: Testar busca
+
+- [ ] **Tarefa 12.4: Logs de Auditoria**
+  - [ ] 12.4.1: Instalar pacote `django-auditlog`
+  - [ ] 12.4.2: Adicionar ao INSTALLED_APPS
+  - [ ] 12.4.3: Executar migrações
+  - [ ] 12.4.4: Registrar modelos principais
+  - [ ] 12.4.5: Criar view `AuditLogListView`
+  - [ ] 12.4.6: Criar template de logs
+  - [ ] 12.4.7: Implementar filtros
+  - [ ] 12.4.8: Adicionar URL `/audit-logs/`
+  - [ ] 12.4.9: Restringir acesso a administradores
+  - [ ] 12.4.10: Testar logs
+
+- [ ] **Tarefa 12.5: Melhorias de UX**
+  - [ ] 12.5.1: Implementar loading spinners
+  - [ ] 12.5.2: Adicionar animações de transição
+  - [ ] 12.5.3: Implementar confirmações de exclusão com modal
+  - [ ] 12.5.4: Adicionar tooltips em campos
+  - [ ] 12.5.5: Implementar mensagens toast
+  - [ ] 12.5.6: Melhorar feedback visual de formulários
+  - [ ] 12.5.7: Adicionar dark mode toggle (opcional)
+  - [ ] 12.5.8: Testar em múltiplos navegadores
+
+---
+
+### Sprint 13: Modelos Preditivos com IA
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 13.1: Configuração do Ambiente ML**
+  - [ ] 13.1.1: Adicionar scikit-learn ao requirements.txt
+  - [ ] 13.1.2: Adicionar pandas ao requirements.txt
+  - [ ] 13.1.3: Adicionar numpy ao requirements.txt
+  - [ ] 13.1.4: Instalar dependências
+  - [ ] 13.1.5: Criar diretório `ml_models/`
+  - [ ] 13.1.6: Criar arquivo `ml_models/__init__.py`
+
+- [ ] **Tarefa 13.2: Modelo de Predição de Lesões**
+  - [ ] 13.2.1: Criar script `ml_models/injury_predictor.py`
+  - [ ] 13.2.2: Importar bibliotecas necessárias
+  - [ ] 13.2.3: Criar função para buscar dados de treinamento
+  - [ ] 13.2.4: Preparar features (duração, distância, frequência)
+  - [ ] 13.2.5: Criar labels (lesionado ou não)
+  - [ ] 13.2.6: Implementar RandomForestClassifier
+  - [ ] 13.2.7: Treinar modelo com dados históricos
+  - [ ] 13.2.8: Criar função de predição
+  - [ ] 13.2.9: Calcular score de confiança
+  - [ ] 13.2.10: Salvar modelo treinado
+
+- [ ] **Tarefa 13.3: Integração da Predição de Lesões**
+  - [ ] 13.3.1: Criar management command para treinar modelo
+  - [ ] 13.3.2: Criar view `InjuryRiskView`
+  - [ ] 13.3.3: Calcular risco para cada atleta
+  - [ ] 13.3.4: Criar template de visualização
+  - [ ] 13.3.5: Exibir score de risco (0-100%)
+  - [ ] 13.3.6: Adicionar alertas para alto risco
+  - [ ] 13.3.7: Criar gráfico de fatores de risco
+  - [ ] 13.3.8: Adicionar URL `/performance/injury-risk/`
+  - [ ] 13.3.9: Adicionar item no menu
+  - [ ] 13.3.10: Testar predições
+
+- [ ] **Tarefa 13.4: Modelo de Avaliação de Potencial**
+  - [ ] 13.4.1: Criar script `ml_models/potential_evaluator.py`
+  - [ ] 13.4.2: Buscar dados de scouting reports
+  - [ ] 13.4.3: Preparar features (scores técnicos)
+  - [ ] 13.4.4: Implementar modelo de regressão
+  - [ ] 13.4.5: Treinar modelo
+  - [ ] 13.4.6: Criar função de predição de potencial
+  - [ ] 13.4.7: Integrar na página de jogador observado
+  - [ ] 13.4.8: Exibir "Potencial Estimado"
+  - [ ] 13.4.9: Testar avaliações
+
+- [ ] **Tarefa 13.5: Modelo de Previsão de Receitas**
+  - [ ] 13.5.1: Criar script `ml_models/revenue_forecaster.py`
+  - [ ] 13.5.2: Buscar dados históricos de receitas
+  - [ ] 13.5.3: Preparar série temporal
+  - [ ] 13.5.4: Implementar LinearRegression
+  - [ ] 13.5.5: Treinar modelo
+  - [ ] 13.5.6: Criar função de previsão
+  - [ ] 13.5.7: Criar view `RevenueForecastView`
+  - [ ] 13.5.8: Criar template de visualização
+  - [ ] 13.5.9: Exibir previsão para próximos 6 meses
+  - [ ] 13.5.10: Criar gráfico de tendência
+  - [ ] 13.5.11: Adicionar URL `/business/forecast/`
+  - [ ] 13.5.12: Testar previsões
+
+---
+
+### Sprint 14: Testes e Garantia de Qualidade
+**Duração**: 2 semanas
+
+- [ ] **Tarefa 14.1: Testes Unitários - Accounts**
+  - [ ] 14.1.1: Criar arquivo `accounts/tests/test_models.py`
+  - [ ] 14.1.2: Testar criação de CustomUser
+  - [ ] 14.1.3: Testar validação de email único
+  - [ ] 14.1.4: Criar arquivo `accounts/tests/test_views.py`
+  - [ ] 14.1.5: Testar view de signup
+  - [ ] 14.1.6: Testar view de login
+  - [ ] 14.1.7: Testar view de logout
+  - [ ] 14.1.8: Criar arquivo `accounts/tests/test_forms.py`
+  - [ ] 14.1.9: Testar validações de formulários
+  - [ ] 14.1.10: Executar testes: `python manage.py test accounts`
+
+- [ ] **Tarefa 14.2: Testes Unitários - Performance**
+  - [ ] 14.2.1: Criar arquivo `performance/tests/test_models.py`
+  - [ ] 14.2.2: Testar modelo Athlete
+  - [ ] 14.2.3: Testar método age()
+  - [ ] 14.2.4: Testar modelo TrainingLoad
+  - [ ] 14.2.5: Testar método fatigue_index()
+  - [ ] 14.2.6: Testar modelo InjuryRecord
+  - [ ] 14.2.7: Testar método days_out()
+  - [ ] 14.2.8: Criar arquivo `performance/tests/test_views.py`
+  - [ ] 14.2.9: Testar CRUD de atletas
+  - [ ] 14.2.10: Testar CRUD de cargas
+  - [ ] 14.2.11: Testar CRUD de lesões
+  - [ ] 14.2.12: Criar arquivo `performance/tests/test_forms.py`
+  - [ ] 14.2.13: Testar validações
+  - [ ] 14.2.14: Executar testes: `python manage.py test performance`
+
+- [ ] **Tarefa 14.3: Testes Unitários - Scouting**
+  - [ ] 14.3.1: Criar arquivo `scouting/tests/test_models.py`
+  - [ ] 14.3.2: Testar modelo ScoutedPlayer
+  - [ ] 14.3.3: Testar modelo ScoutingReport
+  - [ ] 14.3.4: Testar método overall_score()
+  - [ ] 14.3.5: Criar arquivo `scouting/tests/test_views.py`
+  - [ ] 14.3.6: Testar CRUD de jogadores
+  - [ ] 14.3.7: Testar CRUD de relatórios
+  - [ ] 14.3.8: Testar comparação de jogadores
+  - [ ] 14.3.9: Executar testes: `python manage.py test scouting`
+
+- [ ] **Tarefa 14.4: Testes Unitários - Business**
+  - [ ] 14.4.1: Criar arquivo `business/tests/test_models.py`
+  - [ ] 14.4.2: Testar modelo Club
+  - [ ] 14.4.3: Testar modelo FinancialRecord
+  - [ ] 14.4.4: Testar modelo Revenue
+  - [ ] 14.4.5: Testar método total_revenue()
+  - [ ] 14.4.6: Criar arquivo `business/tests/test_views.py`
+  - [ ] 14.4.7: Testar CRUD de clubes
+  - [ ] 14.4.8: Testar CRUD de registros financeiros
+  - [ ] 14.4.9: Testar CRUD de receitas
+  - [ ] 14.4.10: Executar testes: `python manage.py test business`
+
+- [ ] **Tarefa 14.5: Testes de Integração**
+  - [ ] 14.5.1: Criar arquivo `core/tests/test_integration.py`
+  - [ ] 14.5.2: Testar fluxo completo de autenticação
+  - [ ] 14.5.3: Testar fluxo de cadastro de atleta
+  - [ ] 14.5.4: Testar fluxo de adição de carga de treino
+  - [ ] 14.5.5: Testar fluxo de scouting completo
+  - [ ] 14.5.6: Testar integração entre módulos
+  - [ ] 14.5.7: Executar todos os testes: `python manage.py test`
+
+- [ ] **Tarefa 14.6: Testes de Performance**
+  - [ ] 14.6.1: Instalar django-debug-toolbar
+  - [ ] 14.6.2: Configurar toolbar
+  - [ ] 14.6.3: Analisar queries N+1
+  - [ ] 14.6.4: Otimizar queries com select_related
+  - [ ] 14.6.5: Otimizar queries com prefetch_related
+  - [ ] 14.6.6: Adicionar índices no banco de dados
+  - [ ] 14.6.7: Testar tempo de carregamento das páginas
+  - [ ] 14.6.8: Meta: todas as páginas < 500ms
+
+- [ ] **Tarefa 14.7: Cobertura de Testes**
+  - [ ] 14.7.1: Instalar coverage
+  - [ ] 14.7.2: Executar: `coverage run manage.py test`
+  - [ ] 14.7.3: Gerar relatório: `coverage report`
+  - [ ] 14.7.4: Gerar HTML: `coverage html`
+  - [ ] 14.7.5: Analisar áreas não cobertas
+  - [ ] 14.7.6: Adicionar testes faltantes
+  - [ ] 14.7.7: Meta: cobertura > 80%
+
+---
+
+### Sprint 15: Polimento e Documentação
+**Duração**: 1 semana
+
+- [ ] **Tarefa 15.1: Revisão de Código**
+  - [ ] 15.1.1: Executar flake8 para verificar PEP 8
+  - [ ] 15.1.2: Corrigir warnings de estilo
+  - [ ] 15.1.3: Executar pylint
+  - [ ] 15.1.4: Corrigir problemas críticos
+  - [ ] 15.1.5: Revisar imports não utilizados
+  - [ ] 15.1.6: Revisar variáveis não utilizadas
+  - [ ] 15.1.7: Verificar consistência de nomenclatura
+  - [ ] 15.1.8: Verificar uso de single quotes
+
+- [ ] **Tarefa 15.2: Segurança**
+  - [ ] 15.2.1: Executar `python manage.py check --deploy`
+  - [ ] 15.2.2: Revisar configurações de produção
+  - [ ] 15.2.3: Configurar ALLOWED_HOSTS
+  - [ ] 15.2.4: Configurar SECRET_KEY via variável de ambiente
+  - [ ] 15.2.5: Configurar CSRF_TRUSTED_ORIGINS
+  - [ ] 15.2.6: Configurar SECURE_SSL_REDIRECT
+  - [ ] 15.2.7: Configurar SECURE_HSTS_SECONDS
+  - [ ] 15.2.8: Revisar permissões de acesso
+  - [ ] 15.2.9: Implementar rate limiting (opcional)
+
+- [ ] **Tarefa 15.3: Documentação de Código**
+  - [ ] 15.3.1: Adicionar docstrings a todos os modelos
+  - [ ] 15.3.2: Adicionar docstrings a todas as views
+  - [ ] 15.3.3: Adicionar docstrings a funções auxiliares
+  - [ ] 15.3.4: Documentar métodos customizados
+  - [ ] 15.3.5: Adicionar comentários em lógica complexa
+  - [ ] 15.3.6: Verificar clareza do código
+
+- [ ] **Tarefa 15.4: Documentação do Usuário**
+  - [ ] 15.4.1: Criar arquivo `docs/INSTALLATION.md`
+  - [ ] 15.4.2: Documentar pré-requisitos
+  - [ ] 15.4.3: Documentar processo de instalação
+  - [ ] 15.4.4: Criar arquivo `docs/USER_GUIDE.md`
+  - [ ] 15.4.5: Documentar funcionalidades principais
+  - [ ] 15.4.6: Adicionar screenshots
+  - [ ] 15.4.7: Criar arquivo `docs/API.md` (se houver API)
+  - [ ] 15.4.8: Atualizar README.md principal
+
+- [ ] **Tarefa 15.5: Otimizações Finais**
+  - [ ] 15.5.1: Minificar CSS e JS
+  - [ ] 15.5.2: Otimizar imagens
+  - [ ] 15.5.3: Configurar cache de templates
+  - [ ] 15.5.4: Configurar compressão gzip
+  - [ ] 15.5.5: Testar responsividade em todos os dispositivos
+  - [ ] 15.5.6: Testar compatibilidade de navegadores
+  - [ ] 15.5.7: Validar acessibilidade (WCAG)
+
+- [ ] **Tarefa 15.6: Preparação para Deploy**
+  - [ ] 15.6.1: Criar arquivo `.env.example`
+  - [ ] 15.6.2: Documentar variáveis de ambiente
+  - [ ] 15.6.3: Criar script de setup automatizado
+  - [ ] 15.6.4: Testar em ambiente limpo
+  - [ ] 15.6.5: Criar arquivo `requirements-production.txt`
+  - [ ] 15.6.6: Preparar arquivos de configuração do servidor
+  - [ ] 15.6.7: Documentar processo de deploy
 
 ---

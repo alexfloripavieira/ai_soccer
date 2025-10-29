@@ -21,7 +21,8 @@ from django.urls import include, path
 from accounts.views import HomeView
 
 urlpatterns = [
-    path("", HomeView.as_view(), name="home"),
-    path("", include("accounts.urls")),
-    path("admin/", admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
+    path('', include('accounts.urls')),
+    path('performance/', include('performance.urls')),
+    path('admin/', admin.site.urls),
 ]
