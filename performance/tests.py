@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 from performance.forms import AthleteForm, TrainingLoadForm
-from performance.models import Athlete, TrainingLoad
+from performance.models import Athlete, InjuryRecord, TrainingLoad
 
 
 class AthleteFormTest(TestCase):
@@ -102,6 +102,16 @@ class AthleteDetailViewTest(TestCase):
             intensity_level=TrainingLoad.INTENSITY_MEDIUM,
             created_by=self.user,
         )
+        self.injury = InjuryRecord.objects.create(
+            athlete=self.athlete,
+            injury_date=date.today() - timedelta(days=5),
+            injury_type=InjuryRecord.INJURY_MUSCULAR,
+            body_part=InjuryRecord.BODY_THIGH,
+            severity_level=InjuryRecord.SEVERITY_MODERATE,
+            description='Lesão muscular na coxa esquerda',
+            expected_return=date.today() + timedelta(days=10),
+            created_by=self.user,
+        )
 
     def test_requires_authentication(self):
         response = self.client.get(self.url)
@@ -121,6 +131,21 @@ class AthleteDetailViewTest(TestCase):
         self.assertContains(response, 'staff@example.com')
         self.assertIn('latest_training_loads', response.context)
         self.assertTrue(response.context['has_training_loads'])
+        self.assertIn('injury_records', response.context)
+        self.assertTrue(response.context['is_currently_injured'])
+        self.assertEqual(response.context['injury_tab'], 'training')
+        self.assertContains(response, 'Atleta lesionado')
+
+    def test_switches_to_injury_tab(self):
+        self.client.login(email='staff@example.com', password='strong-password')
+
+        response = self.client.get(f'{self.url}?tab=injuries')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['injury_tab'], 'injuries')
+        self.assertContains(response, 'Histórico de lesões')
+        self.assertContains(response, 'Registrar lesão')
+        self.assertIn(self.injury, response.context['injury_records'])
 
 
 class AthleteUpdateViewTest(TestCase):
@@ -417,3 +442,87 @@ class TrainingLoadViewsTest(TestCase):
         response = self.client.post(url)
         self.assertRedirects(response, reverse('performance:training_load_list'))
         self.assertFalse(TrainingLoad.objects.filter(pk=self.training_load.pk).exists())
+
+
+class PerformanceDashboardViewTest(TestCase):
+    """Validate aggregated metrics and alerts in the performance dashboard."""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            email='analytics@example.com',
+            password='strong-password',
+        )
+        self.client.login(email='analytics@example.com', password='strong-password')
+
+        self.athlete_active = Athlete.objects.create(
+            created_by=self.user,
+            name='Diego Sousa',
+            birth_date=date(1996, 5, 20),
+            position=Athlete.POSITION_FORWARD,
+            nationality='Brasil',
+            height=180,
+            weight=76,
+        )
+        self.athlete_injured = Athlete.objects.create(
+            created_by=self.user,
+            name='Ricardo Lima',
+            birth_date=date(1999, 9, 12),
+            position=Athlete.POSITION_MIDFIELDER,
+            nationality='Brasil',
+            height=177,
+            weight=72,
+        )
+        TrainingLoad.objects.create(
+            athlete=self.athlete_active,
+            training_date=date.today(),
+            duration_minutes=90,
+            distance_km=Decimal('10.0'),
+            intensity_level=TrainingLoad.INTENSITY_VERY_HIGH,
+            created_by=self.user,
+        )
+        TrainingLoad.objects.create(
+            athlete=self.athlete_active,
+            training_date=date.today() - timedelta(days=2),
+            duration_minutes=85,
+            distance_km=Decimal('9.2'),
+            intensity_level=TrainingLoad.INTENSITY_HIGH,
+            created_by=self.user,
+        )
+        InjuryRecord.objects.create(
+            athlete=self.athlete_injured,
+            injury_date=date.today() - timedelta(days=3),
+            injury_type=InjuryRecord.INJURY_MUSCULAR,
+            body_part=InjuryRecord.BODY_THIGH,
+            severity_level=InjuryRecord.SEVERITY_MODERATE,
+            description='Lesão muscular na coxa esquerda',
+            created_by=self.user,
+        )
+        self.url = reverse('performance:dashboard')
+
+    def test_requires_authentication(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('accounts:login'), response['Location'])
+
+    def test_dashboard_metrics_and_alerts(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'performance/performance_dashboard.html')
+
+        self.assertEqual(response.context['total_athletes'], 2)
+        self.assertEqual(response.context['injured_athletes'], 1)
+        self.assertEqual(response.context['active_athletes'], 1)
+        self.assertIsNotNone(response.context['average_age'])
+
+        latest_loads = response.context['latest_training_loads']
+        self.assertTrue(any(load.athlete == self.athlete_active for load in latest_loads))
+
+        recent_injuries = response.context['recent_injuries']
+        self.assertTrue(any(injury.athlete == self.athlete_injured for injury in recent_injuries))
+
+        alerts = response.context['alerts']
+        self.assertTrue(any(alert['athlete'] == self.athlete_active for alert in alerts))
+
+        activities = response.context['latest_activities']
+        self.assertGreaterEqual(len(activities), 1)

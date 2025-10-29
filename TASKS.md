@@ -348,60 +348,60 @@
 ### Sprint 5: Módulo de Performance - Lesões e Dashboard
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 5.1: Modelo de Registro de Lesão**
-  - [ ] 5.1.1: Criar modelo `InjuryRecord` em `performance/models.py`
-  - [ ] 5.1.2: Adicionar ForeignKey para `Athlete`
-  - [ ] 5.1.3: Adicionar campo `injury_date` (DateField)
-  - [ ] 5.1.4: Adicionar choices para `injury_type` (MUSCULAR, ARTICULAR, OSSEA, etc)
-  - [ ] 5.1.5: Adicionar choices para `body_part` (JOELHO, TORNOZELO, COXA, etc)
-  - [ ] 5.1.6: Adicionar choices para `severity_level` (LEVE, MODERADA, GRAVE)
-  - [ ] 5.1.7: Adicionar campo `description` (TextField, opcional)
-  - [ ] 5.1.8: Adicionar campo `expected_return` (DateField, opcional)
-  - [ ] 5.1.9: Adicionar campo `actual_return` (DateField, opcional)
-  - [ ] 5.1.10: Adicionar campos de auditoria
-  - [ ] 5.1.11: Adicionar campo `created_by`
-  - [ ] 5.1.12: Criar método `__str__`
-  - [ ] 5.1.13: Criar método `days_out()` para calcular tempo afastado
-  - [ ] 5.1.14: Configurar Meta
-  - [ ] 5.1.15: Criar e aplicar migrações
-  - [ ] 5.1.16: Registrar no admin
+- [X] **Tarefa 5.1: Modelo de Registro de Lesão**
+  - [X] 5.1.1: Criar modelo `InjuryRecord` em `performance/models.py`
+  - [X] 5.1.2: Adicionar ForeignKey para `Athlete`
+  - [X] 5.1.3: Adicionar campo `injury_date` (DateField)
+  - [X] 5.1.4: Adicionar choices para `injury_type` (MUSCULAR, ARTICULAR, OSSEA, etc)
+  - [X] 5.1.5: Adicionar choices para `body_part` (JOELHO, TORNOZELO, COXA, etc)
+  - [X] 5.1.6: Adicionar choices para `severity_level` (LEVE, MODERADA, GRAVE)
+  - [X] 5.1.7: Adicionar campo `description` (TextField, opcional)
+  - [X] 5.1.8: Adicionar campo `expected_return` (DateField, opcional)
+  - [X] 5.1.9: Adicionar campo `actual_return` (DateField, opcional)
+  - [X] 5.1.10: Adicionar campos de auditoria
+  - [X] 5.1.11: Adicionar campo `created_by`
+  - [X] 5.1.12: Criar método `__str__`
+  - [X] 5.1.13: Criar método `days_out()` para calcular tempo afastado
+  - [X] 5.1.14: Configurar Meta
+  - [X] 5.1.15: Criar e aplicar migrações
+  - [X] 5.1.16: Registrar no admin
 
-- [ ] **Tarefa 5.2: CRUD de Lesões**
-  - [ ] 5.2.1: Criar `InjuryRecordForm`
-  - [ ] 5.2.2: Configurar validações de datas
-  - [ ] 5.2.3: Adicionar classes CSS
-  - [ ] 5.2.4: Criar view `InjuryRecordListView`
-  - [ ] 5.2.5: Criar template de listagem
-  - [ ] 5.2.6: Implementar filtro por atleta
-  - [ ] 5.2.7: Implementar filtro por gravidade
-  - [ ] 5.2.8: Criar view `InjuryRecordCreateView`
-  - [ ] 5.2.9: Criar template de formulário
-  - [ ] 5.2.10: Criar views de edição e exclusão
-  - [ ] 5.2.11: Adicionar URLs
-  - [ ] 5.2.12: Testar CRUD completo
+- [X] **Tarefa 5.2: CRUD de Lesões**
+  - [X] 5.2.1: Criar `InjuryRecordForm`
+  - [X] 5.2.2: Configurar validações de datas
+  - [X] 5.2.3: Adicionar classes CSS
+  - [X] 5.2.4: Criar view `InjuryRecordListView`
+  - [X] 5.2.5: Criar template de listagem
+  - [X] 5.2.6: Implementar filtro por atleta
+  - [X] 5.2.7: Implementar filtro por gravidade
+  - [X] 5.2.8: Criar view `InjuryRecordCreateView`
+  - [X] 5.2.9: Criar template de formulário
+  - [X] 5.2.10: Criar views de edição e exclusão
+  - [X] 5.2.11: Adicionar URLs
+  - [X] 5.2.12: Testar CRUD completo
 
-- [ ] **Tarefa 5.3: Dashboard de Performance**
-  - [ ] 5.3.1: Criar view `PerformanceDashboardView`
-  - [ ] 5.3.2: Calcular total de atletas
-  - [ ] 5.3.3: Calcular atletas ativos vs lesionados
-  - [ ] 5.3.4: Calcular média de idade
-  - [ ] 5.3.5: Buscar últimas cargas de treino
-  - [ ] 5.3.6: Buscar lesões recentes
-  - [ ] 5.3.7: Criar template `performance_dashboard.html`
-  - [ ] 5.3.8: Implementar cards de estatísticas
-  - [ ] 5.3.9: Criar seção "Alertas" (atletas com carga excessiva)
-  - [ ] 5.3.10: Criar tabela de últimas atividades
-  - [ ] 5.3.11: Adicionar URL `/performance/dashboard/`
-  - [ ] 5.3.12: Atualizar menu de navegação
-  - [ ] 5.3.13: Testar dashboard
+- [X] **Tarefa 5.3: Dashboard de Performance**
+  - [X] 5.3.1: Criar view `PerformanceDashboardView`
+  - [X] 5.3.2: Calcular total de atletas
+  - [X] 5.3.3: Calcular atletas ativos vs lesionados
+  - [X] 5.3.4: Calcular média de idade
+  - [X] 5.3.5: Buscar últimas cargas de treino
+  - [X] 5.3.6: Buscar lesões recentes
+  - [X] 5.3.7: Criar template `performance_dashboard.html`
+  - [X] 5.3.8: Implementar cards de estatísticas
+  - [X] 5.3.9: Criar seção "Alertas" (atletas com carga excessiva)
+  - [X] 5.3.10: Criar tabela de últimas atividades
+  - [X] 5.3.11: Adicionar URL `/performance/dashboard/`
+  - [X] 5.3.12: Atualizar menu de navegação
+  - [X] 5.3.13: Testar dashboard
 
-- [ ] **Tarefa 5.4: Integração de Lesões na Página do Atleta**
-  - [ ] 5.4.1: Adicionar aba "Histórico de Lesões"
-  - [ ] 5.4.2: Listar lesões do atleta
-  - [ ] 5.4.3: Exibir status (recuperado ou em recuperação)
-  - [ ] 5.4.4: Calcular total de dias afastado
-  - [ ] 5.4.5: Adicionar indicador visual de atleta lesionado
-  - [ ] 5.4.6: Testar visualização
+- [X] **Tarefa 5.4: Integração de Lesões na Página do Atleta**
+  - [X] 5.4.1: Adicionar aba "Histórico de Lesões"
+  - [X] 5.4.2: Listar lesões do atleta
+  - [X] 5.4.3: Exibir status (recuperado ou em recuperação)
+  - [X] 5.4.4: Calcular total de dias afastado
+  - [X] 5.4.5: Adicionar indicador visual de atleta lesionado
+  - [X] 5.4.6: Testar visualização
 
 ---
 

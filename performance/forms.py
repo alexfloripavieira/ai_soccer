@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from django import forms
 
-from .models import Athlete, TrainingLoad
+from .models import Athlete, InjuryRecord, TrainingLoad
 
 
 class AthleteForm(forms.ModelForm):
@@ -180,4 +180,97 @@ class TrainingLoadForm(forms.ModelForm):
                     'heart_rate_avg',
                     'FC média não pode ser maior que a FC máxima.',
                 )
+        return cleaned_data
+
+
+class InjuryRecordForm(forms.ModelForm):
+    """Form used to register and update athlete injuries."""
+
+    class Meta:
+        model = InjuryRecord
+        fields = [
+            'athlete',
+            'injury_date',
+            'injury_type',
+            'body_part',
+            'severity_level',
+            'description',
+            'expected_return',
+            'actual_return',
+        ]
+        widgets = {
+            'injury_date': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'expected_return': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'actual_return': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'injury_type': forms.Select(
+                attrs={
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'body_part': forms.Select(
+                attrs={
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'severity_level': forms.Select(
+                attrs={
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'description': forms.Textarea(
+                attrs={
+                    'rows': 4,
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500',
+                    'placeholder': 'Detalhes adicionais sobre a lesão (opcional)',
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        base_class = (
+            'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg '
+            'text-slate-100 placeholder-slate-400 focus:outline-none '
+            'focus:ring-2 focus:ring-green-500 focus:border-transparent'
+        )
+        for field_name, field in self.fields.items():
+            field.widget.attrs.setdefault('class', base_class)
+            field.widget.attrs.setdefault('placeholder', field.label)
+
+    def clean_injury_date(self):
+        injury_date = self.cleaned_data['injury_date']
+        if injury_date > date.today():
+            raise forms.ValidationError('Data da lesão não pode estar no futuro.')
+        return injury_date
+
+    def clean(self):
+        cleaned_data = super().clean()
+        injury_date = cleaned_data.get('injury_date')
+        expected_return = cleaned_data.get('expected_return')
+        actual_return = cleaned_data.get('actual_return')
+
+        if injury_date and expected_return and expected_return < injury_date:
+            self.add_error('expected_return', 'Retorno previsto deve ser após a data da lesão.')
+
+        if injury_date and actual_return and actual_return < injury_date:
+            self.add_error('actual_return', 'Retorno real deve ser após a data da lesão.')
+
+        if expected_return and actual_return and actual_return < expected_return:
+            self.add_error('actual_return', 'Retorno real não pode ser anterior ao retorno previsto.')
+
         return cleaned_data

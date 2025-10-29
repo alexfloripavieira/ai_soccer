@@ -8,6 +8,11 @@ from performance.views import (
     AthleteDetailView,
     AthleteListView,
     AthleteUpdateView,
+    InjuryRecordCreateView,
+    InjuryRecordDeleteView,
+    InjuryRecordListView,
+    InjuryRecordUpdateView,
+    PerformanceDashboardView,
     TrainingLoadCreateView,
     TrainingLoadDeleteView,
     TrainingLoadListView,
@@ -17,6 +22,7 @@ from performance.views import (
 app_name = 'performance'
 
 urlpatterns = [
+    path('dashboard/', PerformanceDashboardView.as_view(), name='dashboard'),
     path('athletes/', AthleteListView.as_view(), name='athlete_list'),
     path('athletes/novo/', AthleteCreateView.as_view(), name='athlete_create'),
     path('athletes/<int:pk>/', AthleteDetailView.as_view(), name='athlete_detail'),
@@ -26,4 +32,8 @@ urlpatterns = [
     path('training-loads/add/', TrainingLoadCreateView.as_view(), name='training_load_create'),
     path('training-loads/<int:pk>/editar/', TrainingLoadUpdateView.as_view(), name='training_load_update'),
     path('training-loads/<int:pk>/excluir/', TrainingLoadDeleteView.as_view(), name='training_load_delete'),
+    path('injury-records/', InjuryRecordListView.as_view(), name='injury_record_list'),
+    path('injury-records/novo/', InjuryRecordCreateView.as_view(), name='injury_record_create'),
+    path('injury-records/<int:pk>/editar/', InjuryRecordUpdateView.as_view(), name='injury_record_update'),
+    path('injury-records/<int:pk>/excluir/', InjuryRecordDeleteView.as_view(), name='injury_record_delete'),
 ]

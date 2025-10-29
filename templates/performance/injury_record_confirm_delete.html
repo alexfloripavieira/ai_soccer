@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Excluir Registro de Lesão • AI Soccer{% endblock %}
+
+{% block content %}
+<section class="mx-auto w-full max-w-3xl px-6 py-16">
+  <div class="rounded-3xl border border-red-500/40 bg-red-500/10 p-10 shadow-2xl shadow-red-500/30 backdrop-blur">
+    <span class="inline-flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/20 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-red-200">
+      Exclusão permanente
+    </span>
+
+    <h1 class="mt-6 text-3xl font-semibold text-slate-100 md:text-4xl">
+      Confirmar exclusão do registro de lesão?
+    </h1>
+    <p class="mt-3 text-sm text-slate-300 md:text-base">
+      Esta ação removerá o registro de lesão datado de <strong class="text-red-200">{{ object.injury_date|date:"d/m/Y" }}</strong> para o atleta
+      <strong class="text-red-200">{{ object.athlete.name }}</strong>. Essa operação não pode ser desfeita.
+    </p>
+
+    <dl class="mt-8 grid grid-cols-1 gap-4 rounded-2xl border border-red-500/30 bg-slate-950/60 p-6 md:grid-cols-2">
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Tipo de lesão</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">{{ object.get_injury_type_display }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Região afetada</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">{{ object.get_body_part_display }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Gravidade</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">{{ object.get_severity_level_display }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Retorno previsto</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">
+          {% if object.expected_return %}
+            {{ object.expected_return|date:"d/m/Y" }}
+          {% else %}
+            —
+          {% endif %}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Retorno real</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">
+          {% if object.actual_return %}
+            {{ object.actual_return|date:"d/m/Y" }}
+          {% else %}
+            —
+          {% endif %}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Registrado por</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">{{ object.created_by.get_full_name|default:object.created_by.email }}</dd>
+      </div>
+    </dl>
+
+    <form method="post" class="mt-10 flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
+      {% csrf_token %}
+      <a
+        href="{% url 'performance:injury_record_list' %}"
+        class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700"
+      >
+        Cancelar
+      </a>
+      <button
+        type="submit"
+        class="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-500/30 transition-all duration-200 hover:bg-red-500 hover:shadow-red-400/40 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+      >
+        Excluir definitivamente
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

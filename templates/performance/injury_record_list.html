@@ -1,0 +1,161 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Lesões - AI Soccer{% endblock %}
+{% block page_title %}Registros de Lesões{% endblock %}
+
+{% block dashboard_content %}
+<section class="space-y-8">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div>
+      <h2 class="text-3xl font-semibold text-slate-100">Monitoramento de lesões</h2>
+      <p class="text-sm text-slate-400">Acompanhe a situação clínica dos atletas e planeje o retorno às atividades.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="{% url 'performance:athlete_list' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        Voltar para atletas
+      </a>
+      <a href="{% url 'performance:injury_record_create' %}" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+        Registrar lesão
+      </a>
+    </div>
+  </div>
+
+  <form method="get" class="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg shadow-slate-950/30 lg:grid-cols-4 lg:items-end">
+    <div class="lg:col-span-2">
+      <label for="id_athlete" class="mb-2 block text-sm font-medium text-slate-300">Filtrar por atleta</label>
+      <select name="athlete" id="id_athlete" class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">Todos os atletas</option>
+        {% for athlete in athletes %}
+          <option value="{{ athlete.id }}" {% if selected_athlete|add:'' == athlete.id|add:'' %}selected{% endif %}>{{ athlete.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="id_severity" class="mb-2 block text-sm font-medium text-slate-300">Gravidade</label>
+      <select name="severity" id="id_severity" class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">Todas</option>
+        {% for value, label in severity_choices %}
+          <option value="{{ value }}" {% if selected_severity == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="flex gap-3">
+      <button type="submit" class="flex-1 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+        Filtrar
+      </button>
+      {% if selected_athlete or selected_severity %}
+      <a href="{% url 'performance:injury_record_list' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        Limpar
+      </a>
+      {% endif %}
+    </div>
+  </form>
+
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-5 shadow-lg shadow-rose-900/20">
+      <p class="text-xs uppercase tracking-widest text-rose-200">Total de registros</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">{{ total_records }}</p>
+      <p class="text-xs text-rose-200/80">Dentro do filtro atual</p>
+    </div>
+    <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-lg shadow-amber-900/20">
+      <p class="text-xs uppercase tracking-widest text-amber-200">Casos ativos</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">{{ active_cases }}</p>
+      <p class="text-xs text-amber-200/80">Atletas ainda em recuperação</p>
+    </div>
+    <div class="rounded-2xl border border-blue-500/40 bg-blue-500/10 p-5 shadow-lg shadow-blue-900/20">
+      <p class="text-xs uppercase tracking-widest text-blue-200">Registro recente</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">
+        {% if recent_injury %}
+          {{ recent_injury.injury_date|date:"d/m" }}
+        {% else %}
+          -
+        {% endif %}
+      </p>
+      <p class="text-xs text-blue-200/80">Data da lesão mais recente</p>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+    {% if injury_records %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-800 text-sm">
+          <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+            <tr>
+              <th class="px-6 py-4 text-left">Data</th>
+              <th class="px-6 py-4 text-left">Atleta</th>
+              <th class="px-6 py-4 text-left">Tipo</th>
+              <th class="px-6 py-4 text-left">Região</th>
+              <th class="px-6 py-4 text-left">Gravidade</th>
+              <th class="px-6 py-4 text-left">Status</th>
+              <th class="px-6 py-4 text-left hidden lg:table-cell">Retorno previsto</th>
+              <th class="px-6 py-4 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-200">
+            {% for record in injury_records %}
+            <tr class="transition-all duration-150 hover:bg-slate-900/60">
+              <td class="whitespace-nowrap px-6 py-4">{{ record.injury_date|date:"d/m/Y" }}</td>
+              <td class="whitespace-nowrap px-6 py-4">
+                <a href="{% url 'performance:athlete_detail' record.athlete.pk %}" class="text-green-300 hover:text-green-200">
+                  {{ record.athlete.name }}
+                </a>
+              </td>
+              <td class="whitespace-nowrap px-6 py-4">{{ record.get_injury_type_display }}</td>
+              <td class="whitespace-nowrap px-6 py-4">{{ record.get_body_part_display }}</td>
+              <td class="whitespace-nowrap px-6 py-4">
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ record.severity_badge_class }}">
+                  {{ record.get_severity_level_display }}
+                </span>
+              </td>
+              <td class="whitespace-nowrap px-6 py-4">
+                {% if record.actual_return %}
+                  <span class="inline-flex items-center rounded-full border border-emerald-400/40 bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-200">
+                    Recuperado
+                  </span>
+                {% else %}
+                  <span class="inline-flex items-center rounded-full border border-amber-400/40 bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-200">
+                    Em recuperação
+                  </span>
+                {% endif %}
+              </td>
+              <td class="whitespace-nowrap px-6 py-4 text-slate-300 hidden lg:table-cell">
+                {% if record.expected_return %}
+                  {{ record.expected_return|date:"d/m/Y" }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td class="whitespace-nowrap px-6 py-4 text-right text-sm">
+                <div class="inline-flex items-center gap-2">
+                  <a href="{% url 'performance:injury_record_update' record.pk %}" class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-all duration-150 hover:border-blue-500/60 hover:text-blue-300">
+                    Editar
+                  </a>
+                  <a href="{% url 'performance:injury_record_delete' record.pk %}" class="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 transition-all duration-150 hover:bg-red-500/20">
+                    Excluir
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% include 'components/pagination.html' with page_obj=page_obj params=params %}
+    {% else %}
+      <div class="flex flex-col items-center justify-center px-10 py-16 text-center">
+        <div class="rounded-full border border-slate-800 bg-slate-900/80 p-6">
+          <svg class="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m-7.5-7.5h15" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Nenhum registro encontrado</h3>
+        <p class="mt-2 text-sm text-slate-400">Cadastre as ocorrências de lesão para acompanhar o processo de recuperação dos atletas.</p>
+        <a href="{% url 'performance:injury_record_create' %}" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+          Registrar primeira lesão
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

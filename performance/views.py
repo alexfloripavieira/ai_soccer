@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date, timedelta
 
 from django.contrib import messages
@@ -5,10 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Max, Sum
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
-from performance.forms import AthleteForm, TrainingLoadForm
-from performance.models import Athlete, TrainingLoad
+from performance.forms import AthleteForm, InjuryRecordForm, TrainingLoadForm
+from performance.models import Athlete, InjuryRecord, TrainingLoad
 
 
 class AthleteListView(LoginRequiredMixin, ListView):
@@ -95,6 +96,16 @@ class AthleteDetailView(LoginRequiredMixin, DetailView):
             TrainingLoad.INTENSITY_VERY_HIGH: 4,
         }
 
+        injury_records = list(
+            self.object.injury_records.select_related('created_by')
+            .order_by('-injury_date', '-created_at')
+        )
+        active_injuries = [record for record in injury_records if record.actual_return is None]
+        total_days_out = sum(record.days_out() for record in injury_records)
+        injury_tab = self.request.GET.get('tab', 'training')
+        if injury_tab not in {'training', 'injuries'}:
+            injury_tab = 'training'
+
         context.update(
             {
                 'latest_training_loads': latest_training_loads,
@@ -115,6 +126,15 @@ class AthleteDetailView(LoginRequiredMixin, DetailView):
                     }
                     for load in latest_training_loads
                 ],
+                'injury_records': injury_records,
+                'has_injury_records': bool(injury_records),
+                'is_currently_injured': bool(active_injuries),
+                'current_injury': active_injuries[0] if active_injuries else None,
+                'active_injuries': active_injuries,
+                'injury_total_days_out': total_days_out,
+                'injury_total_count': len(injury_records),
+                'injury_list_url': reverse_lazy('performance:injury_record_list'),
+                'injury_tab': injury_tab,
             }
         )
         return context
@@ -242,3 +262,208 @@ class TrainingLoadDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Carga de treino removida com sucesso.')
         return super().delete(request, *args, **kwargs)
+
+
+class InjuryRecordListView(LoginRequiredMixin, ListView):
+    """Display registered injuries with filtering options."""
+
+    model = InjuryRecord
+    template_name = 'performance/injury_record_list.html'
+    context_object_name = 'injury_records'
+    paginate_by = 15
+    login_url = reverse_lazy('accounts:login')
+
+    def get_queryset(self):
+        queryset = (
+            super()
+            .get_queryset()
+            .select_related('athlete', 'created_by')
+            .order_by('-injury_date', '-created_at')
+        )
+        athlete_id = self.request.GET.get('athlete')
+        severity = self.request.GET.get('severity')
+
+        if athlete_id:
+            queryset = queryset.filter(athlete_id=athlete_id)
+
+        if severity:
+            queryset = queryset.filter(severity_level=severity)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        filtered_queryset = self.get_queryset()
+        context.update(
+            {
+                'athletes': Athlete.objects.order_by('name'),
+                'severity_choices': InjuryRecord.SEVERITY_LEVEL_CHOICES,
+                'selected_athlete': self.request.GET.get('athlete', ''),
+                'selected_severity': self.request.GET.get('severity', ''),
+                'total_records': filtered_queryset.count(),
+                'active_cases': filtered_queryset.filter(actual_return__isnull=True).count(),
+                'recent_injury': filtered_queryset.first(),
+                'params': self.request.GET.copy(),
+            }
+        )
+        context['params'].pop('page', None)
+        return context
+
+
+class InjuryRecordCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    """Register a new injury record."""
+
+    model = InjuryRecord
+    form_class = InjuryRecordForm
+    template_name = 'performance/injury_record_form.html'
+    login_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('performance:injury_record_list')
+    success_message = 'Registro de lesão criado com sucesso.'
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        form.fields['athlete'].queryset = Athlete.objects.order_by('name')
+        return form
+
+
+class InjuryRecordUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Update an existing injury record."""
+
+    model = InjuryRecord
+    form_class = InjuryRecordForm
+    template_name = 'performance/injury_record_form.html'
+    login_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('performance:injury_record_list')
+    success_message = 'Registro de lesão atualizado com sucesso.'
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        form.fields['athlete'].queryset = Athlete.objects.order_by('name')
+        return form
+
+
+class InjuryRecordDeleteView(LoginRequiredMixin, DeleteView):
+    """Remove an injury record after confirmation."""
+
+    model = InjuryRecord
+    template_name = 'performance/injury_record_confirm_delete.html'
+    login_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('performance:injury_record_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Registro de lesão removido com sucesso.')
+        return super().delete(request, *args, **kwargs)
+
+
+class PerformanceDashboardView(LoginRequiredMixin, TemplateView):
+    """Provide consolidated performance insights for coaching staff."""
+
+    template_name = 'performance/performance_dashboard.html'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        total_athletes = Athlete.objects.count()
+        injured_athlete_count = (
+            InjuryRecord.objects.filter(actual_return__isnull=True)
+            .values('athlete_id')
+            .distinct()
+            .count()
+        )
+
+        athlete_birth_dates = Athlete.objects.only('birth_date')
+        ages = [athlete.age() for athlete in athlete_birth_dates]
+        average_age = round(sum(ages) / len(ages), 1) if ages else None
+
+        latest_training_loads = list(
+            TrainingLoad.objects.select_related('athlete', 'created_by')
+            .order_by('-training_date', '-created_at')[:5]
+        )
+        recent_injuries = list(
+            InjuryRecord.objects.select_related('athlete', 'created_by')
+            .order_by('-injury_date', '-created_at')[:5]
+        )
+
+        one_week_ago = date.today() - timedelta(days=7)
+        recent_loads = (
+            TrainingLoad.objects.filter(training_date__gte=one_week_ago)
+            .select_related('athlete')
+            .order_by('-training_date')
+        )
+        alert_map = defaultdict(lambda: {
+            'athlete': None,
+            'athlete_id': None,
+            'sessions': 0,
+            'high_sessions': 0,
+            'total_duration': 0,
+            'total_distance': 0.0,
+            'fatigue_sum': 0.0,
+            'last_training_date': None,
+        })
+        for load in recent_loads:
+            entry = alert_map[load.athlete_id]
+            entry['athlete'] = load.athlete
+            entry['athlete_id'] = load.athlete_id
+            entry['sessions'] += 1
+            if load.intensity_level in [TrainingLoad.INTENSITY_HIGH, TrainingLoad.INTENSITY_VERY_HIGH]:
+                entry['high_sessions'] += 1
+            entry['total_duration'] += load.duration_minutes
+            entry['total_distance'] += float(load.distance_km)
+            entry['fatigue_sum'] += load.fatigue_index()
+            if entry['last_training_date'] is None or load.training_date > entry['last_training_date']:
+                entry['last_training_date'] = load.training_date
+
+        alerts = []
+        for data in alert_map.values():
+            if data['high_sessions'] >= 2 or data['fatigue_sum'] >= 6 or data['total_duration'] >= 360:
+                alerts.append(data)
+
+        alerts.sort(key=lambda item: (item['high_sessions'], item['fatigue_sum'], item['total_duration']), reverse=True)
+        alerts = alerts[:5]
+
+        activity_items = []
+        for load in latest_training_loads:
+            activity_items.append(
+                {
+                    'date': load.training_date,
+                    'type': 'training',
+                    'label': 'Carga de treino',
+                    'athlete': load.athlete,
+                    'intensity': load.get_intensity_level_display(),
+                    'description': f'{load.duration_minutes} min • {load.distance_km} km',
+                }
+            )
+        for injury in recent_injuries:
+            status_label = 'Recuperado' if injury.actual_return else 'Em recuperação'
+            activity_items.append(
+                {
+                    'date': injury.injury_date,
+                    'type': 'injury',
+                    'label': 'Registro de lesão',
+                    'athlete': injury.athlete,
+                    'intensity': status_label,
+                    'description': f'{injury.get_injury_type_display()} • {injury.get_body_part_display()}',
+                }
+            )
+        activity_items.sort(key=lambda item: item['date'], reverse=True)
+        latest_activities = activity_items[:8]
+
+        context.update(
+            {
+                'total_athletes': total_athletes,
+                'injured_athletes': injured_athlete_count,
+                'active_athletes': max(total_athletes - injured_athlete_count, 0),
+                'average_age': average_age,
+                'latest_training_loads': latest_training_loads,
+                'recent_injuries': recent_injuries,
+                'alerts': alerts,
+                'latest_activities': latest_activities,
+                'has_data': bool(latest_training_loads or recent_injuries or alerts),
+            }
+        )
+        return context

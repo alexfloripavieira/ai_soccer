@@ -1,0 +1,224 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Painel de Performance - AI Soccer{% endblock %}
+{% block page_title %}Painel de Performance{% endblock %}
+
+{% block dashboard_content %}
+<section class="space-y-10">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div>
+      <h2 class="text-3xl font-semibold text-slate-100">Visão geral da equipe</h2>
+      <p class="text-sm text-slate-400">Resumo das métricas esportivas para decisões rápidas sobre cargas e lesões.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="{% url 'performance:athlete_list' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        Gerenciar atletas
+      </a>
+      <a href="{% url 'performance:injury_record_create' %}" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+        Registrar lesão
+      </a>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div class="rounded-2xl border border-green-500/40 bg-green-500/10 p-6 shadow-lg shadow-green-900/20">
+      <p class="text-xs uppercase tracking-widest text-green-200">Atletas cadastrados</p>
+      <p class="mt-2 text-4xl font-semibold text-slate-100">{{ total_athletes }}</p>
+      <p class="text-xs text-green-200/80">Total de atletas no elenco</p>
+    </div>
+    <div class="rounded-2xl border border-blue-500/40 bg-blue-500/10 p-6 shadow-lg shadow-blue-900/20">
+      <p class="text-xs uppercase tracking-widest text-blue-200">Atletas ativos</p>
+      <p class="mt-2 text-4xl font-semibold text-slate-100">{{ active_athletes }}</p>
+      <p class="text-xs text-blue-200/80">Disponíveis para treinos e jogos</p>
+    </div>
+    <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-6 shadow-lg shadow-amber-900/20">
+      <p class="text-xs uppercase tracking-widest text-amber-200">Atletas lesionados</p>
+      <p class="mt-2 text-4xl font-semibold text-slate-100">{{ injured_athletes }}</p>
+      <p class="text-xs text-amber-200/80">Lesões ativas sem retorno registrado</p>
+    </div>
+    <div class="rounded-2xl border border-purple-500/40 bg-purple-500/10 p-6 shadow-lg shadow-purple-900/20">
+      <p class="text-xs uppercase tracking-widest text-purple-200">Idade média</p>
+      <p class="mt-2 text-4xl font-semibold text-slate-100">
+        {% if average_age %}
+          {{ average_age|floatformat:1 }} anos
+        {% else %}
+          —
+        {% endif %}
+      </p>
+      <p class="text-xs text-purple-200/80">Considerando todos os atletas</p>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-100">Últimas cargas de treino</h3>
+          <p class="text-xs text-slate-400">Monitoramento das sessões mais recentes</p>
+        </div>
+        <a href="{% url 'performance:training_load_list' %}" class="text-xs font-semibold text-green-300 hover:text-green-200">Ver todas</a>
+      </div>
+      <div class="divide-y divide-slate-800">
+        {% if latest_training_loads %}
+          {% for load in latest_training_loads %}
+          <div class="flex items-center justify-between px-6 py-4">
+            <div>
+              <p class="text-sm font-semibold text-slate-100">{{ load.athlete.name }}</p>
+              <p class="mt-1 text-xs text-slate-400">
+                {{ load.training_date|date:"d/m/Y" }} • {{ load.duration_minutes }} min • {{ load.distance_km|floatformat:1 }} km
+              </p>
+            </div>
+            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ load.intensity_badge_class }}">
+              {{ load.get_intensity_level_display }}
+            </span>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="px-6 py-10 text-center text-sm text-slate-400">
+            Nenhuma carga de treino registrada recentemente.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-100">Lesões recentes</h3>
+          <p class="text-xs text-slate-400">Acompanhamento clínico dos atletas</p>
+        </div>
+        <a href="{% url 'performance:injury_record_list' %}" class="text-xs font-semibold text-blue-300 hover:text-blue-200">Ver histórico</a>
+      </div>
+      <div class="divide-y divide-slate-800">
+        {% if recent_injuries %}
+          {% for injury in recent_injuries %}
+          <div class="flex items-center justify-between px-6 py-4">
+            <div>
+              <p class="text-sm font-semibold text-slate-100">{{ injury.athlete.name }}</p>
+              <p class="mt-1 text-xs text-slate-400">
+                {{ injury.injury_date|date:"d/m/Y" }} • {{ injury.get_injury_type_display }} • {{ injury.get_body_part_display }}
+              </p>
+            </div>
+            {% if injury.actual_return %}
+              <span class="inline-flex items-center rounded-full border border-emerald-400/40 bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-200">
+                Recuperado
+              </span>
+            {% else %}
+              <span class="inline-flex items-center rounded-full border border-amber-400/40 bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-200">
+                Em recuperação
+              </span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="px-6 py-10 text-center text-sm text-slate-400">
+            Nenhum registro de lesão recente.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-3">
+    <div class="xl:col-span-2 rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-100">Alertas de carga</h3>
+          <p class="text-xs text-slate-400">Atletas com potencial sobrecarga na última semana</p>
+        </div>
+        <a href="{% url 'performance:training_load_list' %}?period=last_7_days" class="text-xs font-semibold text-amber-300 hover:text-amber-200">Ver filtro</a>
+      </div>
+      {% if alerts %}
+        <div class="divide-y divide-slate-800">
+          {% for alert in alerts %}
+          <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold text-slate-100">{{ alert.athlete.name }}</p>
+              <span class="inline-flex items-center rounded-full border border-red-400/40 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-200">
+                {{ alert.high_sessions }} sessões intensas
+              </span>
+            </div>
+            <dl class="mt-3 grid gap-3 text-xs text-slate-400 sm:grid-cols-3">
+              <div>
+                <dt class="uppercase tracking-wider text-slate-500">Duração total</dt>
+                <dd class="mt-1 text-sm text-slate-200">{{ alert.total_duration }} min</dd>
+              </div>
+              <div>
+                <dt class="uppercase tracking-wider text-slate-500">Distância</dt>
+                <dd class="mt-1 text-sm text-slate-200">{{ alert.total_distance|floatformat:1 }} km</dd>
+              </div>
+              <div>
+                <dt class="uppercase tracking-wider text-slate-500">Último treino</dt>
+                <dd class="mt-1 text-sm text-slate-200">
+                  {% if alert.last_training_date %}
+                    {{ alert.last_training_date|date:"d/m" }}
+                  {% else %}
+                    —
+                  {% endif %}
+                </dd>
+              </div>
+            </dl>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="px-6 py-10 text-center text-sm text-slate-400">
+          Nenhum atleta com sobrecarga detectada nos últimos 7 dias.
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+      <div class="flex items-center justify-between border-b border-slate-800 px-6 py-5">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-100">Últimas atividades</h3>
+          <p class="text-xs text-slate-400">Resumo das ações registradas</p>
+        </div>
+      </div>
+      <div class="divide-y divide-slate-800">
+        {% if latest_activities %}
+          {% for item in latest_activities %}
+          <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-semibold text-slate-100">{{ item.athlete.name }}</p>
+                <p class="mt-1 text-xs text-slate-400">{{ item.label }} • {{ item.date|date:"d/m/Y" }}</p>
+              </div>
+              {% if item.type == 'training' %}
+                <span class="inline-flex items-center rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-200">
+                  {{ item.intensity }}
+                </span>
+              {% else %}
+                <span class="inline-flex items-center rounded-full border border-amber-400/40 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-200">
+                  {{ item.intensity }}
+                </span>
+              {% endif %}
+            </div>
+            <p class="mt-2 text-xs text-slate-400">{{ item.description }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="px-6 py-10 text-center text-sm text-slate-400">
+            Nenhuma atividade registrada recentemente.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if not has_data %}
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/60 px-6 py-10 text-center shadow-xl shadow-slate-950/30">
+      <h3 class="text-xl font-semibold text-slate-100">Comece a registrar dados</h3>
+      <p class="mt-2 text-sm text-slate-400">Cadastre atletas, cargas de treino e lesões para visualizar indicadores neste painel.</p>
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+        <a href="{% url 'performance:athlete_create' %}" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+          Adicionar atleta
+        </a>
+        <a href="{% url 'performance:training_load_create' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+          Registrar carga
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
