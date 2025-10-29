@@ -1,0 +1,167 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Cargas de Treino - AI Soccer{% endblock %}
+{% block page_title %}Cargas de Treino{% endblock %}
+
+{% block dashboard_content %}
+<section class="space-y-8">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div>
+      <h2 class="text-3xl font-semibold text-slate-100">Monitoramento de cargas</h2>
+      <p class="text-sm text-slate-400">Acompanhe a evolução das sessões de treino e ajuste o planejamento físico.</p>
+    </div>
+    <div class="flex gap-3">
+      <a href="{% url 'performance:athlete_list' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        Voltar para atletas
+      </a>
+      <a href="{% url 'performance:training_load_create' %}" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+        Registrar carga
+      </a>
+    </div>
+  </div>
+
+  <form method="get" class="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg shadow-slate-950/30 lg:grid-cols-4 lg:items-end">
+    <div class="lg:col-span-2">
+      <label for="id_athlete" class="block text-sm font-medium text-slate-300 mb-2">
+        Filtrar por atleta
+      </label>
+      <select name="athlete" id="id_athlete" class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">Todos os atletas</option>
+        {% for athlete in athletes %}
+          <option value="{{ athlete.id }}" {% if selected_athlete|add:'' == athlete.id|add:'' %}selected{% endif %}>{{ athlete.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="id_period" class="block text-sm font-medium text-slate-300 mb-2">
+        Período
+      </label>
+      <select name="period" id="id_period" class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        {% for value, label in period_options %}
+          {% if value %}
+            <option value="{{ value }}" {% if selected_period == value %}selected{% endif %}>{{ label }}</option>
+          {% endif %}
+        {% endfor %}
+        <option value="" {% if not selected_period %}selected{% endif %}>Tudo</option>
+      </select>
+    </div>
+    <div class="flex gap-3">
+      <button type="submit" class="flex-1 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+        Filtrar
+      </button>
+      {% if selected_athlete or selected_period %}
+      <a href="{% url 'performance:training_load_list' %}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        Limpar
+      </a>
+      {% endif %}
+    </div>
+  </form>
+
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class="rounded-2xl border border-green-500/40 bg-green-500/10 p-5 shadow-lg shadow-green-900/20">
+      <p class="text-xs uppercase tracking-widest text-green-200">Registros</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">{{ total_records }}</p>
+      <p class="text-xs text-green-200/80">Cargas dentro do filtro atual</p>
+    </div>
+    <div class="rounded-2xl border border-blue-500/40 bg-blue-500/10 p-5 shadow-lg shadow-blue-900/20">
+      <p class="text-xs uppercase tracking-widest text-blue-200">Duração média</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">
+        {% if average_duration %}
+          {{ average_duration|floatformat:1 }}
+        {% else %}
+          -
+        {% endif %}
+      </p>
+      <p class="text-xs text-blue-200/80">minutos</p>
+    </div>
+    <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-lg shadow-amber-900/20">
+      <p class="text-xs uppercase tracking-widest text-amber-200">Carga recente</p>
+      <p class="mt-2 text-3xl font-semibold text-slate-100">
+        {% if latest_training_date %}
+          {{ latest_training_date|date:"d/m" }}
+        {% else %}
+          -
+        {% endif %}
+      </p>
+      <p class="text-xs text-amber-200/80">Data mais recente registrada</p>
+    </div>
+  </div>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl shadow-slate-950/40">
+    {% if training_loads %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-800 text-sm">
+          <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider text-xs">
+            <tr>
+              <th class="px-6 py-4 text-left">Data</th>
+              <th class="px-6 py-4 text-left">Atleta</th>
+              <th class="px-6 py-4 text-left">Duração</th>
+              <th class="px-6 py-4 text-left">Distância</th>
+              <th class="px-6 py-4 text-left">Intensidade</th>
+              <th class="px-6 py-4 text-left hidden lg:table-cell">FC média / máx</th>
+              <th class="px-6 py-4 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 text-slate-200">
+            {% for training_load in training_loads %}
+            <tr class="hover:bg-slate-900/60 transition-all duration-150">
+              <td class="px-6 py-4 whitespace-nowrap">{{ training_load.training_date|date:"d/m/Y" }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <a href="{% url 'performance:athlete_detail' training_load.athlete.pk %}" class="text-green-300 hover:text-green-200">
+                  {{ training_load.athlete.name }}
+                </a>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ training_load.duration_minutes }} min</td>
+              <td class="px-6 py-4 whitespace-nowrap">{{ training_load.distance_km|floatformat:1 }} km</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ training_load.intensity_badge_class }}">
+                  {{ training_load.get_intensity_level_display }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap hidden lg:table-cell">
+                {% if training_load.heart_rate_avg %}
+                  {{ training_load.heart_rate_avg }} bpm
+                {% else %}
+                  —
+                {% endif %}
+                /
+                {% if training_load.heart_rate_max %}
+                  {{ training_load.heart_rate_max }} bpm
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                <div class="inline-flex items-center gap-2">
+                  <a href="{% url 'performance:training_load_update' training_load.pk %}" class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-all duration-150 hover:border-blue-500/60 hover:text-blue-300">
+                    Editar
+                  </a>
+                  <a href="{% url 'performance:training_load_delete' training_load.pk %}" class="rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-300 transition-all duration-150 hover:bg-red-500/20">
+                    Excluir
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% include 'components/pagination.html' with page_obj=page_obj params=params %}
+    {% else %}
+      <div class="flex flex-col items-center justify-center px-10 py-16 text-center">
+        <div class="rounded-full border border-slate-800 bg-slate-900/80 p-6">
+          <svg class="h-10 w-10 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m-9 5h18M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16" />
+          </svg>
+        </div>
+        <h3 class="mt-6 text-xl font-semibold text-slate-100">Nenhuma carga encontrada</h3>
+        <p class="mt-2 text-sm text-slate-400">Registre as sessões de treino para acompanhar o esforço dos atletas ao longo da temporada.</p>
+        <a href="{% url 'performance:training_load_create' %}" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+          Registrar primeira carga
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

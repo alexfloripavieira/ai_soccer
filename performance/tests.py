@@ -1,11 +1,12 @@
 from datetime import date, timedelta
+from decimal import Decimal
 
 from django.test import TestCase
 from django.urls import reverse
 
 from django.contrib.auth import get_user_model
-from performance.forms import AthleteForm
-from performance.models import Athlete
+from performance.forms import AthleteForm, TrainingLoadForm
+from performance.models import Athlete, TrainingLoad
 
 
 class AthleteFormTest(TestCase):
@@ -91,6 +92,16 @@ class AthleteDetailViewTest(TestCase):
             weight=82,
         )
         self.url = reverse('performance:athlete_detail', args=[self.athlete.pk])
+        TrainingLoad.objects.create(
+            athlete=self.athlete,
+            training_date=date.today() - timedelta(days=1),
+            duration_minutes=60,
+            distance_km=Decimal('8.5'),
+            heart_rate_avg=130,
+            heart_rate_max=165,
+            intensity_level=TrainingLoad.INTENSITY_MEDIUM,
+            created_by=self.user,
+        )
 
     def test_requires_authentication(self):
         response = self.client.get(self.url)
@@ -108,6 +119,8 @@ class AthleteDetailViewTest(TestCase):
         self.assertContains(response, 'Carlos Mendes')
         self.assertContains(response, 'Defensor')
         self.assertContains(response, 'staff@example.com')
+        self.assertIn('latest_training_loads', response.context)
+        self.assertTrue(response.context['has_training_loads'])
 
 
 class AthleteUpdateViewTest(TestCase):
@@ -226,3 +239,181 @@ class AthleteDeleteViewTest(TestCase):
             fetch_redirect_response=False,
         )
         self.assertFalse(Athlete.objects.filter(pk=self.athlete.pk).exists())
+
+
+class TrainingLoadModelTest(TestCase):
+    """Ensure TrainingLoad model helpers behave as expected."""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            email='coach@example.com',
+            password='strong-password',
+        )
+        self.athlete = Athlete.objects.create(
+            created_by=self.user,
+            name='Lucas Rocha',
+            birth_date=date(1999, 3, 12),
+            position=Athlete.POSITION_MIDFIELDER,
+            nationality='Brasil',
+            height=178,
+            weight=72,
+        )
+        self.training_load = TrainingLoad.objects.create(
+            athlete=self.athlete,
+            training_date=date(2025, 10, 1),
+            duration_minutes=75,
+            distance_km=Decimal('9.5'),
+            heart_rate_avg=125,
+            heart_rate_max=170,
+            intensity_level=TrainingLoad.INTENSITY_HIGH,
+            created_by=self.user,
+        )
+
+    def test_str_representation(self):
+        self.assertEqual(str(self.training_load), 'Lucas Rocha - 2025-10-01')
+
+    def test_fatigue_index(self):
+        self.assertAlmostEqual(self.training_load.fatigue_index(), 0.7125)
+
+    def test_intensity_badge_class(self):
+        self.assertIn('bg-amber-500/20', self.training_load.intensity_badge_class())
+
+
+class TrainingLoadFormTest(TestCase):
+    """Validate TrainingLoadForm business rules."""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            email='physio@example.com',
+            password='strong-password',
+        )
+        self.athlete = Athlete.objects.create(
+            created_by=self.user,
+            name='Thiago Nunes',
+            birth_date=date(2000, 7, 22),
+            position=Athlete.POSITION_FORWARD,
+            nationality='Brasil',
+            height=180,
+            weight=78,
+        )
+        self.valid_payload = {
+            'athlete': self.athlete.pk,
+            'training_date': date.today(),
+            'duration_minutes': 60,
+            'distance_km': Decimal('6.5'),
+            'heart_rate_avg': 140,
+            'heart_rate_max': 170,
+            'intensity_level': TrainingLoad.INTENSITY_MEDIUM,
+        }
+
+    def test_valid_payload(self):
+        form = TrainingLoadForm(self.valid_payload)
+        self.assertTrue(form.is_valid())
+
+    def test_future_training_date_not_allowed(self):
+        data = self.valid_payload | {'training_date': date.today() + timedelta(days=1)}
+        form = TrainingLoadForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('training_date', form.errors)
+
+    def test_distance_cannot_be_negative(self):
+        data = self.valid_payload | {'distance_km': Decimal('-1')}
+        form = TrainingLoadForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('distance_km', form.errors)
+
+    def test_heart_rate_avg_cannot_exceed_max(self):
+        data = self.valid_payload | {'heart_rate_avg': 180, 'heart_rate_max': 170}
+        form = TrainingLoadForm(data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('heart_rate_avg', form.errors)
+
+
+class TrainingLoadViewsTest(TestCase):
+    """Exercise list, create, update and delete views for training loads."""
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            email='coach@example.com',
+            password='strong-password',
+        )
+        self.other_user = get_user_model().objects.create_user(
+            email='assistant@example.com',
+            password='strong-password',
+        )
+        self.athlete = Athlete.objects.create(
+            created_by=self.user,
+            name='João Pereira',
+            birth_date=date(1997, 4, 10),
+            position=Athlete.POSITION_GOALKEEPER,
+            nationality='Brasil',
+            height=188,
+            weight=84,
+        )
+        self.training_load = TrainingLoad.objects.create(
+            athlete=self.athlete,
+            training_date=date.today() - timedelta(days=3),
+            duration_minutes=55,
+            distance_km=Decimal('5.5'),
+            heart_rate_avg=120,
+            heart_rate_max=160,
+            intensity_level=TrainingLoad.INTENSITY_MEDIUM,
+            created_by=self.user,
+        )
+        TrainingLoad.objects.create(
+            athlete=self.athlete,
+            training_date=date.today() - timedelta(days=10),
+            duration_minutes=70,
+            distance_km=Decimal('7.2'),
+            intensity_level=TrainingLoad.INTENSITY_LOW,
+            created_by=self.user,
+        )
+        self.client.login(email='coach@example.com', password='strong-password')
+
+    def test_list_filters_by_period(self):
+        url = reverse('performance:training_load_list')
+        response = self.client.get(url, {'period': 'last_7_days'})
+        self.assertEqual(response.status_code, 200)
+        loads = response.context['training_loads']
+        self.assertTrue(all(load.training_date >= date.today() - timedelta(days=7) for load in loads))
+
+    def test_create_training_load_sets_creator(self):
+        url = reverse('performance:training_load_create')
+        payload = {
+            'athlete': self.athlete.pk,
+            'training_date': date.today(),
+            'duration_minutes': 65,
+            'distance_km': '6.2',
+            'heart_rate_avg': 135,
+            'heart_rate_max': 172,
+            'intensity_level': TrainingLoad.INTENSITY_HIGH,
+        }
+        response = self.client.post(url, payload)
+        self.assertRedirects(response, reverse('performance:training_load_list'))
+        training_load = TrainingLoad.objects.get(distance_km=Decimal('6.2'))
+        self.assertEqual(training_load.created_by, self.user)
+
+    def test_update_training_load(self):
+        url = reverse('performance:training_load_update', args=[self.training_load.pk])
+        response = self.client.post(
+            url,
+            {
+                'athlete': self.athlete.pk,
+                'training_date': self.training_load.training_date,
+                'duration_minutes': 60,
+                'distance_km': '6.0',
+                'heart_rate_avg': 130,
+                'heart_rate_max': 165,
+                'intensity_level': TrainingLoad.INTENSITY_HIGH,
+            },
+        )
+        self.assertRedirects(response, reverse('performance:training_load_list'))
+        self.training_load.refresh_from_db()
+        self.assertEqual(self.training_load.duration_minutes, 60)
+        self.assertEqual(self.training_load.intensity_level, TrainingLoad.INTENSITY_HIGH)
+
+    def test_delete_training_load(self):
+        url = reverse('performance:training_load_delete', args=[self.training_load.pk])
+        response = self.client.post(url)
+        self.assertRedirects(response, reverse('performance:training_load_list'))
+        self.assertFalse(TrainingLoad.objects.filter(pk=self.training_load.pk).exists())

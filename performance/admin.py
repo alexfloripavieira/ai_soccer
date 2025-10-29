@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Athlete
+from .models import Athlete, TrainingLoad
 
 
 @admin.register(Athlete)
@@ -24,5 +24,22 @@ class AthleteAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+
+@admin.register(TrainingLoad)
+class TrainingLoadAdmin(admin.ModelAdmin):
+    list_display = [
+        'athlete',
+        'training_date',
+        'intensity_level',
+        'duration_minutes',
+        'distance_km',
+        'created_at',
+    ]
+    list_filter = ['intensity_level', 'training_date']
+    search_fields = ['athlete__name']
+    date_hierarchy = 'training_date'
+    readonly_fields = ['created_at', 'updated_at']
+    raw_id_fields = ['athlete', 'created_by']
 
 # Register your models here.

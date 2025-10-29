@@ -1,8 +1,9 @@
 from datetime import date
+from decimal import Decimal
 
 from django import forms
 
-from .models import Athlete
+from .models import Athlete, TrainingLoad
 
 
 class AthleteForm(forms.ModelForm):
@@ -74,3 +75,109 @@ class AthleteForm(forms.ModelForm):
         if weight is not None and weight <= 0:
             raise forms.ValidationError('Peso deve ser maior que zero.')
         return weight
+
+
+class TrainingLoadForm(forms.ModelForm):
+    """Form used to create and edit training loads."""
+
+    PERIOD_CHOICES = [
+        ('', 'Selecione um período'),
+        ('last_7_days', 'Últimos 7 dias'),
+        ('last_30_days', 'Últimos 30 dias'),
+        ('last_90_days', 'Últimos 90 dias'),
+    ]
+
+    class Meta:
+        model = TrainingLoad
+        fields = [
+            'athlete',
+            'training_date',
+            'duration_minutes',
+            'distance_km',
+            'heart_rate_avg',
+            'heart_rate_max',
+            'intensity_level',
+        ]
+        widgets = {
+            'training_date': forms.DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'duration_minutes': forms.NumberInput(
+                attrs={
+                    'min': '1',
+                    'step': '1',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'distance_km': forms.NumberInput(
+                attrs={
+                    'min': '0',
+                    'step': '0.1',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'heart_rate_avg': forms.NumberInput(
+                attrs={
+                    'min': '0',
+                    'step': '1',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'heart_rate_max': forms.NumberInput(
+                attrs={
+                    'min': '0',
+                    'step': '1',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+            'intensity_level': forms.Select(
+                attrs={
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+        }
+        help_texts = {
+            'distance_km': 'Informe a distância percorrida em quilômetros.',
+            'duration_minutes': 'Tempo total de treino em minutos.',
+            'heart_rate_avg': 'Opcional. Frequência cardíaca média registrada.',
+            'heart_rate_max': 'Opcional. Frequência cardíaca máxima registrada.',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        base_class = (
+            'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg '
+            'text-slate-100 placeholder-slate-400 focus:outline-none '
+            'focus:ring-2 focus:ring-green-500 focus:border-transparent'
+        )
+        for field_name, field in self.fields.items():
+            field.widget.attrs.setdefault('class', base_class)
+            field.widget.attrs.setdefault('placeholder', field.label)
+
+    def clean_training_date(self):
+        training_date = self.cleaned_data['training_date']
+        if training_date > date.today():
+            raise forms.ValidationError('Data do treino não pode estar no futuro.')
+        return training_date
+
+    def clean_distance_km(self):
+        distance = self.cleaned_data['distance_km']
+        if distance is not None and distance < Decimal('0'):
+            raise forms.ValidationError('Distância deve ser maior ou igual a zero.')
+        return distance
+
+    def clean(self):
+        cleaned_data = super().clean()
+        heart_rate_avg = cleaned_data.get('heart_rate_avg')
+        heart_rate_max = cleaned_data.get('heart_rate_max')
+
+        if heart_rate_avg is not None and heart_rate_max is not None:
+            if heart_rate_avg > heart_rate_max:
+                self.add_error(
+                    'heart_rate_avg',
+                    'FC média não pode ser maior que a FC máxima.',
+                )
+        return cleaned_data

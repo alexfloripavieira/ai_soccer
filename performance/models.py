@@ -56,4 +56,68 @@ class Athlete(models.Model):
         )
         return today.year - self.birth_date.year - (0 if has_had_birthday else 1)
 
+
+class TrainingLoad(models.Model):
+    """Training load record associated with an athlete."""
+
+    INTENSITY_LOW = 'LOW'
+    INTENSITY_MEDIUM = 'MEDIUM'
+    INTENSITY_HIGH = 'HIGH'
+    INTENSITY_VERY_HIGH = 'VERY_HIGH'
+
+    INTENSITY_CHOICES = [
+        (INTENSITY_LOW, 'Baixa'),
+        (INTENSITY_MEDIUM, 'Média'),
+        (INTENSITY_HIGH, 'Alta'),
+        (INTENSITY_VERY_HIGH, 'Muito Alta'),
+    ]
+
+    athlete = models.ForeignKey(
+        Athlete,
+        on_delete=models.CASCADE,
+        related_name='training_loads',
+        verbose_name='Atleta',
+    )
+    training_date = models.DateField('Data do treino')
+    duration_minutes = models.PositiveIntegerField('Duração (minutos)')
+    distance_km = models.DecimalField('Distância (km)', max_digits=6, decimal_places=2)
+    heart_rate_avg = models.PositiveIntegerField('FC média', blank=True, null=True)
+    heart_rate_max = models.PositiveIntegerField('FC máxima', blank=True, null=True)
+    intensity_level = models.CharField(
+        'Intensidade',
+        max_length=10,
+        choices=INTENSITY_CHOICES,
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='training_loads',
+        verbose_name='Criado por',
+    )
+
+    created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+
+    class Meta:
+        verbose_name = 'Carga de treino'
+        verbose_name_plural = 'Cargas de treino'
+        ordering = ['-training_date', '-created_at']
+
+    def __str__(self):
+        return f'{self.athlete.name} - {self.training_date}'
+
+    def fatigue_index(self):
+        """Return a simplified fatigue index based on load metrics."""
+        return (float(self.distance_km) * self.duration_minutes) / 1000
+
+    def intensity_badge_class(self):
+        """Return Tailwind classes for intensity badge styling."""
+        mapping = {
+            self.INTENSITY_LOW: 'bg-green-500/20 text-green-300 border border-green-400/30',
+            self.INTENSITY_MEDIUM: 'bg-blue-500/20 text-blue-300 border border-blue-400/30',
+            self.INTENSITY_HIGH: 'bg-amber-500/20 text-amber-300 border border-amber-400/30',
+            self.INTENSITY_VERY_HIGH: 'bg-red-500/20 text-red-300 border border-red-400/30',
+        }
+        return mapping.get(self.intensity_level, 'bg-slate-700 text-slate-200 border border-slate-600/40')
+
 # Create your models here.

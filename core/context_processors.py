@@ -42,6 +42,12 @@ def navigation(request):
                     'exclude_patterns': ['/performance/athletes/novo/'],
                 },
                 {
+                    'label': 'Cargas de treino',
+                    'href': reverse('performance:training_load_list'),
+                    'pattern': '/performance/training-loads/',
+                    'exclude_patterns': ['/performance/training-loads/add/'],
+                },
+                {
                     'label': 'Novo atleta',
                     'href': performance_create_url,
                     'pattern': '/performance/athletes/novo/',

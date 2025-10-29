@@ -120,26 +120,109 @@
       </div>
     </div>
 
-    <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 p-6">
-      <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">
-        Próximos passos
+    <div class="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6">
+      <span class="text-xs font-semibold uppercase tracking-widest text-amber-200">
+        Cargas de treino
       </span>
-      <p class="mt-3 text-sm text-slate-400">
-        Informações adicionais como cargas de treino, métricas de performance e histórico
-        de lesões serão exibidas aqui assim que forem cadastradas.
-      </p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <span class="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-400">
-          Treinos
-        </span>
-        <span class="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-400">
-          Lesões
-        </span>
-        <span class="rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-400">
-          Avaliações físicas
-        </span>
+      <div class="mt-4 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-wide text-amber-200/70">Média de duração</p>
+            <p class="text-2xl font-semibold text-slate-100">
+            {% if training_load_count %}{{ training_load_average_duration|floatformat:1 }}{% else %}-{% endif %}
+              <span class="text-sm font-normal text-slate-300">min</span>
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="text-xs uppercase tracking-wide text-amber-200/70">Distância total</p>
+            <p class="text-2xl font-semibold text-slate-100">
+            {% if training_load_count %}{{ training_load_total_distance|floatformat:1 }}{% else %}0{% endif %}
+              <span class="text-sm font-normal text-slate-300">km</span>
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center justify-between text-sm text-slate-200">
+          <span>Registros: {{ training_load_count }}</span>
+          <a href="{% url 'performance:training_load_create' %}?athlete={{ athlete.id }}" class="inline-flex items-center justify-center rounded-lg border border-amber-500/40 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-amber-200 transition-all duration-150 hover:border-amber-400 hover:text-amber-100">
+            Registrar carga
+          </a>
+        </div>
       </div>
     </div>
+  </div>
+
+  <div class="mt-10 rounded-2xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl shadow-slate-950/40">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-100">Histórico recente de cargas</h2>
+        <p class="text-sm text-slate-400">Exibição das últimas sessões registradas para monitorar a evolução.</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="{% url 'performance:training_load_create' %}?athlete={{ athlete.id }}" class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+          Nova carga
+        </a>
+        <a href="{{ training_load_list_url }}?athlete={{ athlete.id }}" class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+          Ver todas as cargas
+        </a>
+      </div>
+    </div>
+
+    {% if has_training_loads %}
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 lg:col-span-2">
+          <h3 class="text-sm font-semibold uppercase tracking-widest text-slate-400">
+            Últimas sessões
+          </h3>
+          <ul class="mt-4 space-y-4">
+            {% for load in latest_training_loads %}
+            <li class="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-100">
+                  {{ load.training_date|date:"d/m/Y" }}
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500 ml-2">
+                    {{ load.get_intensity_level_display }}
+                  </span>
+                </p>
+                <p class="text-xs text-slate-400">
+                  Duração {{ load.duration_minutes }} min • Distância {{ load.distance_km|floatformat:1 }} km
+                </p>
+              </div>
+              <a href="{% url 'performance:training_load_update' load.pk %}" class="text-xs font-semibold text-green-300 hover:text-green-200">
+                editar
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/80 p-6">
+          <h3 class="text-sm font-semibold uppercase tracking-widest text-slate-400">
+            Intensidade recente
+          </h3>
+          <div class="mt-6 flex items-end gap-2">
+            {% for entry in training_load_chart_data %}
+            <div class="flex flex-1 flex-col items-center gap-2">
+              <div class="flex h-24 w-8 items-end justify-center rounded-lg bg-slate-800">
+                <div class="w-full rounded-lg bg-gradient-to-t from-green-500 via-blue-500 to-blue-400" style="height: calc({{ entry.intensity }} * 20%);"></div>
+              </div>
+              <span class="text-xs font-medium text-slate-400">{{ entry.date }}</span>
+            </div>
+            {% empty %}
+            <p class="text-sm text-slate-400">Sem dados.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="mt-8 rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 px-6 py-12 text-center">
+        <h3 class="text-lg font-semibold text-slate-100">Nenhuma carga registrada</h3>
+        <p class="mt-2 text-sm text-slate-400">
+          Assim que as cargas forem registradas, este painel mostrará tendências de intensidade, duração média e distância acumulada.
+        </p>
+        <a href="{% url 'performance:training_load_create' %}?athlete={{ athlete.id }}" class="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-150 hover:shadow-xl hover:shadow-green-500/30">
+          Registrar primeira carga
+        </a>
+      </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

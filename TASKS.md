@@ -268,80 +268,80 @@
 ### Sprint 4: Módulo de Performance - Treinos e Cargas
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 4.1: Modelo de Carga de Treinamento**
-  - [ ] 4.1.1: Criar modelo `TrainingLoad` em `performance/models.py`
-  - [ ] 4.1.2: Adicionar ForeignKey para `Athlete`
-  - [ ] 4.1.3: Adicionar campo `training_date` (DateField)
-  - [ ] 4.1.4: Adicionar campo `duration_minutes` (PositiveIntegerField)
-  - [ ] 4.1.5: Adicionar campo `distance_km` (DecimalField)
-  - [ ] 4.1.6: Adicionar campo `heart_rate_avg` (PositiveIntegerField, opcional)
-  - [ ] 4.1.7: Adicionar campo `heart_rate_max` (PositiveIntegerField, opcional)
-  - [ ] 4.1.8: Adicionar choices para `intensity_level` (BAIXA, MEDIA, ALTA, MAXIMA)
-  - [ ] 4.1.9: Adicionar campos `created_at` e `updated_at`
-  - [ ] 4.1.10: Adicionar campo `created_by`
-  - [ ] 4.1.11: Criar método `__str__`
-  - [ ] 4.1.12: Criar método `fatigue_index()` para cálculo de fadiga
-  - [ ] 4.1.13: Configurar Meta (verbose_name, ordering)
-  - [ ] 4.1.14: Criar e aplicar migrações
-  - [ ] 4.1.15: Registrar no admin
+- [X] **Tarefa 4.1: Modelo de Carga de Treinamento**
+  - [X] 4.1.1: Criar modelo `TrainingLoad` em `performance/models.py`
+  - [X] 4.1.2: Adicionar ForeignKey para `Athlete`
+  - [X] 4.1.3: Adicionar campo `training_date` (DateField)
+  - [X] 4.1.4: Adicionar campo `duration_minutes` (PositiveIntegerField)
+  - [X] 4.1.5: Adicionar campo `distance_km` (DecimalField)
+  - [X] 4.1.6: Adicionar campo `heart_rate_avg` (PositiveIntegerField, opcional)
+  - [X] 4.1.7: Adicionar campo `heart_rate_max` (PositiveIntegerField, opcional)
+  - [X] 4.1.8: Adicionar choices para `intensity_level` (BAIXA, MEDIA, ALTA, MAXIMA)
+  - [X] 4.1.9: Adicionar campos `created_at` e `updated_at`
+  - [X] 4.1.10: Adicionar campo `created_by`
+  - [X] 4.1.11: Criar método `__str__`
+  - [X] 4.1.12: Criar método `fatigue_index()` para cálculo de fadiga
+  - [X] 4.1.13: Configurar Meta (verbose_name, ordering)
+  - [X] 4.1.14: Criar e aplicar migrações
+  - [X] 4.1.15: Registrar no admin
 
-- [ ] **Tarefa 4.2: Formulário de Carga de Treinamento**
-  - [ ] 4.2.1: Criar `TrainingLoadForm` em `performance/forms.py`
-  - [ ] 4.2.2: Configurar campos do formulário
-  - [ ] 4.2.3: Adicionar widget DateInput com type='date'
-  - [ ] 4.2.4: Adicionar validação: data não pode ser futura
-  - [ ] 4.2.5: Adicionar validação: duration_minutes > 0
-  - [ ] 4.2.6: Adicionar validação: distance_km >= 0
-  - [ ] 4.2.7: Adicionar validação: heart_rate_avg <= heart_rate_max
-  - [ ] 4.2.8: Adicionar classes CSS aos widgets
-  - [ ] 4.2.9: Configurar help_text para campos
-  - [ ] 4.2.10: Testar validações
+- [X] **Tarefa 4.2: Formulário de Carga de Treinamento**
+  - [X] 4.2.1: Criar `TrainingLoadForm` em `performance/forms.py`
+  - [X] 4.2.2: Configurar campos do formulário
+  - [X] 4.2.3: Adicionar widget DateInput com type='date'
+  - [X] 4.2.4: Adicionar validação: data não pode ser futura
+  - [X] 4.2.5: Adicionar validação: duration_minutes > 0
+  - [X] 4.2.6: Adicionar validação: distance_km >= 0
+  - [X] 4.2.7: Adicionar validação: heart_rate_avg <= heart_rate_max
+  - [X] 4.2.8: Adicionar classes CSS aos widgets
+  - [X] 4.2.9: Configurar help_text para campos
+  - [X] 4.2.10: Testar validações
 
-- [ ] **Tarefa 4.3: Listagem de Cargas de Treinamento**
-  - [ ] 4.3.1: Criar view `TrainingLoadListView`
-  - [ ] 4.3.2: Configurar filtro por atleta
-  - [ ] 4.3.3: Adicionar ordenação por data (mais recente primeiro)
-  - [ ] 4.3.4: Criar template `training_load_list.html`
-  - [ ] 4.3.5: Implementar tabela responsiva
-  - [ ] 4.3.6: Exibir nome do atleta com link
-  - [ ] 4.3.7: Exibir data, duração e distância
-  - [ ] 4.3.8: Exibir nível de intensidade com badge colorido
-  - [ ] 4.3.9: Adicionar botão "Adicionar Carga"
-  - [ ] 4.3.10: Implementar filtro por período (última semana, mês, etc)
-  - [ ] 4.3.11: Adicionar paginação
-  - [ ] 4.3.12: Adicionar URL `/performance/training-loads/`
-  - [ ] 4.3.13: Testar listagem
+- [X] **Tarefa 4.3: Listagem de Cargas de Treinamento**
+  - [X] 4.3.1: Criar view `TrainingLoadListView`
+  - [X] 4.3.2: Configurar filtro por atleta
+  - [X] 4.3.3: Adicionar ordenação por data (mais recente primeiro)
+  - [X] 4.3.4: Criar template `training_load_list.html`
+  - [X] 4.3.5: Implementar tabela responsiva
+  - [X] 4.3.6: Exibir nome do atleta com link
+  - [X] 4.3.7: Exibir data, duração e distância
+  - [X] 4.3.8: Exibir nível de intensidade com badge colorido
+  - [X] 4.3.9: Adicionar botão "Adicionar Carga"
+  - [X] 4.3.10: Implementar filtro por período (última semana, mês, etc)
+  - [X] 4.3.11: Adicionar paginação
+  - [X] 4.3.12: Adicionar URL `/performance/training-loads/`
+  - [X] 4.3.13: Testar listagem
 
-- [ ] **Tarefa 4.4: Cadastro de Carga de Treinamento**
-  - [ ] 4.4.1: Criar view `TrainingLoadCreateView`
-  - [ ] 4.4.2: Configurar formulário
-  - [ ] 4.4.3: Configurar `created_by` automaticamente
-  - [ ] 4.4.4: Criar template `training_load_form.html`
-  - [ ] 4.4.5: Implementar layout do formulário
-  - [ ] 4.4.6: Adicionar seletor de atleta
-  - [ ] 4.4.7: Adicionar campos de frequência cardíaca
-  - [ ] 4.4.8: Implementar mensagens de sucesso
-  - [ ] 4.4.9: Configurar redirecionamento
-  - [ ] 4.4.10: Adicionar URL `/performance/training-loads/add/`
-  - [ ] 4.4.11: Testar cadastro
+- [X] **Tarefa 4.4: Cadastro de Carga de Treinamento**
+  - [X] 4.4.1: Criar view `TrainingLoadCreateView`
+  - [X] 4.4.2: Configurar formulário
+  - [X] 4.4.3: Configurar `created_by` automaticamente
+  - [X] 4.4.4: Criar template `training_load_form.html`
+  - [X] 4.4.5: Implementar layout do formulário
+  - [X] 4.4.6: Adicionar seletor de atleta
+  - [X] 4.4.7: Adicionar campos de frequência cardíaca
+  - [X] 4.4.8: Implementar mensagens de sucesso
+  - [X] 4.4.9: Configurar redirecionamento
+  - [X] 4.4.10: Adicionar URL `/performance/training-loads/add/`
+  - [X] 4.4.11: Testar cadastro
 
-- [ ] **Tarefa 4.5: Edição e Exclusão de Cargas**
-  - [ ] 4.5.1: Criar view `TrainingLoadUpdateView`
-  - [ ] 4.5.2: Reutilizar template de formulário
-  - [ ] 4.5.3: Adicionar URL de edição
-  - [ ] 4.5.4: Criar view `TrainingLoadDeleteView`
-  - [ ] 4.5.5: Criar template de confirmação
-  - [ ] 4.5.6: Adicionar URL de exclusão
-  - [ ] 4.5.7: Testar edição e exclusão
+- [X] **Tarefa 4.5: Edição e Exclusão de Cargas**
+  - [X] 4.5.1: Criar view `TrainingLoadUpdateView`
+  - [X] 4.5.2: Reutilizar template de formulário
+  - [X] 4.5.3: Adicionar URL de edição
+  - [X] 4.5.4: Criar view `TrainingLoadDeleteView`
+  - [X] 4.5.5: Criar template de confirmação
+  - [X] 4.5.6: Adicionar URL de exclusão
+  - [X] 4.5.7: Testar edição e exclusão
 
-- [ ] **Tarefa 4.6: Visualização de Cargas por Atleta**
-  - [ ] 4.6.1: Adicionar aba "Cargas de Treino" na página de detalhes do atleta
-  - [ ] 4.6.2: Listar últimas 10 cargas
-  - [ ] 4.6.3: Exibir gráfico de barras de intensidade (opcional)
-  - [ ] 4.6.4: Calcular e exibir média de duração
-  - [ ] 4.6.5: Calcular e exibir distância total
-  - [ ] 4.6.6: Adicionar botão "Ver todas as cargas"
-  - [ ] 4.6.7: Testar visualização
+- [X] **Tarefa 4.6: Visualização de Cargas por Atleta**
+  - [X] 4.6.1: Adicionar aba "Cargas de Treino" na página de detalhes do atleta
+  - [X] 4.6.2: Listar últimas 10 cargas
+  - [X] 4.6.3: Exibir gráfico de barras de intensidade (opcional)
+  - [X] 4.6.4: Calcular e exibir média de duração
+  - [X] 4.6.5: Calcular e exibir distância total
+  - [X] 4.6.6: Adicionar botão "Ver todas as cargas"
+  - [X] 4.6.7: Testar visualização
 
 ---
 

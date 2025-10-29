@@ -32,3 +32,13 @@ class NavigationContextTest(TestCase):
         self.assertTrue(performance['active'])
         self.assertTrue(children['Novo atleta']['active'])
         self.assertFalse(children['Atletas']['active'])
+        self.assertFalse(children['Cargas de treino']['active'])
+
+    def test_training_load_child_activation(self):
+        sidebar_items = self._get_sidebar_items(reverse('performance:training_load_list'))
+        performance = next(item for item in sidebar_items if item['label'] == 'Performance')
+        children = {child['label']: child for child in performance['children']}
+
+        self.assertTrue(performance['active'])
+        self.assertTrue(children['Cargas de treino']['active'])
+        self.assertFalse(children['Novo atleta']['active'])
