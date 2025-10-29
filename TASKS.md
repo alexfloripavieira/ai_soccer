@@ -772,48 +772,48 @@
 ### Sprint 13: Modelos Preditivos com IA
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 13.1: Configuração do Ambiente ML**
-  - [ ] 13.1.1: Adicionar scikit-learn ao requirements.txt
-  - [ ] 13.1.2: Adicionar pandas ao requirements.txt
-  - [ ] 13.1.3: Adicionar numpy ao requirements.txt
-  - [ ] 13.1.4: Instalar dependências
-  - [ ] 13.1.5: Criar diretório `ml_models/`
-  - [ ] 13.1.6: Criar arquivo `ml_models/__init__.py`
+- [X] **Tarefa 13.1: Configuração do Ambiente ML**
+  - [X] 13.1.1: Adicionar scikit-learn ao requirements.txt
+  - [X] 13.1.2: Adicionar pandas ao requirements.txt
+  - [X] 13.1.3: Adicionar numpy ao requirements.txt
+  - [X] 13.1.4: Instalar dependências
+  - [X] 13.1.5: Criar diretório `ml_models/`
+  - [X] 13.1.6: Criar arquivo `ml_models/__init__.py`
 
-- [ ] **Tarefa 13.2: Modelo de Predição de Lesões**
-  - [ ] 13.2.1: Criar script `ml_models/injury_predictor.py`
-  - [ ] 13.2.2: Importar bibliotecas necessárias
-  - [ ] 13.2.3: Criar função para buscar dados de treinamento
-  - [ ] 13.2.4: Preparar features (duração, distância, frequência)
-  - [ ] 13.2.5: Criar labels (lesionado ou não)
-  - [ ] 13.2.6: Implementar RandomForestClassifier
-  - [ ] 13.2.7: Treinar modelo com dados históricos
-  - [ ] 13.2.8: Criar função de predição
-  - [ ] 13.2.9: Calcular score de confiança
-  - [ ] 13.2.10: Salvar modelo treinado
+- [X] **Tarefa 13.2: Modelo de Predição de Lesões**
+  - [X] 13.2.1: Criar script `ml_models/injury_predictor.py`
+  - [X] 13.2.2: Importar bibliotecas necessárias
+  - [X] 13.2.3: Criar função para buscar dados de treinamento
+  - [X] 13.2.4: Preparar features (duração, distância, frequência)
+  - [X] 13.2.5: Criar labels (lesionado ou não)
+  - [X] 13.2.6: Implementar RandomForestClassifier
+  - [X] 13.2.7: Treinar modelo com dados históricos
+  - [X] 13.2.8: Criar função de predição
+  - [X] 13.2.9: Calcular score de confiança
+  - [X] 13.2.10: Salvar modelo treinado
 
-- [ ] **Tarefa 13.3: Integração da Predição de Lesões**
-  - [ ] 13.3.1: Criar management command para treinar modelo
-  - [ ] 13.3.2: Criar view `InjuryRiskView`
-  - [ ] 13.3.3: Calcular risco para cada atleta
-  - [ ] 13.3.4: Criar template de visualização
-  - [ ] 13.3.5: Exibir score de risco (0-100%)
-  - [ ] 13.3.6: Adicionar alertas para alto risco
-  - [ ] 13.3.7: Criar gráfico de fatores de risco
-  - [ ] 13.3.8: Adicionar URL `/performance/injury-risk/`
-  - [ ] 13.3.9: Adicionar item no menu
-  - [ ] 13.3.10: Testar predições
+- [X] **Tarefa 13.3: Integração da Predição de Lesões**
+  - [X] 13.3.1: Criar management command para treinar modelo
+  - [X] 13.3.2: Criar view `InjuryRiskView`
+  - [X] 13.3.3: Calcular risco para cada atleta
+  - [X] 13.3.4: Criar template de visualização
+  - [X] 13.3.5: Exibir score de risco (0-100%)
+  - [X] 13.3.6: Adicionar alertas para alto risco
+  - [X] 13.3.7: Criar gráfico de fatores de risco
+  - [X] 13.3.8: Adicionar URL `/performance/injury-risk/`
+  - [X] 13.3.9: Adicionar item no menu
+  - [X] 13.3.10: Testar predições
 
-- [ ] **Tarefa 13.4: Modelo de Avaliação de Potencial**
-  - [ ] 13.4.1: Criar script `ml_models/potential_evaluator.py`
-  - [ ] 13.4.2: Buscar dados de scouting reports
-  - [ ] 13.4.3: Preparar features (scores técnicos)
-  - [ ] 13.4.4: Implementar modelo de regressão
-  - [ ] 13.4.5: Treinar modelo
-  - [ ] 13.4.6: Criar função de predição de potencial
-  - [ ] 13.4.7: Integrar na página de jogador observado
-  - [ ] 13.4.8: Exibir "Potencial Estimado"
-  - [ ] 13.4.9: Testar avaliações
+- [X] **Tarefa 13.4: Modelo de Avaliação de Potencial**
+  - [X] 13.4.1: Criar script `ml_models/potential_evaluator.py`
+  - [X] 13.4.2: Buscar dados de scouting reports
+  - [X] 13.4.3: Preparar features (scores técnicos)
+  - [X] 13.4.4: Implementar modelo de regressão
+  - [X] 13.4.5: Treinar modelo
+  - [X] 13.4.6: Criar função de predição de potencial
+  - [X] 13.4.7: Integrar na página de jogador observado
+  - [X] 13.4.8: Exibir "Potencial Estimado"
+  - [X] 13.4.9: Testar avaliações
 
 - [ ] **Tarefa 13.5: Modelo de Previsão de Receitas**
   - [ ] 13.5.1: Criar script `ml_models/revenue_forecaster.py`

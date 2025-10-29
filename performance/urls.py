@@ -8,6 +8,7 @@ from performance.views import (
     AthleteDetailView,
     AthleteListView,
     AthleteUpdateView,
+    InjuryRiskView,
     InjuryRecordCreateView,
     InjuryRecordDeleteView,
     InjuryRecordListView,
@@ -23,6 +24,7 @@ app_name = 'performance'
 
 urlpatterns = [
     path('dashboard/', PerformanceDashboardView.as_view(), name='dashboard'),
+    path('injury-risk/', InjuryRiskView.as_view(), name='injury_risk'),
     path('athletes/', AthleteListView.as_view(), name='athlete_list'),
     path('athletes/novo/', AthleteCreateView.as_view(), name='athlete_create'),
     path('athletes/<int:pk>/', AthleteDetailView.as_view(), name='athlete_detail'),

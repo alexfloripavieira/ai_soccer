@@ -16,6 +16,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from ml_models.potential_evaluator import evaluate_player_potential
 from scouting.forms import ScoutedPlayerForm, ScoutingReportForm
 from scouting.models import ScoutedPlayer, ScoutingReport
 
@@ -336,6 +337,7 @@ class ScoutedPlayerDetailView(LoginRequiredMixin, DetailView):
             context['timeline_labels'] = []
             context['timeline_values'] = []
             context['show_timeline_chart'] = False
+        context['potential_prediction'] = evaluate_player_potential(self.object)
         return context
 
 

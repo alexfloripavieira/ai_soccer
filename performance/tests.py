@@ -1,10 +1,18 @@
 from datetime import date, timedelta
 from decimal import Decimal
+from io import StringIO
 
+from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
-from django.contrib.auth import get_user_model
+from ml_models.injury_predictor import (
+    InjuryPredictor,
+    MINIMUM_SAMPLES,
+    evaluate_injury_risk_for_team,
+    get_injury_predictor,
+)
 from performance.forms import AthleteForm, TrainingLoadForm
 from performance.models import Athlete, InjuryRecord, TrainingLoad
 
@@ -526,3 +534,108 @@ class PerformanceDashboardViewTest(TestCase):
 
         activities = response.context['latest_activities']
         self.assertGreaterEqual(len(activities), 1)
+
+
+class InjuryPredictorTestCase(TestCase):
+    """Validate training pipeline and integration helpers for injury predictor."""
+
+    def setUp(self) -> None:
+        user_model = get_user_model()
+        self.user = user_model.objects.create_user(
+            email='coach@example.com',
+            password='strong-password',
+        )
+        self.client.force_login(self.user)
+
+        self.athlete = Athlete.objects.create(
+            created_by=self.user,
+            name='Carlos Pereira',
+            birth_date=date(1998, 6, 1),
+            position=Athlete.POSITION_MIDFIELDER,
+            nationality='Brasil',
+            height=180,
+            weight=75,
+        )
+        self.secondary_athlete = Athlete.objects.create(
+            created_by=self.user,
+            name='Eduardo Silva',
+            birth_date=date(1995, 4, 12),
+            position=Athlete.POSITION_FORWARD,
+            nationality='Brasil',
+            height=182,
+            weight=78,
+        )
+
+        today = date.today()
+        for day_offset in range(40):
+            training_date = today - timedelta(days=40 - day_offset)
+            TrainingLoad.objects.create(
+                athlete=self.athlete,
+                training_date=training_date,
+                duration_minutes=60 + (day_offset % 15),
+                distance_km=Decimal('5.0') + Decimal(day_offset % 4),
+                heart_rate_avg=130,
+                heart_rate_max=175,
+                intensity_level=TrainingLoad.INTENSITY_MEDIUM,
+                created_by=self.user,
+            )
+
+        for day_offset in range(10):
+            training_date = today - timedelta(days=10 - day_offset)
+            TrainingLoad.objects.create(
+                athlete=self.secondary_athlete,
+                training_date=training_date,
+                duration_minutes=50 + day_offset,
+                distance_km=Decimal('4.5') + Decimal(day_offset % 3),
+                heart_rate_avg=128,
+                heart_rate_max=168,
+                intensity_level=TrainingLoad.INTENSITY_LOW,
+                created_by=self.user,
+            )
+
+        InjuryRecord.objects.create(
+            athlete=self.athlete,
+            injury_date=today - timedelta(days=5),
+            injury_type=InjuryRecord.INJURY_MUSCULAR,
+            body_part=InjuryRecord.BODY_HAMSTRING,
+            severity_level=InjuryRecord.SEVERITY_MODERATE,
+            description='Lesao muscular detectada apos sequencia intensa.',
+            expected_return=today + timedelta(days=10),
+            created_by=self.user,
+        )
+
+        shared_predictor = get_injury_predictor()
+        shared_predictor._model = None  # noqa: SLF001 - reset for testing
+        shared_predictor._trained_samples = 0  # noqa: SLF001
+        shared_predictor._validation_accuracy = None  # noqa: SLF001
+
+    def test_predictor_trains_and_evaluates(self) -> None:
+        predictor = InjuryPredictor()
+        self.assertTrue(predictor.train())
+        self.assertGreaterEqual(predictor.trained_samples, MINIMUM_SAMPLES)
+        athlete_result = predictor.evaluate_athlete(self.athlete)
+        self.assertIsNotNone(athlete_result)
+        assert athlete_result is not None
+        self.assertGreaterEqual(athlete_result.risk_probability, 0.0)
+        self.assertLessEqual(athlete_result.risk_probability, 1.0)
+        self.assertGreaterEqual(athlete_result.confidence, 0.0)
+        self.assertLessEqual(athlete_result.confidence, 1.0)
+
+    def test_global_predictor_wrapper_returns_results(self) -> None:
+        predictor = get_injury_predictor()
+        self.assertTrue(predictor.train())
+        team_results = evaluate_injury_risk_for_team()
+        self.assertTrue(team_results)
+        self.assertGreaterEqual(len(team_results), 1)
+
+    def test_injury_risk_view_renders_predictions(self) -> None:
+        predictor = get_injury_predictor()
+        predictor.train()
+        response = self.client.get(reverse('performance:injury_risk'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('predictions', response.context)
+
+    def test_management_command_outputs_success(self) -> None:
+        output = StringIO()
+        call_command('train_injury_model', stdout=output)
+        self.assertIn('Modelo treinado com sucesso', output.getvalue())
