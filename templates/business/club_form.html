@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ form_title }} - AI Soccer{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-3xl">
+  {# Page Header #}
+  <div class="mb-8">
+    <a href="{% url 'business:club_list' %}"
+       class="inline-flex items-center text-slate-400 hover:text-slate-300 transition-colors duration-200 mb-4">
+      <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      Voltar para lista
+    </a>
+    <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">{{ form_title }}</h1>
+    <p class="text-slate-400">Preencha os dados do clube abaixo</p>
+  </div>
+
+  {# Form Card #}
+  <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6 md:p-8">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      {# Non-field errors #}
+      {% if form.non_field_errors %}
+        <div class="mb-6 p-4 bg-red-900/30 border border-red-700 rounded-lg">
+          {% for error in form.non_field_errors %}
+            <p class="text-sm text-red-300">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="space-y-6">
+        {# Name Field #}
+        <div>
+          <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-2">
+            {{ form.name.label }}
+            {% if form.name.field.required %}
+              <span class="text-red-400">*</span>
+            {% endif %}
+          </label>
+          <input type="text"
+                 name="{{ form.name.name }}"
+                 id="{{ form.name.id_for_label }}"
+                 value="{{ form.name.value|default:'' }}"
+                 class="w-full px-4 py-3 bg-slate-700 border {% if form.name.errors %}border-red-500{% else %}border-slate-600{% endif %} rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                 {% if form.name.field.required %}required{% endif %}>
+          {% if form.name.help_text %}
+            <p class="mt-1 text-sm text-slate-400">{{ form.name.help_text }}</p>
+          {% endif %}
+          {% if form.name.errors %}
+            {% for error in form.name.errors %}
+              <p class="mt-1 text-sm text-red-400">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        {# Country Field #}
+        <div>
+          <label for="{{ form.country.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-2">
+            {{ form.country.label }}
+            {% if form.country.field.required %}
+              <span class="text-red-400">*</span>
+            {% endif %}
+          </label>
+          <input type="text"
+                 name="{{ form.country.name }}"
+                 id="{{ form.country.id_for_label }}"
+                 value="{{ form.country.value|default:'' }}"
+                 class="w-full px-4 py-3 bg-slate-700 border {% if form.country.errors %}border-red-500{% else %}border-slate-600{% endif %} rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                 {% if form.country.field.required %}required{% endif %}>
+          {% if form.country.help_text %}
+            <p class="mt-1 text-sm text-slate-400">{{ form.country.help_text }}</p>
+          {% endif %}
+          {% if form.country.errors %}
+            {% for error in form.country.errors %}
+              <p class="mt-1 text-sm text-red-400">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        {# City Field #}
+        <div>
+          <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-2">
+            {{ form.city.label }}
+            {% if form.city.field.required %}
+              <span class="text-red-400">*</span>
+            {% endif %}
+          </label>
+          <input type="text"
+                 name="{{ form.city.name }}"
+                 id="{{ form.city.id_for_label }}"
+                 value="{{ form.city.value|default:'' }}"
+                 class="w-full px-4 py-3 bg-slate-700 border {% if form.city.errors %}border-red-500{% else %}border-slate-600{% endif %} rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                 {% if form.city.field.required %}required{% endif %}>
+          {% if form.city.help_text %}
+            <p class="mt-1 text-sm text-slate-400">{{ form.city.help_text }}</p>
+          {% endif %}
+          {% if form.city.errors %}
+            {% for error in form.city.errors %}
+              <p class="mt-1 text-sm text-red-400">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        {# Division Field #}
+        <div>
+          <label for="{{ form.division.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-2">
+            {{ form.division.label }}
+            {% if form.division.field.required %}
+              <span class="text-red-400">*</span>
+            {% endif %}
+          </label>
+          <select name="{{ form.division.name }}"
+                  id="{{ form.division.id_for_label }}"
+                  class="w-full px-4 py-3 bg-slate-700 border {% if form.division.errors %}border-red-500{% else %}border-slate-600{% endif %} rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                  {% if form.division.field.required %}required{% endif %}>
+            {% for value, label in form.division.field.choices %}
+              <option value="{{ value }}" {% if form.division.value == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+          {% if form.division.help_text %}
+            <p class="mt-1 text-sm text-slate-400">{{ form.division.help_text }}</p>
+          {% endif %}
+          {% if form.division.errors %}
+            {% for error in form.division.errors %}
+              <p class="mt-1 text-sm text-red-400">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        {# Logo Field #}
+        <div>
+          <label for="{{ form.logo.id_for_label }}" class="block text-sm font-medium text-slate-300 mb-2">
+            {{ form.logo.label }}
+            {% if form.logo.field.required %}
+              <span class="text-red-400">*</span>
+            {% endif %}
+          </label>
+
+          {# Logo Preview (if editing and logo exists) #}
+          {% if form.logo.value %}
+            <div class="mb-4">
+              <div class="inline-block p-2 bg-slate-700 border border-slate-600 rounded-lg">
+                <img src="{{ form.logo.value.url }}"
+                     alt="Logo atual"
+                     class="h-24 w-24 object-cover rounded-lg"
+                     id="logo-preview">
+              </div>
+              <p class="mt-2 text-sm text-slate-400">Logo atual</p>
+            </div>
+          {% endif %}
+
+          <input type="file"
+                 name="{{ form.logo.name }}"
+                 id="{{ form.logo.id_for_label }}"
+                 accept="image/*"
+                 class="w-full px-4 py-3 bg-slate-700 border {% if form.logo.errors %}border-red-500{% else %}border-slate-600{% endif %} rounded-lg text-slate-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-green-500 file:to-blue-500 file:text-white hover:file:opacity-90 file:cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-200"
+                 onchange="previewLogo(event)"
+                 {% if form.logo.field.required %}required{% endif %}>
+          {% if form.logo.help_text %}
+            <p class="mt-1 text-sm text-slate-400">{{ form.logo.help_text }}</p>
+          {% endif %}
+          {% if form.logo.errors %}
+            {% for error in form.logo.errors %}
+              <p class="mt-1 text-sm text-red-400">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+
+          {# Preview area for new uploads #}
+          <div id="new-logo-preview" class="mt-4 hidden">
+            <div class="inline-block p-2 bg-slate-700 border border-slate-600 rounded-lg">
+              <img id="new-logo-img"
+                   src=""
+                   alt="Preview da nova logo"
+                   class="h-24 w-24 object-cover rounded-lg">
+            </div>
+            <p class="mt-2 text-sm text-slate-400">Preview da nova logo</p>
+          </div>
+        </div>
+      </div>
+
+      {# Form Actions #}
+      <div class="mt-8 flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+        <a href="{% url 'business:club_list' %}"
+           class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg border border-slate-600 hover:bg-slate-600 transition-all duration-200 text-center">
+          Cancelar
+        </a>
+        <button type="submit"
+                class="px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+          {{ submit_text }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Preview logo function
+function previewLogo(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const previewDiv = document.getElementById('new-logo-preview');
+      const previewImg = document.getElementById('new-logo-img');
+      previewImg.src = e.target.result;
+      previewDiv.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+</script>
+{% endblock %}

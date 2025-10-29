@@ -18,6 +18,7 @@ class AthleteForm(forms.ModelForm):
             'nationality',
             'height',
             'weight',
+            'market_value',
         ]
         widgets = {
             'birth_date': forms.DateInput(
@@ -45,6 +46,16 @@ class AthleteForm(forms.ModelForm):
                     'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
                 }
             ),
+            'market_value': forms.NumberInput(
+                attrs={
+                    'min': '0',
+                    'step': '0.01',
+                    'class': 'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500',
+                }
+            ),
+        }
+        help_texts = {
+            'market_value': 'Valor em Reais (R$)',
         }
 
     def __init__(self, *args, **kwargs):

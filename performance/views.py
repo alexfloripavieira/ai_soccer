@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Avg, Max, Sum
+from django.db.models import Avg, Count, Max, Sum
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
 
@@ -537,4 +537,42 @@ class InjuryRiskView(LoginRequiredMixin, TemplateView):
                 'insufficient_training_data': predictor.trained_samples < MINIMUM_SAMPLES,
             }
         )
+        return context
+
+
+class AthleteValuationView(LoginRequiredMixin, ListView):
+    """Display athlete valuation data with market value aggregations."""
+
+    model = Athlete
+    template_name = 'performance/athlete_valuation.html'
+    context_object_name = 'athletes'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_queryset(self):
+        """Return all athletes ordered by market value (highest first)."""
+        return Athlete.objects.order_by('-market_value', 'name')
+
+    def get_context_data(self, **kwargs):
+        """Add valuation aggregations and statistics to context."""
+        context = super().get_context_data(**kwargs)
+
+        # Aggregate calculations
+        aggregates = Athlete.objects.aggregate(
+            total_squad_value=Sum('market_value'),
+            average_value=Avg('market_value'),
+        )
+
+        # Athletes with and without market value
+        athletes_with_value = Athlete.objects.filter(market_value__isnull=False)
+        athletes_without_value_count = Athlete.objects.filter(market_value__isnull=True).count()
+
+        context.update(
+            {
+                'total_squad_value': aggregates['total_squad_value'] or 0,
+                'average_value': aggregates['average_value'] or 0,
+                'athletes_with_value': athletes_with_value,
+                'athletes_without_value': athletes_without_value_count,
+            }
+        )
+
         return context

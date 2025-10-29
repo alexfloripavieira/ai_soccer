@@ -553,160 +553,164 @@
 ### Sprint 9: Módulo de Business - Gestão de Clubes
 **Duração**: 1 semana
 
-- [ ] **Tarefa 9.1: Modelo de Clube**
-  - [ ] 9.1.1: Criar modelo `Club` em `business/models.py`
-  - [ ] 9.1.2: Adicionar campo `name` (CharField, único)
-  - [ ] 9.1.3: Adicionar campo `country` (CharField)
-  - [ ] 9.1.4: Adicionar campo `city` (CharField)
-  - [ ] 9.1.5: Adicionar choices para `division` (PRIMEIRA, SEGUNDA, etc)
-  - [ ] 9.1.6: Adicionar campo `logo` (ImageField, opcional)
-  - [ ] 9.1.7: Adicionar campos de auditoria
-  - [ ] 9.1.8: Adicionar campo `created_by`
-  - [ ] 9.1.9: Criar método `__str__`
-  - [ ] 9.1.10: Configurar Meta
-  - [ ] 9.1.11: Criar e aplicar migrações
-  - [ ] 9.1.12: Registrar no admin
+- [X] **Tarefa 9.1: Modelo de Clube**
+  - [X] 9.1.1: Criar modelo `Club` em `business/models.py`
+  - [X] 9.1.2: Adicionar campo `name` (CharField, único)
+  - [X] 9.1.3: Adicionar campo `country` (CharField)
+  - [X] 9.1.4: Adicionar campo `city` (CharField)
+  - [X] 9.1.5: Adicionar choices para `division` (PRIMEIRA, SEGUNDA, etc)
+  - [X] 9.1.6: Adicionar campo `logo` (ImageField, opcional)
+  - [X] 9.1.7: Adicionar campos de auditoria
+  - [X] 9.1.8: Adicionar campo `created_by`
+  - [X] 9.1.9: Criar método `__str__`
+  - [X] 9.1.10: Configurar Meta
+  - [X] 9.1.11: Criar e aplicar migrações
+  - [X] 9.1.12: Registrar no admin
 
-- [ ] **Tarefa 9.2: CRUD de Clubes**
-  - [ ] 9.2.1: Criar `ClubForm`
-  - [ ] 9.2.2: Configurar campos e validações
-  - [ ] 9.2.3: Adicionar classes CSS
-  - [ ] 9.2.4: Criar view `ClubListView`
-  - [ ] 9.2.5: Criar template de listagem
-  - [ ] 9.2.6: Implementar busca por nome e país
-  - [ ] 9.2.7: Implementar filtro por divisão
-  - [ ] 9.2.8: Criar view `ClubCreateView`
-  - [ ] 9.2.9: Criar template de formulário
-  - [ ] 9.2.10: Criar view `ClubDetailView`
-  - [ ] 9.2.11: Criar template de detalhes
-  - [ ] 9.2.12: Criar views de edição e exclusão
-  - [ ] 9.2.13: Adicionar URLs em `business/urls.py`
-  - [ ] 9.2.14: Incluir URLs em `core/urls.py`
-  - [ ] 9.2.15: Testar CRUD completo
+- [X] **Tarefa 9.2: CRUD de Clubes**
+  - [X] 9.2.1: Criar `ClubForm`
+  - [X] 9.2.2: Configurar campos e validações
+  - [X] 9.2.3: Adicionar classes CSS
+  - [X] 9.2.4: Criar view `ClubListView`
+  - [X] 9.2.5: Criar template de listagem
+  - [X] 9.2.6: Implementar busca por nome e país
+  - [X] 9.2.7: Implementar filtro por divisão
+  - [X] 9.2.8: Criar view `ClubCreateView`
+  - [X] 9.2.9: Criar template de formulário
+  - [X] 9.2.10: Criar view `ClubDetailView`
+  - [X] 9.2.11: Criar template de detalhes
+  - [X] 9.2.12: Criar views de edição e exclusão
+  - [X] 9.2.13: Adicionar URLs em `business/urls.py`
+  - [X] 9.2.14: Incluir URLs em `core/urls.py`
+  - [X] 9.2.15: Testar CRUD completo
 
-- [ ] **Tarefa 9.3: Integração com Menu**
-  - [ ] 9.3.1: Adicionar item "Business" no menu
-  - [ ] 9.3.2: Criar submenu "Clubes"
-  - [ ] 9.3.3: Atualizar lógica de highlight
-  - [ ] 9.3.4: Testar navegação
+- [X] **Tarefa 9.3: Integração com Menu**
+  - [X] 9.3.1: Adicionar item "Business" no menu
+  - [X] 9.3.2: Criar submenu "Clubes"
+  - [X] 9.3.3: Atualizar lógica de highlight
+  - [X] 9.3.4: Testar navegação
+
+- [X] Sprint 9 concluída
 
 ---
 
 ### Sprint 10: Módulo de Business - Registros Financeiros e Receitas
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 10.1: Modelo de Registro Financeiro**
-  - [ ] 10.1.1: Criar modelo `FinancialRecord` em `business/models.py`
-  - [ ] 10.1.2: Adicionar ForeignKey para `Club`
-  - [ ] 10.1.3: Adicionar campo `record_date` (DateField)
-  - [ ] 10.1.4: Adicionar choices para `category` (SALARIOS, TRANSFERENCIAS, etc)
-  - [ ] 10.1.5: Adicionar campo `amount` (DecimalField)
-  - [ ] 10.1.6: Adicionar choices para `transaction_type` (RECEITA, DESPESA)
-  - [ ] 10.1.7: Adicionar campo `description` (TextField)
-  - [ ] 10.1.8: Adicionar campos de auditoria
-  - [ ] 10.1.9: Adicionar campo `created_by`
-  - [ ] 10.1.10: Criar método `__str__`
-  - [ ] 10.1.11: Configurar Meta
-  - [ ] 10.1.12: Criar e aplicar migrações
-  - [ ] 10.1.13: Registrar no admin
+- [X] **Tarefa 10.1: Modelo de Registro Financeiro**
+  - [X] 10.1.1: Criar modelo `FinancialRecord` em `business/models.py`
+  - [X] 10.1.2: Adicionar ForeignKey para `Club`
+  - [X] 10.1.3: Adicionar campo `record_date` (DateField)
+  - [X] 10.1.4: Adicionar choices para `category` (SALARIOS, TRANSFERENCIAS, etc)
+  - [X] 10.1.5: Adicionar campo `amount` (DecimalField)
+  - [X] 10.1.6: Adicionar choices para `transaction_type` (RECEITA, DESPESA)
+  - [X] 10.1.7: Adicionar campo `description` (TextField)
+  - [X] 10.1.8: Adicionar campos de auditoria
+  - [X] 10.1.9: Adicionar campo `created_by`
+  - [X] 10.1.10: Criar método `__str__`
+  - [X] 10.1.11: Configurar Meta
+  - [X] 10.1.12: Criar e aplicar migrações
+  - [X] 10.1.13: Registrar no admin
 
-- [ ] **Tarefa 10.2: CRUD de Registros Financeiros**
-  - [ ] 10.2.1: Criar `FinancialRecordForm`
-  - [ ] 10.2.2: Configurar validações
-  - [ ] 10.2.3: Adicionar classes CSS
-  - [ ] 10.2.4: Criar view `FinancialRecordListView`
-  - [ ] 10.2.5: Criar template de listagem
-  - [ ] 10.2.6: Implementar filtro por clube
-  - [ ] 10.2.7: Implementar filtro por tipo de transação
-  - [ ] 10.2.8: Implementar filtro por período
-  - [ ] 10.2.9: Calcular totais de receitas e despesas
-  - [ ] 10.2.10: Criar view `FinancialRecordCreateView`
-  - [ ] 10.2.11: Criar template de formulário
-  - [ ] 10.2.12: Criar views de edição e exclusão
-  - [ ] 10.2.13: Adicionar URLs
-  - [ ] 10.2.14: Testar CRUD completo
+- [X] **Tarefa 10.2: CRUD de Registros Financeiros**
+  - [X] 10.2.1: Criar `FinancialRecordForm`
+  - [X] 10.2.2: Configurar validações
+  - [X] 10.2.3: Adicionar classes CSS
+  - [X] 10.2.4: Criar view `FinancialRecordListView`
+  - [X] 10.2.5: Criar template de listagem
+  - [X] 10.2.6: Implementar filtro por clube
+  - [X] 10.2.7: Implementar filtro por tipo de transação
+  - [X] 10.2.8: Implementar filtro por período
+  - [X] 10.2.9: Calcular totais de receitas e despesas
+  - [X] 10.2.10: Criar view `FinancialRecordCreateView`
+  - [X] 10.2.11: Criar template de formulário
+  - [X] 10.2.12: Criar views de edição e exclusão
+  - [X] 10.2.13: Adicionar URLs
+  - [X] 10.2.14: Testar CRUD completo
 
-- [ ] **Tarefa 10.3: Modelo de Receita Mensal**
-  - [ ] 10.3.1: Criar modelo `Revenue` em `business/models.py`
-  - [ ] 10.3.2: Adicionar ForeignKey para `Club`
-  - [ ] 10.3.3: Adicionar campo `year` (PositiveIntegerField)
-  - [ ] 10.3.4: Adicionar campo `month` (PositiveIntegerField, 1-12)
-  - [ ] 10.3.5: Adicionar campo `ticketing` (DecimalField)
-  - [ ] 10.3.6: Adicionar campo `sponsorship` (DecimalField)
-  - [ ] 10.3.7: Adicionar campo `broadcasting` (DecimalField)
-  - [ ] 10.3.8: Adicionar campo `merchandising` (DecimalField)
-  - [ ] 10.3.9: Adicionar campos de auditoria
-  - [ ] 10.3.10: Criar método `total_revenue()`
-  - [ ] 10.3.11: Criar método `__str__`
-  - [ ] 10.3.12: Configurar Meta com unique_together (club, year, month)
-  - [ ] 10.3.13: Criar e aplicar migrações
-  - [ ] 10.3.14: Registrar no admin
+- [X] **Tarefa 10.3: Modelo de Receita Mensal**
+  - [X] 10.3.1: Criar modelo `Revenue` em `business/models.py`
+  - [X] 10.3.2: Adicionar ForeignKey para `Club`
+  - [X] 10.3.3: Adicionar campo `year` (PositiveIntegerField)
+  - [X] 10.3.4: Adicionar campo `month` (PositiveIntegerField, 1-12)
+  - [X] 10.3.5: Adicionar campo `ticketing` (DecimalField)
+  - [X] 10.3.6: Adicionar campo `sponsorship` (DecimalField)
+  - [X] 10.3.7: Adicionar campo `broadcasting` (DecimalField)
+  - [X] 10.3.8: Adicionar campo `merchandising` (DecimalField)
+  - [X] 10.3.9: Adicionar campos de auditoria
+  - [X] 10.3.10: Criar método `total_revenue()`
+  - [X] 10.3.11: Criar método `__str__`
+  - [X] 10.3.12: Configurar Meta com unique_together (club, year, month)
+  - [X] 10.3.13: Criar e aplicar migrações
+  - [X] 10.3.14: Registrar no admin
 
-- [ ] **Tarefa 10.4: CRUD de Receitas**
-  - [ ] 10.4.1: Criar `RevenueForm`
-  - [ ] 10.4.2: Configurar validações
-  - [ ] 10.4.3: Criar view `RevenueListView`
-  - [ ] 10.4.4: Criar template de listagem
-  - [ ] 10.4.5: Implementar filtro por clube e ano
-  - [ ] 10.4.6: Exibir total mensal
-  - [ ] 10.4.7: Criar view `RevenueCreateView`
-  - [ ] 10.4.8: Criar template de formulário
-  - [ ] 10.4.9: Criar views de edição e exclusão
-  - [ ] 10.4.10: Adicionar URLs
-  - [ ] 10.4.11: Testar CRUD completo
+- [X] **Tarefa 10.4: CRUD de Receitas**
+  - [X] 10.4.1: Criar `RevenueForm`
+  - [X] 10.4.2: Configurar validações
+  - [X] 10.4.3: Criar view `RevenueListView`
+  - [X] 10.4.4: Criar template de listagem
+  - [X] 10.4.5: Implementar filtro por clube e ano
+  - [X] 10.4.6: Exibir total mensal
+  - [X] 10.4.7: Criar view `RevenueCreateView`
+  - [X] 10.4.8: Criar template de formulário
+  - [X] 10.4.9: Criar views de edição e exclusão
+  - [X] 10.4.10: Adicionar URLs
+  - [X] 10.4.11: Testar CRUD completo
 
-- [ ] **Tarefa 10.5: Dashboard Financeiro**
-  - [ ] 10.5.1: Criar view `FinancialDashboardView`
-  - [ ] 10.5.2: Calcular receitas totais por clube
-  - [ ] 10.5.3: Calcular despesas totais por clube
-  - [ ] 10.5.4: Calcular saldo (receitas - despesas)
-  - [ ] 10.5.5: Buscar receitas dos últimos 12 meses
-  - [ ] 10.5.6: Criar template do dashboard
-  - [ ] 10.5.7: Implementar gráfico de barras de receitas mensais
-  - [ ] 10.5.8: Implementar gráfico de pizza por categoria
-  - [ ] 10.5.9: Adicionar cards de resumo
-  - [ ] 10.5.10: Adicionar URL `/business/dashboard/`
-  - [ ] 10.5.11: Atualizar menu
-  - [ ] 10.5.12: Testar dashboard
+- [X] **Tarefa 10.5: Dashboard Financeiro**
+  - [X] 10.5.1: Criar view `FinancialDashboardView`
+  - [X] 10.5.2: Calcular receitas totais por clube
+  - [X] 10.5.3: Calcular despesas totais por clube
+  - [X] 10.5.4: Calcular saldo (receitas - despesas)
+  - [X] 10.5.5: Buscar receitas dos últimos 12 meses
+  - [X] 10.5.6: Criar template do dashboard
+  - [X] 10.5.7: Implementar gráfico de barras de receitas mensais
+  - [X] 10.5.8: Implementar gráfico de pizza por categoria
+  - [X] 10.5.9: Adicionar cards de resumo
+  - [X] 10.5.10: Adicionar URL `/business/dashboard/`
+  - [X] 10.5.11: Atualizar menu
+  - [X] 10.5.12: Testar dashboard
 
 ---
 
 ### Sprint 11: Integração entre Módulos
 **Duração**: 1 semana
 
-- [ ] **Tarefa 11.1: Integração Performance → Business**
-  - [ ] 11.1.1: Adicionar campo `market_value` no modelo `Athlete`
-  - [ ] 11.1.2: Criar migração para adicionar o campo
-  - [ ] 11.1.3: Atualizar formulário de atleta
-  - [ ] 11.1.4: Exibir valor de mercado na página de detalhes
-  - [ ] 11.1.5: Criar view `AthleteValuationView`
-  - [ ] 11.1.6: Calcular valor total do elenco
-  - [ ] 11.1.7: Criar template de valorização
-  - [ ] 11.1.8: Adicionar URL `/performance/valuation/`
-  - [ ] 11.1.9: Adicionar item no menu
-  - [ ] 11.1.10: Testar integração
+- [X] **Tarefa 11.1: Integração Performance → Business**
+  - [X] 11.1.1: Adicionar campo `market_value` no modelo `Athlete`
+  - [X] 11.1.2: Criar migração para adicionar o campo
+  - [X] 11.1.3: Atualizar formulário de atleta
+  - [X] 11.1.4: Exibir valor de mercado na página de detalhes
+  - [X] 11.1.5: Criar view `AthleteValuationView`
+  - [X] 11.1.6: Calcular valor total do elenco
+  - [X] 11.1.7: Criar template de valorização
+  - [X] 11.1.8: Adicionar URL `/performance/valuation/`
+  - [X] 11.1.9: Adicionar item no menu
+  - [X] 11.1.10: Testar integração
 
-- [ ] **Tarefa 11.2: Integração Scouting → Performance**
-  - [ ] 11.2.1: Criar funcionalidade "Contratar Jogador"
-  - [ ] 11.2.2: Adicionar botão na página de detalhes do jogador observado
-  - [ ] 11.2.3: Criar view `ConvertToAthleteView`
-  - [ ] 11.2.4: Copiar dados do ScoutedPlayer para Athlete
-  - [ ] 11.2.5: Marcar ScoutedPlayer como "CONTRATADO"
-  - [ ] 11.2.6: Adicionar URL
-  - [ ] 11.2.7: Implementar mensagem de confirmação
-  - [ ] 11.2.8: Testar conversão
+- [X] **Tarefa 11.2: Integração Scouting → Performance**
+  - [X] 11.2.1: Criar funcionalidade "Contratar Jogador"
+  - [X] 11.2.2: Adicionar botão na página de detalhes do jogador observado
+  - [X] 11.2.3: Criar view `ConvertToAthleteView`
+  - [X] 11.2.4: Copiar dados do ScoutedPlayer para Athlete
+  - [X] 11.2.5: Marcar ScoutedPlayer como "CONTRATADO"
+  - [X] 11.2.6: Adicionar URL
+  - [X] 11.2.7: Implementar mensagem de confirmação
+  - [X] 11.2.8: Testar conversão
 
-- [ ] **Tarefa 11.3: Dashboard Principal Unificado**
-  - [ ] 11.3.1: Atualizar `DashboardView`
-  - [ ] 11.3.2: Adicionar widget de performance
-  - [ ] 11.3.3: Adicionar widget de scouting
-  - [ ] 11.3.4: Adicionar widget de business
-  - [ ] 11.3.5: Criar seção "Atividades Recentes"
-  - [ ] 11.3.6: Listar últimos atletas cadastrados
-  - [ ] 11.3.7: Listar últimas lesões
-  - [ ] 11.3.8: Listar últimos relatórios de scouting
-  - [ ] 11.3.9: Implementar layout responsivo
-  - [ ] 11.3.10: Testar dashboard unificado
+- [X] **Tarefa 11.3: Dashboard Principal Unificado**
+  - [X] 11.3.1: Atualizar `DashboardView`
+  - [X] 11.3.2: Adicionar widget de performance
+  - [X] 11.3.3: Adicionar widget de scouting
+  - [X] 11.3.4: Adicionar widget de business
+  - [X] 11.3.5: Criar seção "Atividades Recentes"
+  - [X] 11.3.6: Listar últimos atletas cadastrados
+  - [X] 11.3.7: Listar últimas lesões
+  - [X] 11.3.8: Listar últimos relatórios de scouting
+  - [X] 11.3.9: Implementar layout responsivo
+  - [X] 11.3.10: Testar dashboard unificado
+
+- [X] Sprint 11 concluída
 
 ---
 
@@ -770,6 +774,7 @@
 ---
 
 ### Sprint 13: Modelos Preditivos com IA
+- [X] Sprint 13 concluída
 **Duração**: 2 semanas
 
 - [X] **Tarefa 13.1: Configuração do Ambiente ML**
@@ -815,19 +820,19 @@
   - [X] 13.4.8: Exibir "Potencial Estimado"
   - [X] 13.4.9: Testar avaliações
 
-- [ ] **Tarefa 13.5: Modelo de Previsão de Receitas**
-  - [ ] 13.5.1: Criar script `ml_models/revenue_forecaster.py`
-  - [ ] 13.5.2: Buscar dados históricos de receitas
-  - [ ] 13.5.3: Preparar série temporal
-  - [ ] 13.5.4: Implementar LinearRegression
-  - [ ] 13.5.5: Treinar modelo
-  - [ ] 13.5.6: Criar função de previsão
-  - [ ] 13.5.7: Criar view `RevenueForecastView`
-  - [ ] 13.5.8: Criar template de visualização
-  - [ ] 13.5.9: Exibir previsão para próximos 6 meses
-  - [ ] 13.5.10: Criar gráfico de tendência
-  - [ ] 13.5.11: Adicionar URL `/business/forecast/`
-  - [ ] 13.5.12: Testar previsões
+- [X] **Tarefa 13.5: Modelo de Previsão de Receitas**
+  - [X] 13.5.1: Criar script `ml_models/revenue_forecaster.py`
+  - [X] 13.5.2: Buscar dados históricos de receitas
+  - [X] 13.5.3: Preparar série temporal
+  - [X] 13.5.4: Implementar LinearRegression
+  - [X] 13.5.5: Treinar modelo
+  - [X] 13.5.6: Criar função de previsão
+  - [X] 13.5.7: Criar view `RevenueForecastView`
+  - [X] 13.5.8: Criar template de visualização
+  - [X] 13.5.9: Exibir previsão para próximos 6 meses
+  - [X] 13.5.10: Criar gráfico de tendência
+  - [X] 13.5.11: Adicionar URL `/business/forecast/`
+  - [X] 13.5.12: Testar previsões
 
 ---
 

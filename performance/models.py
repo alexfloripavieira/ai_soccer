@@ -35,6 +35,14 @@ class Athlete(models.Model):
     nationality = models.CharField('Nacionalidade', max_length=100)
     height = models.FloatField('Altura (cm)')
     weight = models.FloatField('Peso (kg)')
+    market_value = models.DecimalField(
+        'Valor de Mercado',
+        max_digits=12,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text='Valor estimado do atleta em Reais (R$)',
+    )
 
     created_at = models.DateTimeField('Criado em', auto_now_add=True)
     updated_at = models.DateTimeField('Atualizado em', auto_now=True)

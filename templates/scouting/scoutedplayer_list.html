@@ -1,5 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
-{% load static %}
+{% load static formatting %}
 
 {% block title %}Jogadores Observados - AI Soccer{% endblock %}
 
@@ -172,9 +172,9 @@
                   {{ player.get_status_display }}
                 </span>
               </td>
-              <td class="px-6 py-4 text-sm text-slate-200">
+              <td class="px-6 py-4 text-sm text-slate-200 tabular-nums">
                 {% if player.market_value %}
-                  R$ {{ player.market_value|floatformat:2 }}
+                  R$ {{ player.market_value|currency_ptbr }}
                 {% else %}
                   <span class="text-slate-500">Não informado</span>
                 {% endif %}
@@ -243,9 +243,9 @@
             </div>
             <div>
               <dt class="text-xs uppercase text-slate-500">Valor</dt>
-              <dd>
+              <dd class="tabular-nums">
                 {% if player.market_value %}
-                  R$ {{ player.market_value|floatformat:2 }}
+                  R$ {{ player.market_value|currency_ptbr }}
                 {% else %}
                   <span class="text-slate-500">Não informado</span>
                 {% endif %}

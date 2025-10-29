@@ -1,0 +1,148 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load formatting %}
+
+{% block title %}Contratar {{ scouted_player.name }} • AI Soccer{% endblock %}
+
+{% block page_title %}Contratar {{ scouted_player.name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="mx-auto max-w-6xl space-y-6">
+  <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-widest text-green-400">Integração de talento</p>
+      <h2 class="text-3xl font-bold text-slate-100 md:text-4xl">
+        Confirme os dados para integrar {{ scouted_player.name }}
+      </h2>
+      <p class="mt-2 text-sm text-slate-400 md:text-base">
+        Os dados coletados pelo scouting já estão pré-preenchidos. Complete os campos obrigatórios
+        e finalize a contratação para mover o jogador para o módulo de performance.
+      </p>
+    </div>
+    <a href="{% url 'scouting:player_detail' scouted_player.pk %}"
+       class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+      Voltar para detalhes
+    </a>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/40">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        {% if suggested_position_label %}
+        <div class="rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-200">
+          Posição sugerida com base nos dados de scouting:
+          <span class="font-semibold text-white">{{ suggested_position_label }}</span>.
+          Ajuste se necessário.
+        </div>
+        {% endif %}
+
+        <div class="grid gap-5 md:grid-cols-2">
+          {% for field in form %}
+          <div class="{% if field.name == 'name' or field.name == 'nationality' %}md:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mb-1 block text-sm font-medium text-slate-300">
+              {{ field.label }}
+              {% if field.field.required %}
+              <span class="text-red-400">*</span>
+              {% endif %}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+            <p class="mt-1 text-sm text-red-400">{{ field.errors|striptags }}</p>
+            {% endif %}
+            {% if field.help_text %}
+            <p class="mt-1 text-xs text-slate-500">{{ field.help_text }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-end">
+          <a href="{% url 'scouting:player_detail' scouted_player.pk %}"
+             class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+            Cancelar
+          </a>
+          <button type="submit"
+                  class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-900/30 transition-all duration-150 hover:shadow-xl">
+            Finalizar contratação
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="space-y-4">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-slate-100">Resumo do jogador</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-300">
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Nome</dt>
+            <dd>{{ scouted_player.name }}</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Idade</dt>
+            <dd>{{ scouted_player.age }} anos</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Posição observada</dt>
+            <dd>{{ scouted_player.get_position_display }}</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Situação atual</dt>
+            <dd>
+              <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ scouted_player.status_badge_class }}">
+                {{ scouted_player.get_status_display }}
+              </span>
+            </dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Valor de mercado</dt>
+            <dd class="tabular-nums">
+              {% if scouted_player.market_value %}
+                R$ {{ scouted_player.market_value|currency_ptbr }}
+              {% else %}
+                <span class="text-slate-500">Não informado</span>
+              {% endif %}
+            </dd>
+          </div>
+          {% if scouted_player.current_club %}
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Clube atual</dt>
+            <dd class="text-right">{{ scouted_player.current_club }}</dd>
+          </div>
+          {% endif %}
+          {% if scouted_player.hire_date %}
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Data de contratação</dt>
+            <dd>{{ scouted_player.hire_date|date:"d/m/Y" }}</dd>
+          </div>
+          {% endif %}
+        </dl>
+      </div>
+
+      <div class="rounded-2xl border border-blue-500/30 bg-blue-500/10 p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-slate-100">Próximos passos</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-200">
+          <li class="flex items-start gap-2">
+            <span class="mt-1 h-2 w-2 rounded-full bg-green-400"></span>
+            Revise altura e peso para manter o acompanhamento físico atualizado.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-1 h-2 w-2 rounded-full bg-green-400"></span>
+            Após salvar, acompanhe o atleta no módulo de performance e registre as primeiras cargas de treino.
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-1 h-2 w-2 rounded-full bg-green-400"></span>
+            O status do jogador será atualizado automaticamente para <strong>Contratado</strong>.
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

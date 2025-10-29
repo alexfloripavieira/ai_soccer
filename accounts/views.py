@@ -1,13 +1,22 @@
 """Account views."""
 
+from datetime import timedelta
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Sum
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib.auth.views import LogoutView as AuthLogoutView
+
+from business.models import Club, FinancialRecord
+from performance.models import Athlete, InjuryRecord, TrainingLoad
+from scouting.models import ScoutedPlayer, ScoutingReport
 
 from .forms import CustomAuthenticationForm, CustomUserCreationForm, ProfileUpdateForm
 
@@ -65,7 +74,57 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Add user-specific data to the dashboard context."""
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        user = self.request.user
+        context['user'] = user
+
+        today = timezone.localdate()
+        last_seven_days = today - timedelta(days=7)
+
+        total_athletes = Athlete.objects.count()
+        total_reports = ScoutingReport.objects.count()
+        total_scouted = ScoutedPlayer.objects.count()
+        total_clubs = Club.objects.count()
+        total_financials = FinancialRecord.objects.count()
+        active_sessions = TrainingLoad.objects.filter(training_date__gte=last_seven_days).count()
+        total_squad_value = (
+            Athlete.objects.aggregate(total=Sum('market_value')).get('total')
+            or Decimal('0')
+        )
+        monitoring_players = ScoutedPlayer.objects.exclude(status=ScoutedPlayer.STATUS_HIRED).count()
+
+        recent_athletes = (
+            Athlete.objects.select_related('created_by')
+            .order_by('-created_at')[:5]
+        )
+        recent_injuries = (
+            InjuryRecord.objects.select_related('athlete')
+            .order_by('-injury_date', '-created_at')[:5]
+        )
+        recent_reports = (
+            ScoutingReport.objects.select_related('player')
+            .order_by('-report_date', '-created_at')[:5]
+        )
+        recent_financials = (
+            FinancialRecord.objects.select_related('club')
+            .order_by('-record_date', '-created_at')[:5]
+        )
+
+        context.update(
+            {
+                'total_athletes': total_athletes,
+                'total_reports': total_reports,
+                'total_financials': total_financials,
+                'active_sessions': active_sessions,
+                'total_squad_value': total_squad_value,
+                'monitoring_players': monitoring_players,
+                'total_scouted': total_scouted,
+                'total_clubs': total_clubs,
+                'recent_athletes': recent_athletes,
+                'recent_injuries': recent_injuries,
+                'recent_reports': recent_reports,
+                'recent_financials': recent_financials,
+            }
+        )
         return context
 
 

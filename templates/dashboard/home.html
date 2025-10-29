@@ -1,5 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
-{% load static %}
+{% load static formatting %}
 
 {% block title %}Dashboard - AI Soccer{% endblock %}
 {% block page_title %}Dashboard{% endblock %}
@@ -50,7 +50,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Performance Module Card -->
-    <a href="#" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-green-500/50 transition-all duration-200">
+    <a href="{% url 'performance:dashboard' %}" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-green-500/50 transition-all duration-200">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center space-x-3">
           <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center group-hover:bg-green-500/30 transition-colors duration-200">
@@ -70,13 +70,19 @@
       </p>
 
       <div class="flex items-center justify-between pt-4 border-t border-slate-700">
-        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Atletas Cadastrados</span>
-        <span class="text-2xl font-bold text-green-400">{{ total_athletes|default:0 }}</span>
+        <div>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Atletas cadastrados</span>
+          <span class="text-2xl font-bold text-green-400">{{ total_athletes|default:0 }}</span>
+        </div>
+        <div class="text-right">
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Valor do elenco</span>
+          <span class="text-sm font-semibold text-green-300 tabular-nums">R$ {{ total_squad_value|currency_ptbr }}</span>
+        </div>
       </div>
     </a>
 
     <!-- Scouting Module Card -->
-    <a href="#" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-blue-500/50 transition-all duration-200">
+    <a href="{% url 'scouting:dashboard' %}" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-blue-500/50 transition-all duration-200">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center space-x-3">
           <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors duration-200">
@@ -96,13 +102,19 @@
       </p>
 
       <div class="flex items-center justify-between pt-4 border-t border-slate-700">
-        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Atletas em Análise</span>
-        <span class="text-2xl font-bold text-blue-400">{{ total_scouted|default:0 }}</span>
+        <div>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Jogadores observados</span>
+          <span class="text-2xl font-bold text-blue-400">{{ total_scouted|default:0 }}</span>
+        </div>
+        <div class="text-right">
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Jogadores monitorados</span>
+          <span class="text-sm font-semibold text-blue-300">{{ monitoring_players|default:0 }}</span>
+        </div>
       </div>
     </a>
 
     <!-- Business Module Card -->
-    <a href="#" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-purple-500/50 transition-all duration-200">
+    <a href="{% url 'business:financial_dashboard' %}" class="group block bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 hover:border-purple-500/50 transition-all duration-200">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center space-x-3">
           <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/30 transition-colors duration-200">
@@ -122,8 +134,21 @@
       </p>
 
       <div class="flex items-center justify-between pt-4 border-t border-slate-700">
-        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Clubes Gerenciados</span>
-        <span class="text-2xl font-bold text-purple-400">{{ total_clubs|default:0 }}</span>
+        <div>
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">Registros financeiros</span>
+          <span class="text-2xl font-bold text-purple-400">{{ total_financials|default:0 }}</span>
+        </div>
+        <div class="text-right">
+          {% if recent_financials %}
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Última movimentação</span>
+          <span class="text-sm font-semibold text-purple-300 tabular-nums">
+            {{ recent_financials.0.get_transaction_type_display }} · R$ {{ recent_financials.0.amount|currency_ptbr }}
+          </span>
+          {% else %}
+          <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Última movimentação</span>
+          <span class="text-sm font-semibold text-slate-400">Sem registros</span>
+          {% endif %}
+        </div>
       </div>
     </a>
   </div>
@@ -205,6 +230,111 @@
   </div>
 </div>
 
+<!-- Recent Activity Section -->
+<div class="mt-8">
+  <h3 class="text-lg font-semibold text-slate-100 mb-4 flex items-center">
+    <svg class="w-5 h-5 mr-2 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3-.895 3-2s-1.343-2-3-2-3 .895-3 2 1.343 2 3 2zm0 0v9m0 0l-3-3m3 3l3-3" />
+    </svg>
+    Atividades Recentes
+  </h3>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <!-- Recent Athletes -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg">
+      <div class="mb-4 flex items-center justify-between">
+        <h4 class="text-lg font-semibold text-slate-100">Novos atletas</h4>
+        <a href="{% url 'performance:athlete_list' %}" class="text-xs font-semibold uppercase tracking-wider text-green-400 hover:text-green-300 transition-colors duration-150">
+          Ver todos
+        </a>
+      </div>
+      <ul class="space-y-3">
+        {% for athlete in recent_athletes %}
+        <li>
+          <a href="{% url 'performance:athlete_detail' athlete.pk %}"
+             class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-3 transition-all duration-150 hover:border-green-500/40 hover:bg-slate-900/80">
+            <div>
+              <p class="text-sm font-semibold text-slate-100">{{ athlete.name }}</p>
+              <p class="text-xs text-slate-400">
+                {{ athlete.get_position_display }} • {{ athlete.created_at|date:"d/m/Y" }}
+              </p>
+            </div>
+            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </li>
+        {% empty %}
+        <li class="rounded-lg border border-dashed border-slate-700 bg-slate-900/40 px-4 py-6 text-center text-sm text-slate-500">
+          Nenhum atleta cadastrado recentemente.
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Recent Injuries -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg">
+      <div class="mb-4 flex items-center justify-between">
+        <h4 class="text-lg font-semibold text-slate-100">Últimas lesões</h4>
+        <a href="{% url 'performance:injury_record_list' %}" class="text-xs font-semibold uppercase tracking-wider text-amber-400 hover:text-amber-300 transition-colors duration-150">
+          Ver todas
+        </a>
+      </div>
+      <ul class="space-y-3">
+        {% for injury in recent_injuries %}
+        <li>
+          <a href="{% url 'performance:athlete_detail' injury.athlete.pk %}?tab=injuries"
+             class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-3 transition-all duration-150 hover:border-amber-500/40 hover:bg-slate-900/80">
+            <div>
+              <p class="text-sm font-semibold text-slate-100">{{ injury.athlete.name }}</p>
+              <p class="text-xs text-slate-400">
+                {{ injury.get_injury_type_display }} • {{ injury.injury_date|date:"d/m/Y" }}
+              </p>
+            </div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-amber-300">{{ injury.get_severity_level_display }}</span>
+          </a>
+        </li>
+        {% empty %}
+        <li class="rounded-lg border border-dashed border-slate-700 bg-slate-900/40 px-4 py-6 text-center text-sm text-slate-500">
+          Nenhuma lesão registrada recentemente.
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Recent Scouting Reports -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-lg">
+      <div class="mb-4 flex items-center justify-between">
+        <h4 class="text-lg font-semibold text-slate-100">Relatórios de scouting</h4>
+        <a href="{% url 'scouting:report_list' %}" class="text-xs font-semibold uppercase tracking-wider text-blue-400 hover:text-blue-300 transition-colors duration-150">
+          Ver todos
+        </a>
+      </div>
+      <ul class="space-y-3">
+        {% for report in recent_reports %}
+        <li>
+          <a href="{% url 'scouting:report_detail' report.pk %}"
+             class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-3 transition-all duration-150 hover:border-blue-500/40 hover:bg-slate-900/80">
+            <div>
+              <p class="text-sm font-semibold text-slate-100">{{ report.player.name }}</p>
+              <p class="text-xs text-slate-400">
+                {{ report.report_date|date:"d/m/Y" }} • Score {{ report.overall_score|floatformat:1 }}
+              </p>
+            </div>
+            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </li>
+        {% empty %}
+        <li class="rounded-lg border border-dashed border-slate-700 bg-slate-900/40 px-4 py-6 text-center text-sm text-slate-500">
+          Nenhum relatório cadastrado recentemente.
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
 <!-- Quick Actions Section (Optional Enhancement) -->
 <div class="mt-8">
   <h3 class="text-lg font-semibold text-slate-100 mb-4 flex items-center">
@@ -216,7 +346,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <!-- Add Athlete -->
-    <a href="#" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-green-500/50 transition-all duration-200">
+    <a href="{% url 'performance:athlete_create' %}" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-green-500/50 transition-all duration-200">
       <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center group-hover:bg-green-500/30 transition-colors duration-200">
         <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -229,7 +359,7 @@
     </a>
 
     <!-- New Report -->
-    <a href="#" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-blue-500/50 transition-all duration-200">
+    <a href="{% url 'scouting:report_create' %}" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-blue-500/50 transition-all duration-200">
       <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors duration-200">
         <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -242,7 +372,7 @@
     </a>
 
     <!-- Add Financial Record -->
-    <a href="#" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-purple-500/50 transition-all duration-200">
+    <a href="{% url 'business:financialrecord_create' %}" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-purple-500/50 transition-all duration-200">
       <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/30 transition-colors duration-200">
         <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -255,15 +385,15 @@
     </a>
 
     <!-- View Reports -->
-    <a href="#" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-orange-500/50 transition-all duration-200">
+    <a href="{% url 'scouting:report_list' %}" class="group flex items-center space-x-3 bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg hover:shadow-xl hover:scale-105 hover:border-orange-500/50 transition-all duration-200">
       <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-200">
         <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
       </div>
       <div>
-        <p class="text-sm font-semibold text-slate-100 group-hover:text-orange-400 transition-colors duration-200">Ver Relatórios</p>
-        <p class="text-xs text-slate-400">Análises</p>
+        <p class="text-sm font-semibold text-slate-100 group-hover:text-orange-400 transition-colors duration-200">Relatórios de scouting</p>
+        <p class="text-xs text-slate-400">Scouting</p>
       </div>
     </a>
   </div>

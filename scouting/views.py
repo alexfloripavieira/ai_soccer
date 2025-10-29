@@ -5,18 +5,22 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Count, ExpressionWrapper, F, FloatField, Max, Q, Value
 from django.db.models import Prefetch
 from django.db.models.functions import Coalesce
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import (
     CreateView,
     DeleteView,
     DetailView,
+    FormView,
     ListView,
     TemplateView,
     UpdateView,
 )
 
 from ml_models.potential_evaluator import evaluate_player_potential
+from performance.forms import AthleteForm
+from performance.models import Athlete
 from scouting.forms import ScoutedPlayerForm, ScoutingReportForm
 from scouting.models import ScoutedPlayer, ScoutingReport
 
@@ -255,6 +259,85 @@ class PlayerComparisonView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class ConvertToAthleteView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    """Convert a scouted player into an athlete inside the performance module."""
+
+    POSITION_MAP = {
+        ScoutedPlayer.POSITION_GOALKEEPER: Athlete.POSITION_GOALKEEPER,
+        ScoutedPlayer.POSITION_RIGHT_BACK: Athlete.POSITION_DEFENDER,
+        ScoutedPlayer.POSITION_LEFT_BACK: Athlete.POSITION_DEFENDER,
+        ScoutedPlayer.POSITION_CENTER_BACK: Athlete.POSITION_DEFENDER,
+        ScoutedPlayer.POSITION_DEFENSIVE_MIDFIELDER: Athlete.POSITION_MIDFIELDER,
+        ScoutedPlayer.POSITION_CENTRAL_MIDFIELDER: Athlete.POSITION_MIDFIELDER,
+        ScoutedPlayer.POSITION_ATT_MIDFIELDER: Athlete.POSITION_MIDFIELDER,
+        ScoutedPlayer.POSITION_RIGHT_WINGER: Athlete.POSITION_FORWARD,
+        ScoutedPlayer.POSITION_LEFT_WINGER: Athlete.POSITION_FORWARD,
+        ScoutedPlayer.POSITION_STRIKER: Athlete.POSITION_FORWARD,
+    }
+    POSITION_LABELS = dict(Athlete.POSITION_CHOICES)
+
+    template_name = 'scouting/convert_to_athlete.html'
+    form_class = AthleteForm
+    login_url = reverse_lazy('accounts:login')
+    success_message = 'Jogador contratado e integrado ao elenco com sucesso!'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.scouted_player = get_object_or_404(ScoutedPlayer, pk=kwargs['pk'])
+        if self.scouted_player.status == ScoutedPlayer.STATUS_HIRED:
+            messages.info(
+                request,
+                'Este jogador já está marcado como contratado e disponível no módulo de performance.',
+            )
+            return redirect('scouting:player_detail', pk=self.scouted_player.pk)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        mapped_position = self.POSITION_MAP.get(self.scouted_player.position)
+        initial.update(
+            {
+                'name': self.scouted_player.name,
+                'birth_date': self.scouted_player.birth_date,
+                'nationality': self.scouted_player.nationality,
+            }
+        )
+        if mapped_position:
+            initial['position'] = mapped_position
+        if self.scouted_player.market_value is not None:
+            initial['market_value'] = self.scouted_player.market_value
+        return initial
+
+    def form_valid(self, form):
+        athlete = form.save(commit=False)
+        athlete.created_by = self.request.user
+        if athlete.market_value is None and self.scouted_player.market_value is not None:
+            athlete.market_value = self.scouted_player.market_value
+        athlete.save()
+        form.save_m2m()
+        self.scouted_player.status = ScoutedPlayer.STATUS_HIRED
+        if not self.scouted_player.hire_date:
+            self.scouted_player.hire_date = timezone.localdate()
+        self.scouted_player.save(update_fields=['status', 'hire_date', 'updated_at'])
+        self.athlete = athlete
+        messages.success(self.request, self.success_message)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('performance:athlete_detail', args=[self.athlete.pk])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mapped_position = self.POSITION_MAP.get(self.scouted_player.position)
+        context.update(
+            {
+                'scouted_player': self.scouted_player,
+                'suggested_position': mapped_position,
+                'suggested_position_label': self.POSITION_LABELS.get(mapped_position),
+            }
+        )
+        return context
+
+
 class ScoutedPlayerCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """Create a new scouted player record."""
 
@@ -338,6 +421,8 @@ class ScoutedPlayerDetailView(LoginRequiredMixin, DetailView):
             context['timeline_values'] = []
             context['show_timeline_chart'] = False
         context['potential_prediction'] = evaluate_player_potential(self.object)
+        context['can_convert'] = self.object.status != ScoutedPlayer.STATUS_HIRED
+        context['convert_url'] = reverse('scouting:player_convert', args=[self.object.pk])
         return context
 
 

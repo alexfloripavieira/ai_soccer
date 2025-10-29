@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static formatting %}
+
+{% block title %}Excluir Receita Mensal - AI Soccer{% endblock %}
+
+{% block content %}
+<section class="mx-auto w-full max-w-3xl px-6 py-16">
+  <div class="rounded-3xl border border-red-500/40 bg-red-500/10 p-10 shadow-2xl shadow-red-500/20 backdrop-blur">
+    <span class="inline-flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/20 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-red-200">
+      Atenção
+    </span>
+
+    <h1 class="mt-6 text-3xl font-semibold text-slate-100 md:text-4xl">
+      Deseja realmente excluir esta receita mensal?
+    </h1>
+    <p class="mt-3 text-sm text-slate-300 md:text-base">
+      Esta ação é permanente e removerá a receita de <strong class="text-red-200">{{ revenue.get_month_display }}/{{ revenue.year }}</strong> do clube <strong class="text-red-200">{{ revenue.club.name }}</strong> do sistema.
+    </p>
+
+    <dl class="mt-8 grid grid-cols-1 gap-4 rounded-2xl border border-red-500/30 bg-slate-950/60 p-6 md:grid-cols-2">
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Clube</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">{{ revenue.club.name }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Período</dt>
+        <dd class="mt-1 text-lg font-semibold text-slate-100">
+          {{ revenue.get_month_display }}/{{ revenue.year }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Bilheteria</dt>
+        <dd class="mt-1 text-base text-slate-200 tabular-nums">
+          R$ {{ revenue.ticketing|currency_ptbr }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Patrocínio</dt>
+        <dd class="mt-1 text-base text-slate-200 tabular-nums">
+          R$ {{ revenue.sponsorship|currency_ptbr }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Direitos de Transmissão</dt>
+        <dd class="mt-1 text-base text-slate-200 tabular-nums">
+          R$ {{ revenue.broadcasting|currency_ptbr }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Merchandising</dt>
+        <dd class="mt-1 text-base text-slate-200 tabular-nums">
+          R$ {{ revenue.merchandising|currency_ptbr }}
+        </dd>
+      </div>
+      <div class="md:col-span-2">
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Receita Total</dt>
+        <dd class="mt-1 text-2xl font-bold text-green-400 tabular-nums">
+          R$ {{ revenue.total_revenue|currency_ptbr }}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Criado em</dt>
+        <dd class="mt-1 text-sm text-slate-400">
+          {{ revenue.created_at|date:'d/m/Y H:i' }}
+        </dd>
+      </div>
+      {% if revenue.updated_at %}
+      <div>
+        <dt class="text-xs uppercase tracking-widest text-slate-500">Última atualização</dt>
+        <dd class="mt-1 text-sm text-slate-400">
+          {{ revenue.updated_at|date:'d/m/Y H:i' }}
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <form method="post" class="mt-10 flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
+      {% csrf_token %}
+      <a
+        href="{% url 'business:revenue_list' %}"
+        class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700"
+      >
+        Cancelar
+      </a>
+      <button
+        type="submit"
+        class="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-500/30 transition-all duration-200 hover:bg-red-500 hover:shadow-red-400/40 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+      >
+        Confirmar exclusão
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

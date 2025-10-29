@@ -1,4 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
+{% load formatting %}
 
 {% block title %}Remover {{ object.name }} - AI Soccer{% endblock %}
 
@@ -44,9 +45,9 @@
       </div>
       <div>
         <dt class="text-xs uppercase text-slate-500">Valor de mercado</dt>
-        <dd class="mt-1">
+        <dd class="mt-1 tabular-nums">
           {% if object.market_value %}
-            R$ {{ object.market_value|floatformat:2 }}
+            R$ {{ object.market_value|currency_ptbr }}
           {% else %}
             <span class="text-slate-500">Não informado</span>
           {% endif %}

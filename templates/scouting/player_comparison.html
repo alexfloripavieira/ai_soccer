@@ -1,4 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
+{% load formatting %}
 
 {% block title %}Comparação de Jogadores - AI Soccer{% endblock %}
 
@@ -48,9 +49,9 @@
           </div>
           <div>
             <dt class="text-xs uppercase text-slate-500">Valor de mercado</dt>
-            <dd>
+            <dd class="tabular-nums">
               {% if entry.player.market_value %}
-                R$ {{ entry.player.market_value|floatformat:2 }}
+                R$ {{ entry.player.market_value|currency_ptbr }}
               {% else %}
                 <span class="text-slate-500">Não informado</span>
               {% endif %}

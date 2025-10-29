@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestão de Clubes - AI Soccer{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+  {# Page Header #}
+  <div class="mb-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold text-slate-100 mb-2">Gestão de Clubes</h1>
+        <p class="text-slate-400">Gerencie os clubes cadastrados no sistema</p>
+      </div>
+      <a href="{% url 'business:club_create' %}"
+         class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+        <span class="mr-2">+</span>
+        Adicionar Clube
+      </a>
+    </div>
+  </div>
+
+  {# Search and Filter Section #}
+  <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6 mb-6">
+    <form method="get" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {# Search Input #}
+        <div>
+          <label for="search" class="block text-sm font-medium text-slate-300 mb-2">
+            Buscar por Nome ou País
+          </label>
+          <input type="text"
+                 id="search"
+                 name="q"
+                 value="{{ request.GET.q }}"
+                 placeholder="Digite o nome do clube ou país..."
+                 class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200">
+        </div>
+
+        {# Division Filter #}
+        <div>
+          <label for="division" class="block text-sm font-medium text-slate-300 mb-2">
+            Filtrar por Divisão
+          </label>
+          <select id="division"
+                  name="division"
+                  class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200">
+            <option value="">Todas as Divisões</option>
+            <option value="PRIMEIRA" {% if request.GET.division == 'PRIMEIRA' %}selected{% endif %}>Primeira Divisão</option>
+            <option value="SEGUNDA" {% if request.GET.division == 'SEGUNDA' %}selected{% endif %}>Segunda Divisão</option>
+            <option value="TERCEIRA" {% if request.GET.division == 'TERCEIRA' %}selected{% endif %}>Terceira Divisão</option>
+            <option value="QUARTA" {% if request.GET.division == 'QUARTA' %}selected{% endif %}>Quarta Divisão</option>
+            <option value="OUTRA" {% if request.GET.division == 'OUTRA' %}selected{% endif %}>Outra</option>
+          </select>
+        </div>
+      </div>
+
+      {# Search Buttons #}
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button type="submit"
+                class="px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+          Buscar
+        </button>
+        {% if request.GET.q or request.GET.division %}
+          <a href="{% url 'business:club_list' %}"
+             class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg border border-slate-600 hover:bg-slate-600 transition-all duration-200 text-center">
+            Limpar Filtros
+          </a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  {# Results Table #}
+  {% if clubs %}
+    <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden">
+      {# Table wrapper for horizontal scroll on mobile #}
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-slate-700/50 border-b border-slate-600">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Logo</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Nome</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">País</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Cidade</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold text-slate-300 uppercase tracking-wider">Divisão</th>
+              <th class="px-6 py-4 text-right text-xs font-semibold text-slate-300 uppercase tracking-wider">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700">
+            {% for club in clubs %}
+              <tr class="hover:bg-slate-700/30 transition-colors duration-150">
+                {# Logo #}
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {% if club.logo %}
+                    <img src="{{ club.logo.url }}"
+                         alt="Logo {{ club.name }}"
+                         class="h-12 w-12 rounded-lg object-cover border border-slate-600">
+                  {% else %}
+                    <div class="h-12 w-12 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center">
+                      <span class="text-slate-400 text-xs font-semibold">{{ club.name|slice:":2"|upper }}</span>
+                    </div>
+                  {% endif %}
+                </td>
+
+                {# Name #}
+                <td class="px-6 py-4">
+                  <div class="text-sm font-semibold text-slate-100">{{ club.name }}</div>
+                </td>
+
+                {# Country #}
+                <td class="px-6 py-4">
+                  <div class="text-sm text-slate-300">{{ club.country }}</div>
+                </td>
+
+                {# City #}
+                <td class="px-6 py-4">
+                  <div class="text-sm text-slate-300">{{ club.city }}</div>
+                </td>
+
+                {# Division #}
+                <td class="px-6 py-4">
+                  <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-blue-900/40 text-blue-300 border border-blue-700/50">
+                    {{ club.get_division_display }}
+                  </span>
+                </td>
+
+                {# Actions #}
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                  <div class="flex items-center justify-end gap-2">
+                    <a href="{% url 'business:club_detail' club.pk %}"
+                       class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 border border-slate-600"
+                       title="Ver detalhes">
+                      Ver
+                    </a>
+                    <a href="{% url 'business:club_update' club.pk %}"
+                       class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200"
+                       title="Editar clube">
+                      Editar
+                    </a>
+                    <a href="{% url 'business:club_delete' club.pk %}"
+                       class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200"
+                       title="Excluir clube">
+                      Excluir
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {# Pagination #}
+      {% if is_paginated %}
+        <div class="bg-slate-700/30 px-6 py-4 border-t border-slate-600">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            {# Results count #}
+            <div class="text-sm text-slate-400">
+              Mostrando {{ page_obj.start_index }} a {{ page_obj.end_index }} de {{ page_obj.paginator.count }} resultados
+            </div>
+
+            {# Pagination controls #}
+            <div class="flex items-center gap-2">
+              {% if page_obj.has_previous %}
+                <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.division %}&division={{ request.GET.division }}{% endif %}"
+                   class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 border border-slate-600">
+                  Primeira
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.division %}&division={{ request.GET.division }}{% endif %}"
+                   class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 border border-slate-600">
+                  Anterior
+                </a>
+              {% endif %}
+
+              <span class="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg font-semibold">
+                {{ page_obj.number }}
+              </span>
+
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.division %}&division={{ request.GET.division }}{% endif %}"
+                   class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 border border-slate-600">
+                  Próxima
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.division %}&division={{ request.GET.division }}{% endif %}"
+                   class="px-3 py-2 bg-slate-700 text-slate-100 rounded-lg hover:bg-slate-600 transition-all duration-200 border border-slate-600">
+                  Última
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    {# Empty State #}
+    <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-12 text-center">
+      <div class="max-w-md mx-auto">
+        <div class="mb-6">
+          <svg class="mx-auto h-24 w-24 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-slate-100 mb-2">
+          {% if request.GET.q or request.GET.division %}
+            Nenhum clube encontrado
+          {% else %}
+            Nenhum clube cadastrado
+          {% endif %}
+        </h3>
+        <p class="text-slate-400 mb-6">
+          {% if request.GET.q or request.GET.division %}
+            Tente ajustar os filtros de busca ou limpe-os para ver todos os clubes.
+          {% else %}
+            Comece adicionando o primeiro clube ao sistema.
+          {% endif %}
+        </p>
+        {% if request.GET.q or request.GET.division %}
+          <a href="{% url 'business:club_list' %}"
+             class="inline-flex items-center justify-center px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg border border-slate-600 hover:bg-slate-600 transition-all duration-200">
+            Limpar Filtros
+          </a>
+        {% else %}
+          <a href="{% url 'business:club_create' %}"
+             class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+            <span class="mr-2">+</span>
+            Adicionar Primeiro Clube
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load formatting %}
 
 {% block title %}Detalhes do Atleta • AI Soccer{% endblock %}
 
@@ -151,6 +152,14 @@
             {{ athlete.weight|default:"—" }} <span class="text-sm font-normal text-slate-400">kg</span>
           </p>
         </div>
+        {% if athlete.market_value %}
+        <div>
+          <p class="text-xs uppercase tracking-wide text-slate-400">Valor de mercado</p>
+          <p class="mt-2 text-2xl font-semibold text-green-400 tabular-nums">
+            R$ {{ athlete.market_value|currency_ptbr }}
+          </p>
+        </div>
+        {% endif %}
       </div>
     </div>
 

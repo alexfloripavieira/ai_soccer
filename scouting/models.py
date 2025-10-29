@@ -35,11 +35,13 @@ class ScoutedPlayer(models.Model):
     STATUS_MONITORING = 'MONITORING'
     STATUS_INTERESTED = 'INTERESTED'
     STATUS_NEGOTIATING = 'NEGOTIATING'
+    STATUS_HIRED = 'HIRED'
 
     STATUS_CHOICES = [
         (STATUS_MONITORING, 'Monitorando'),
         (STATUS_INTERESTED, 'Interessado'),
         (STATUS_NEGOTIATING, 'Negociando'),
+        (STATUS_HIRED, 'Contratado'),
     ]
 
     created_by = models.ForeignKey(
@@ -69,6 +71,12 @@ class ScoutedPlayer(models.Model):
         max_length=15,
         choices=STATUS_CHOICES,
         default=STATUS_MONITORING,
+    )
+    hire_date = models.DateField(
+        'Data de contratação',
+        blank=True,
+        null=True,
+        help_text='Data em que o jogador foi contratado',
     )
     notes = models.TextField('Observações', blank=True)
     photo = models.ImageField(
@@ -104,6 +112,7 @@ class ScoutedPlayer(models.Model):
             self.STATUS_MONITORING: 'border-blue-400/40 bg-blue-500/15 text-blue-200',
             self.STATUS_INTERESTED: 'border-amber-400/40 bg-amber-500/15 text-amber-200',
             self.STATUS_NEGOTIATING: 'border-green-400/40 bg-green-500/15 text-green-200',
+            self.STATUS_HIRED: 'border-emerald-400/40 bg-emerald-500/15 text-emerald-200',
         }
         return mapping.get(self.status, 'border-slate-700 bg-slate-800 text-slate-200')
 

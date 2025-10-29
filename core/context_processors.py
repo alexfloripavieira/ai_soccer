@@ -77,9 +77,49 @@ def navigation(request):
         },
         {
             'label': 'Business',
-            'href': '/business/',
+            'href': reverse('business:financial_dashboard'),
             'icon': 'briefcase',
             'pattern': '/business/',
+            'children': [
+                {
+                    'label': 'Dashboard',
+                    'href': reverse('business:financial_dashboard'),
+                    'pattern': '/business/dashboard/',
+                },
+                {
+                    'label': 'Clubes',
+                    'href': reverse('business:club_list'),
+                    'pattern': '/business/clubs/',
+                    'exclude_patterns': ['/business/clubs/create/'],
+                },
+                {
+                    'label': 'Novo clube',
+                    'href': reverse('business:club_create'),
+                    'pattern': '/business/clubs/create/',
+                },
+                {
+                    'label': 'Registros financeiros',
+                    'href': reverse('business:financialrecord_list'),
+                    'pattern': '/business/financial-records/',
+                    'exclude_patterns': ['/business/financial-records/add/'],
+                },
+                {
+                    'label': 'Novo registro',
+                    'href': reverse('business:financialrecord_create'),
+                    'pattern': '/business/financial-records/add/',
+                },
+                {
+                    'label': 'Receitas mensais',
+                    'href': reverse('business:revenue_list'),
+                    'pattern': '/business/revenues/',
+                    'exclude_patterns': ['/business/revenues/add/'],
+                },
+                {
+                    'label': 'Nova receita',
+                    'href': reverse('business:revenue_create'),
+                    'pattern': '/business/revenues/add/',
+                },
+            ],
         },
     ]
 
