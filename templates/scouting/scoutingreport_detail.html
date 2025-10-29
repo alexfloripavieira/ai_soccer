@@ -1,0 +1,218 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Relatório de {{ report.player.name }} - AI Soccer{% endblock %}
+
+{% block page_title %}Relatório de Scouting{% endblock %}
+
+{% block dashboard_content %}
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h2 class="text-3xl font-bold text-slate-100">{{ report.player.name }}</h2>
+      <p class="text-sm text-slate-400">
+        Relatório elaborado por {{ report.created_by.get_full_name|default:report.created_by.email }} em {{ report.report_date|date:"d \\d\\e F \\d\\e Y" }}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'scouting:report_update' report.pk %}"
+         class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+        Editar relatório
+      </a>
+      <a href="{% url 'scouting:report_delete' report.pk %}"
+         class="inline-flex items-center gap-2 rounded-lg border border-red-500/40 px-4 py-2 text-sm font-semibold text-red-300 transition-all duration-150 hover:border-red-400 hover:text-red-200">
+        Excluir
+      </a>
+      <a href="{% url 'scouting:report_list' %}"
+         class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+        Ver lista
+      </a>
+      <a href="{% url 'scouting:report_create' %}?player={{ report.player.pk }}"
+         class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-green-900/40 transition-all duration-150 hover:shadow-xl">
+        Novo relatório
+      </a>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-3">
+    <div class="space-y-6 xl:col-span-2">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <h3 class="text-lg font-semibold text-slate-100">Síntese do relatório</h3>
+          <span class="inline-flex items-center rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-300">
+            Partida/Eventos: {{ report.match_or_event }}
+          </span>
+        </div>
+        <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <dt class="text-xs uppercase text-slate-500">Observador responsável</dt>
+            <dd class="mt-1 text-sm font-semibold text-slate-100">
+              {{ report.created_by.get_full_name|default:report.created_by.email }}
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <dt class="text-xs uppercase text-slate-500">Data do relatório</dt>
+            <dd class="mt-1 text-sm font-semibold text-slate-100">
+              {{ report.report_date|date:"d/m/Y" }}
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <dt class="text-xs uppercase text-slate-500">Overall</dt>
+            <dd class="mt-1 text-2xl font-bold text-green-300">
+              {{ report.overall_score|floatformat:1 }}
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <dt class="text-xs uppercase text-slate-500">Última atualização</dt>
+            <dd class="mt-1 text-sm font-semibold text-slate-100">
+              {{ report.updated_at|date:"d/m/Y H:i" }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+        <h3 class="text-lg font-semibold text-slate-100">Insights qualitativos</h3>
+        <div class="mt-4 grid gap-4 lg:grid-cols-3">
+          <div class="rounded-xl border border-green-500/30 bg-green-500/10 p-5">
+            <h4 class="text-sm font-semibold text-green-300 uppercase tracking-wide mb-2">Pontos fortes</h4>
+            <p class="text-sm leading-relaxed text-slate-100 whitespace-pre-line">
+              {{ report.strengths }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5">
+            <h4 class="text-sm font-semibold text-amber-300 uppercase tracking-wide mb-2">Pontos a desenvolver</h4>
+            <p class="text-sm leading-relaxed text-slate-100 whitespace-pre-line">
+              {{ report.weaknesses }}
+            </p>
+          </div>
+          <div class="rounded-xl border border-blue-500/30 bg-blue-500/10 p-5">
+            <h4 class="text-sm font-semibold text-blue-300 uppercase tracking-wide mb-2">Recomendação</h4>
+            <p class="text-sm leading-relaxed text-slate-100 whitespace-pre-line">
+              {{ report.recommendation }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+        <h3 class="text-lg font-semibold text-slate-100">Radar de desempenho</h3>
+        <canvas id="report-radar-chart" class="mt-6"></canvas>
+        <div class="mt-4 space-y-3 text-sm text-slate-300">
+          <div class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-2">
+            <span>Técnica</span>
+            <span class="font-semibold text-slate-100">{{ report.technical_score }}</span>
+          </div>
+          <div class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-2">
+            <span>Física</span>
+            <span class="font-semibold text-slate-100">{{ report.physical_score }}</span>
+          </div>
+            <div class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-2">
+            <span>Tática</span>
+            <span class="font-semibold text-slate-100">{{ report.tactical_score }}</span>
+          </div>
+          <div class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-2">
+            <span>Mental</span>
+            <span class="font-semibold text-slate-100">{{ report.mental_score }}</span>
+          </div>
+          <div class="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-2">
+            <span>Potencial</span>
+            <span class="font-semibold text-slate-100">{{ report.potential_score }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40">
+        <h3 class="text-lg font-semibold text-slate-100">Resumo do atleta</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-300">
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Posição</dt>
+            <dd class="text-slate-100 font-semibold">{{ report.player.get_position_display }}</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Idade</dt>
+            <dd class="text-slate-100 font-semibold">{{ report.player.age }} anos</dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Status no pipeline</dt>
+            <dd>
+              <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold {{ report.player.status_badge_class }}">
+                {{ report.player.get_status_display }}
+              </span>
+            </dd>
+          </div>
+          <div class="flex items-center justify-between">
+            <dt class="text-slate-400">Clube atual</dt>
+            <dd class="text-slate-100 font-semibold">
+              {{ report.player.current_club|default:'Sem clube informado' }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" integrity="sha384-1V8YIfJfnS417hKjFY6pFIheN4mqCpKZXDN9icuYxcDRr1IAdZjAWeA9d7FpC18m" crossorigin="anonymous"></script>
+<script>
+  (function() {
+    const canvas = document.getElementById('report-radar-chart');
+    if (!canvas) {
+      return;
+    }
+    const dataLabels = {{ score_labels|safe }};
+    const dataValues = {{ score_values|safe }};
+
+    new window.Chart(canvas, {
+      type: 'radar',
+      data: {
+        labels: dataLabels,
+        datasets: [{
+          label: 'Pontuação',
+          data: dataValues,
+          backgroundColor: 'rgba(56, 189, 248, 0.2)',
+          borderColor: 'rgba(56, 189, 248, 0.8)',
+          pointBackgroundColor: '#38bdf8',
+          pointBorderColor: '#0ea5e9',
+          pointHoverBackgroundColor: '#0ea5e9',
+          pointHoverBorderColor: '#38bdf8'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              stepSize: 2,
+              color: '#94a3b8'
+            },
+            grid: {
+              color: 'rgba(148, 163, 184, 0.2)'
+            },
+            angleLines: {
+              color: 'rgba(148, 163, 184, 0.2)'
+            },
+            pointLabels: {
+              color: '#e2e8f0',
+              font: {
+                size: 12
+              }
+            }
+          }
+        }
+      }
+    });
+  })();
+</script>
+{% endblock %}

@@ -460,64 +460,64 @@
 ### Sprint 7: Módulo de Scouting - Relatórios de Observação
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 7.1: Modelo de Relatório de Scouting**
-  - [ ] 7.1.1: Criar modelo `ScoutingReport` em `scouting/models.py`
-  - [ ] 7.1.2: Adicionar ForeignKey para `ScoutedPlayer`
-  - [ ] 7.1.3: Adicionar ForeignKey para `User` (scout que criou)
-  - [ ] 7.1.4: Adicionar campo `report_date` (DateField)
-  - [ ] 7.1.5: Adicionar campo `match_or_event` (CharField)
-  - [ ] 7.1.6: Adicionar campo `technical_score` (IntegerField, 0-10)
-  - [ ] 7.1.7: Adicionar campo `physical_score` (IntegerField, 0-10)
-  - [ ] 7.1.8: Adicionar campo `tactical_score` (IntegerField, 0-10)
-  - [ ] 7.1.9: Adicionar campo `mental_score` (IntegerField, 0-10)
-  - [ ] 7.1.10: Adicionar campo `potential_score` (IntegerField, 0-10)
-  - [ ] 7.1.11: Adicionar campo `strengths` (TextField)
-  - [ ] 7.1.12: Adicionar campo `weaknesses` (TextField)
-  - [ ] 7.1.13: Adicionar campo `recommendation` (TextField)
-  - [ ] 7.1.14: Adicionar campos de auditoria
-  - [ ] 7.1.15: Criar método `overall_score()` (média dos scores)
-  - [ ] 7.1.16: Criar método `__str__`
-  - [ ] 7.1.17: Configurar Meta
-  - [ ] 7.1.18: Criar e aplicar migrações
-  - [ ] 7.1.19: Registrar no admin
+- [X] **Tarefa 7.1: Modelo de Relatório de Scouting**
+  - [X] 7.1.1: Criar modelo `ScoutingReport` em `scouting/models.py`
+  - [X] 7.1.2: Adicionar ForeignKey para `ScoutedPlayer`
+  - [X] 7.1.3: Adicionar ForeignKey para `User` (scout que criou)
+  - [X] 7.1.4: Adicionar campo `report_date` (DateField)
+  - [X] 7.1.5: Adicionar campo `match_or_event` (CharField)
+  - [X] 7.1.6: Adicionar campo `technical_score` (IntegerField, 0-10)
+  - [X] 7.1.7: Adicionar campo `physical_score` (IntegerField, 0-10)
+  - [X] 7.1.8: Adicionar campo `tactical_score` (IntegerField, 0-10)
+  - [X] 7.1.9: Adicionar campo `mental_score` (IntegerField, 0-10)
+  - [X] 7.1.10: Adicionar campo `potential_score` (IntegerField, 0-10)
+  - [X] 7.1.11: Adicionar campo `strengths` (TextField)
+  - [X] 7.1.12: Adicionar campo `weaknesses` (TextField)
+  - [X] 7.1.13: Adicionar campo `recommendation` (TextField)
+  - [X] 7.1.14: Adicionar campos de auditoria
+  - [X] 7.1.15: Criar método `overall_score()` (média dos scores)
+  - [X] 7.1.16: Criar método `__str__`
+  - [X] 7.1.17: Configurar Meta
+  - [X] 7.1.18: Criar e aplicar migrações
+  - [X] 7.1.19: Registrar no admin
 
-- [ ] **Tarefa 7.2: CRUD de Relatórios**
-  - [ ] 7.2.1: Criar `ScoutingReportForm`
-  - [ ] 7.2.2: Adicionar validação: scores entre 0 e 10
-  - [ ] 7.2.3: Adicionar classes CSS
-  - [ ] 7.2.4: Criar view `ScoutingReportListView`
-  - [ ] 7.2.5: Criar template de listagem
-  - [ ] 7.2.6: Implementar filtro por jogador
-  - [ ] 7.2.7: Implementar filtro por scout
-  - [ ] 7.2.8: Criar view `ScoutingReportCreateView`
-  - [ ] 7.2.9: Criar template de formulário
-  - [ ] 7.2.10: Implementar seção de scores com sliders
-  - [ ] 7.2.11: Criar view `ScoutingReportDetailView`
-  - [ ] 7.2.12: Criar template de detalhes
-  - [ ] 7.2.13: Exibir gráfico radar dos scores
-  - [ ] 7.2.14: Criar views de edição e exclusão
-  - [ ] 7.2.15: Adicionar URLs
-  - [ ] 7.2.16: Testar CRUD completo
+- [X] **Tarefa 7.2: CRUD de Relatórios**
+  - [X] 7.2.1: Criar `ScoutingReportForm`
+  - [X] 7.2.2: Adicionar validação: scores entre 0 e 10
+  - [X] 7.2.3: Adicionar classes CSS
+  - [X] 7.2.4: Criar view `ScoutingReportListView`
+  - [X] 7.2.5: Criar template de listagem
+  - [X] 7.2.6: Implementar filtro por jogador
+  - [X] 7.2.7: Implementar filtro por scout
+  - [X] 7.2.8: Criar view `ScoutingReportCreateView`
+  - [X] 7.2.9: Criar template de formulário
+  - [X] 7.2.10: Implementar seção de scores com sliders
+  - [X] 7.2.11: Criar view `ScoutingReportDetailView`
+  - [X] 7.2.12: Criar template de detalhes
+  - [X] 7.2.13: Exibir gráfico radar dos scores
+  - [X] 7.2.14: Criar views de edição e exclusão
+  - [X] 7.2.15: Adicionar URLs
+  - [X] 7.2.16: Testar CRUD completo
 
-- [ ] **Tarefa 7.3: Integração de Relatórios na Página do Jogador**
-  - [ ] 7.3.1: Adicionar aba "Relatórios" na página de detalhes
-  - [ ] 7.3.2: Listar relatórios do jogador
-  - [ ] 7.3.3: Calcular média geral dos scores
-  - [ ] 7.3.4: Exibir evolução dos scores (se múltiplos relatórios)
-  - [ ] 7.3.5: Adicionar botão "Novo Relatório"
-  - [ ] 7.3.6: Testar visualização
+- [X] **Tarefa 7.3: Integração de Relatórios na Página do Jogador**
+  - [X] 7.3.1: Adicionar aba "Relatórios" na página de detalhes
+  - [X] 7.3.2: Listar relatórios do jogador
+  - [X] 7.3.3: Calcular média geral dos scores
+  - [X] 7.3.4: Exibir evolução dos scores (se múltiplos relatórios)
+  - [X] 7.3.5: Adicionar botão "Novo Relatório"
+  - [X] 7.3.6: Testar visualização
 
-- [ ] **Tarefa 7.4: Dashboard de Scouting**
-  - [ ] 7.4.1: Criar view `ScoutingDashboardView`
-  - [ ] 7.4.2: Calcular total de jogadores observados
-  - [ ] 7.4.3: Calcular jogadores por status
-  - [ ] 7.4.4: Buscar top 5 jogadores por overall_score
-  - [ ] 7.4.5: Criar template do dashboard
-  - [ ] 7.4.6: Implementar cards de estatísticas
-  - [ ] 7.4.7: Criar seção de recomendações prioritárias
-  - [ ] 7.4.8: Adicionar URL `/scouting/dashboard/`
-  - [ ] 7.4.9: Atualizar menu
-  - [ ] 7.4.10: Testar dashboard
+- [X] **Tarefa 7.4: Dashboard de Scouting**
+  - [X] 7.4.1: Criar view `ScoutingDashboardView`
+  - [X] 7.4.2: Calcular total de jogadores observados
+  - [X] 7.4.3: Calcular jogadores por status
+  - [X] 7.4.4: Buscar top 5 jogadores por overall_score
+  - [X] 7.4.5: Criar template do dashboard
+  - [X] 7.4.6: Implementar cards de estatísticas
+  - [X] 7.4.7: Criar seção de recomendações prioritárias
+  - [X] 7.4.8: Adicionar URL `/scouting/dashboard/`
+  - [X] 7.4.9: Atualizar menu
+  - [X] 7.4.10: Testar dashboard
 
 ---
 

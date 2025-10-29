@@ -1,0 +1,139 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block title %}Relatórios de Scouting - AI Soccer{% endblock %}
+
+{% block page_title %}Relatórios de Scouting{% endblock %}
+
+{% block dashboard_content %}
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div>
+      <h2 class="text-3xl font-bold text-slate-100">Insights de observação</h2>
+      <p class="text-sm text-slate-400">
+        Analise e gerencie os relatórios produzidos pela equipe de scouting
+      </p>
+    </div>
+    <a href="{% url 'scouting:report_create' %}"
+       class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-900/50 transition-all duration-200 hover:shadow-xl">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12M6 12h12" />
+      </svg>
+      Novo relatório
+    </a>
+  </div>
+
+  <form method="get" class="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40 md:grid-cols-12 md:items-end">
+    <div class="md:col-span-5">
+      <label for="player-filter" class="mb-2 block text-sm font-medium text-slate-300">
+        Filtrar por jogador
+      </label>
+      <select id="player-filter"
+              name="player"
+              class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">Todos os jogadores</option>
+        {% for player in players %}
+          <option value="{{ player.id }}" {% if current_player|add:'' == player.id|stringformat:'s' %}selected{% endif %}>
+            {{ player.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-5">
+      <label for="scout-filter" class="mb-2 block text-sm font-medium text-slate-300">
+        Filtrar por observador
+      </label>
+      <select id="scout-filter"
+              name="scout"
+              class="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-100 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-green-500">
+        <option value="">Todos os observadores</option>
+        {% for scout in scouts %}
+          <option value="{{ scout.id }}" {% if current_scout|add:'' == scout.id|stringformat:'s' %}selected{% endif %}>
+            {{ scout.get_full_name|default:scout.email }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="md:col-span-2">
+      <button type="submit"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-green-900/50 transition-all duration-200 hover:shadow-xl">
+        Filtrar
+      </button>
+    </div>
+  </form>
+
+  <div class="rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg shadow-slate-950/40">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-800">
+        <thead class="bg-slate-900/80">
+          <tr>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Jogador
+            </th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Observador
+            </th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Data
+            </th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Partida / Evento
+            </th>
+            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Overall
+            </th>
+            <th scope="col" class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          {% for report in reports %}
+            <tr class="hover:bg-slate-900/80">
+              <td class="px-6 py-4 text-sm font-semibold text-slate-100">
+                {{ report.player.name }}
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-200">
+                {{ report.created_by.get_full_name|default:report.created_by.email }}
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-200">
+                {{ report.report_date|date:"d/m/Y" }}
+              </td>
+              <td class="px-6 py-4 text-sm text-slate-300">
+                {{ report.match_or_event }}
+              </td>
+              <td class="px-6 py-4 text-sm font-semibold text-green-300">
+                {{ report.overall_score|floatformat:1 }}
+              </td>
+              <td class="px-6 py-4 text-right text-sm">
+                <div class="flex justify-end gap-2">
+                  <a href="{% url 'scouting:report_detail' report.pk %}"
+                     class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+                    Ver
+                  </a>
+                  <a href="{% url 'scouting:report_update' report.pk %}"
+                     class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition-all duration-150 hover:border-slate-500 hover:text-white">
+                    Editar
+                  </a>
+                  <a href="{% url 'scouting:report_delete' report.pk %}"
+                     class="inline-flex items-center gap-2 rounded-lg border border-red-500/40 px-3 py-2 text-xs font-semibold text-red-300 transition-all duration-150 hover:border-red-400 hover:text-red-200">
+                    Excluir
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="px-6 py-8 text-center text-sm text-slate-500">
+                Nenhum relatório encontrado com os filtros atuais.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include 'components/pagination.html' %}
+  </div>
+</div>
+{% endblock %}

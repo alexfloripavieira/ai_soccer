@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -105,3 +106,66 @@ class ScoutedPlayer(models.Model):
             self.STATUS_NEGOTIATING: 'border-green-400/40 bg-green-500/15 text-green-200',
         }
         return mapping.get(self.status, 'border-slate-700 bg-slate-800 text-slate-200')
+
+
+class ScoutingReport(models.Model):
+    """Store a detailed scouting report for a player."""
+
+    player = models.ForeignKey(
+        ScoutedPlayer,
+        on_delete=models.CASCADE,
+        related_name='reports',
+        verbose_name='Jogador observado',
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='scouting_reports',
+        verbose_name='Observador',
+    )
+    report_date = models.DateField('Data do relatório')
+    match_or_event = models.CharField('Partida ou evento observado', max_length=200)
+    technical_score = models.IntegerField(
+        'Avaliação técnica',
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+    physical_score = models.IntegerField(
+        'Avaliação física',
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+    tactical_score = models.IntegerField(
+        'Avaliação tática',
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+    mental_score = models.IntegerField(
+        'Avaliação mental',
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+    potential_score = models.IntegerField(
+        'Potencial',
+        validators=[MinValueValidator(0), MaxValueValidator(10)],
+    )
+    strengths = models.TextField('Pontos fortes')
+    weaknesses = models.TextField('Pontos a desenvolver')
+    recommendation = models.TextField('Recomendação final')
+    created_at = models.DateTimeField('Criado em', auto_now_add=True)
+    updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+
+    class Meta:
+        verbose_name = 'Relatório de scouting'
+        verbose_name_plural = 'Relatórios de scouting'
+        ordering = ['-report_date', '-created_at']
+
+    def __str__(self):
+        return f'Relatório de {self.player.name} ({self.report_date:%d/%m/%Y})'
+
+    def overall_score(self):
+        """Return average score considering all evaluation metrics."""
+        scores = [
+            self.technical_score,
+            self.physical_score,
+            self.tactical_score,
+            self.mental_score,
+            self.potential_score,
+        ]
+        return sum(scores) / len(scores)

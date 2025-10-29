@@ -5,7 +5,16 @@ from decimal import Decimal
 
 from django import forms
 
-from scouting.models import ScoutedPlayer
+from scouting.models import ScoutedPlayer, ScoutingReport
+
+
+REPORT_SCORE_FIELDS = [
+    'technical_score',
+    'physical_score',
+    'tactical_score',
+    'mental_score',
+    'potential_score',
+]
 
 
 class ScoutedPlayerForm(forms.ModelForm):
@@ -88,3 +97,57 @@ class ScoutedPlayerForm(forms.ModelForm):
         if isinstance(market_value, Decimal) and market_value < 0:
             raise forms.ValidationError('Valor de mercado deve ser positivo.')
         return market_value
+
+
+class ScoutingReportForm(forms.ModelForm):
+    """Form used to create and edit scouting reports."""
+
+    SCORE_FIELDS = REPORT_SCORE_FIELDS
+
+    class Meta:
+        model = ScoutingReport
+        fields = (
+            ['player', 'report_date', 'match_or_event']
+            + REPORT_SCORE_FIELDS
+            + ['strengths', 'weaknesses', 'recommendation']
+        )
+        widgets = {
+            'report_date': forms.DateInput(attrs={'type': 'date'}),
+            'strengths': forms.Textarea(attrs={'rows': 4}),
+            'weaknesses': forms.Textarea(attrs={'rows': 4}),
+            'recommendation': forms.Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        base_input_class = (
+            'w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg '
+            'text-slate-100 placeholder-slate-400 focus:outline-none '
+            'focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+        )
+        slider_class = 'w-full accent-green-500'
+        for field_name, field in self.fields.items():
+            if field_name in self.SCORE_FIELDS:
+                field.widget = forms.NumberInput(
+                    attrs={
+                        'type': 'range',
+                        'min': '0',
+                        'max': '10',
+                        'step': '1',
+                        'class': slider_class,
+                        'data-value-target': f'value-{field_name}',
+                    }
+                )
+            else:
+                field.widget.attrs.setdefault('class', base_input_class)
+                field.widget.attrs.setdefault('placeholder', field.label)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        for field_name in self.SCORE_FIELDS:
+            value = cleaned_data.get(field_name)
+            if value is None:
+                continue
+            if not 0 <= value <= 10:
+                self.add_error(field_name, 'Os scores devem estar entre 0 e 10.')
+        return cleaned_data

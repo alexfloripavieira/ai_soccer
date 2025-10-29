@@ -1,11 +1,21 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.db.models import Avg, Count, ExpressionWrapper, F, FloatField, Max, Q, Value
+from django.db.models.functions import Coalesce
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 
-from scouting.forms import ScoutedPlayerForm
-from scouting.models import ScoutedPlayer
+from scouting.forms import ScoutedPlayerForm, ScoutingReportForm
+from scouting.models import ScoutedPlayer, ScoutingReport
 
 
 class ScoutedPlayerListView(LoginRequiredMixin, ListView):
@@ -101,6 +111,62 @@ class ScoutedPlayerDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['has_photo'] = bool(self.object.photo)
+        reports = (
+            self.object.reports.select_related('created_by')
+            .order_by('-report_date', '-created_at')
+        )
+        context['reports'] = reports
+        score_fields = ScoutingReportForm.SCORE_FIELDS
+        score_labels = {
+            'technical_score': 'Técnica',
+            'physical_score': 'Física',
+            'tactical_score': 'Tática',
+            'mental_score': 'Mental',
+            'potential_score': 'Potencial',
+        }
+        context['score_labels'] = score_labels
+        context['score_fields'] = score_fields
+        reports_count = reports.count()
+        context['reports_count'] = reports_count
+        if reports_count:
+            averages = reports.aggregate(
+                **{f'{field}_avg': Avg(field) for field in score_fields}
+            )
+            average_values = [
+                averages.get(f'{field}_avg') or 0 for field in score_fields
+            ]
+            overall_average = (
+                sum(average_values) / len(score_fields) if reports_count else 0
+            )
+            score_averages = []
+            for field in score_fields:
+                avg_value = averages.get(f'{field}_avg') or 0
+                score_averages.append(
+                    {
+                        'field': field,
+                        'label': score_labels[field],
+                        'average': avg_value,
+                        'percentage': (avg_value / 10) * 100 if avg_value else 0,
+                    }
+                )
+            context['score_averages'] = score_averages
+            context['overall_average'] = overall_average
+            timeline = list(
+                reports.order_by('report_date', 'created_at')
+            )
+            context['timeline_labels'] = [
+                report.report_date.strftime('%d/%m/%Y') for report in timeline
+            ]
+            context['timeline_values'] = [
+                report.overall_score() for report in timeline
+            ]
+            context['show_timeline_chart'] = len(timeline) > 1
+        else:
+            context['score_averages'] = []
+            context['overall_average'] = None
+            context['timeline_labels'] = []
+            context['timeline_values'] = []
+            context['show_timeline_chart'] = False
         return context
 
 
@@ -127,4 +193,241 @@ class ScoutedPlayerDeleteView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Jogador observado removido com sucesso.')
+        return super().delete(request, *args, **kwargs)
+
+
+class ScoutingDashboardView(LoginRequiredMixin, TemplateView):
+    """Display consolidated scouting metrics and insights."""
+
+    template_name = 'scouting/scouting_dashboard.html'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        players = ScoutedPlayer.objects.select_related('created_by')
+        reports = ScoutingReport.objects.select_related('player', 'created_by')
+
+        total_players = players.count()
+        total_reports = reports.count()
+        user_model = get_user_model()
+        active_scouts = (
+            user_model.objects.filter(scouting_reports__isnull=False)
+            .distinct()
+            .count()
+        )
+
+        status_totals = {
+            item['status']: item['total']
+            for item in players.values('status').annotate(total=Count('id'))
+        }
+        status_distribution = []
+        negotiating_count = status_totals.get(ScoutedPlayer.STATUS_NEGOTIATING, 0)
+        for code, label in ScoutedPlayer.STATUS_CHOICES:
+            count = status_totals.get(code, 0)
+            percentage = (count / total_players * 100) if total_players else 0
+            status_distribution.append(
+                {
+                    'code': code,
+                    'label': label,
+                    'count': count,
+                    'percentage': percentage,
+                }
+            )
+
+        pipeline_efficiency = (
+            negotiating_count / total_players * 100 if total_players else 0
+        )
+
+        annotated_players = players.annotate(
+            report_count=Count('reports', distinct=True),
+            technical_avg=Avg('reports__technical_score'),
+            physical_avg=Avg('reports__physical_score'),
+            tactical_avg=Avg('reports__tactical_score'),
+            mental_avg=Avg('reports__mental_score'),
+            potential_avg=Avg('reports__potential_score'),
+            last_report_date=Max('reports__report_date'),
+        ).annotate(
+            overall_avg=ExpressionWrapper(
+                (
+                    Coalesce(F('technical_avg'), Value(0.0))
+                    + Coalesce(F('physical_avg'), Value(0.0))
+                    + Coalesce(F('tactical_avg'), Value(0.0))
+                    + Coalesce(F('mental_avg'), Value(0.0))
+                    + Coalesce(F('potential_avg'), Value(0.0))
+                )
+                / Value(5.0),
+                output_field=FloatField(),
+            ),
+            potential_avg_value=Coalesce(F('potential_avg'), Value(0.0)),
+        ).annotate(
+            overall_percentage=ExpressionWrapper(
+                F('overall_avg') * Value(10),
+                output_field=FloatField(),
+            ),
+        )
+
+        top_players = (
+            annotated_players.filter(report_count__gt=0)
+            .order_by('-overall_avg', '-last_report_date')[:5]
+        )
+
+        priority_players = (
+            annotated_players.filter(report_count__gt=0)
+            .filter(
+                Q(status=ScoutedPlayer.STATUS_MONITORING)
+                | Q(status=ScoutedPlayer.STATUS_INTERESTED)
+            )
+            .order_by('-potential_avg_value', '-overall_avg')[:5]
+        )
+
+        latest_reports = reports.order_by('-report_date', '-created_at')[:6]
+
+        context.update(
+            {
+                'total_players': total_players,
+                'total_reports': total_reports,
+                'active_scouts': active_scouts,
+                'status_distribution': status_distribution,
+                'status_labels': [item['label'] for item in status_distribution],
+                'status_values': [item['count'] for item in status_distribution],
+                'top_players': top_players,
+                'priority_players': priority_players,
+                'latest_reports': latest_reports,
+                'has_reports': total_reports > 0,
+                'pipeline_efficiency': pipeline_efficiency,
+            }
+        )
+        return context
+
+
+class ScoutingReportListView(LoginRequiredMixin, ListView):
+    """Display all scouting reports with filtering options."""
+
+    model = ScoutingReport
+    template_name = 'scouting/scoutingreport_list.html'
+    context_object_name = 'reports'
+    paginate_by = 20
+    login_url = reverse_lazy('accounts:login')
+
+    def get_queryset(self):
+        queryset = (
+            super()
+            .get_queryset()
+            .select_related('player', 'created_by')
+        )
+        player_id = self.request.GET.get('player')
+        if player_id:
+            queryset = queryset.filter(player_id=player_id)
+
+        scout_id = self.request.GET.get('scout')
+        if scout_id:
+            queryset = queryset.filter(created_by_id=scout_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_model = get_user_model()
+        context.update(
+            {
+                'players': ScoutedPlayer.objects.order_by('name'),
+                'scouts': user_model.objects.filter(
+                    scouting_reports__isnull=False
+                )
+                .distinct()
+                .order_by('first_name', 'last_name', 'email'),
+                'current_player': self.request.GET.get('player', ''),
+                'current_scout': self.request.GET.get('scout', ''),
+            }
+        )
+        return context
+
+
+class ScoutingReportCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    """Register a new scouting report."""
+
+    model = ScoutingReport
+    form_class = ScoutingReportForm
+    template_name = 'scouting/scoutingreport_form.html'
+    success_message = 'Relatório de scouting criado com sucesso.'
+    login_url = reverse_lazy('accounts:login')
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        player_id = self.request.GET.get('player')
+        if player_id:
+            initial['player'] = player_id
+        return initial
+
+    def get_success_url(self):
+        return reverse('scouting:report_detail', args=[self.object.pk])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['score_fields'] = ScoutingReportForm.SCORE_FIELDS
+        return context
+
+
+class ScoutingReportDetailView(LoginRequiredMixin, DetailView):
+    """Show detailed information about a scouting report."""
+
+    model = ScoutingReport
+    template_name = 'scouting/scoutingreport_detail.html'
+    context_object_name = 'report'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['score_labels'] = [
+            'Técnica',
+            'Física',
+            'Tática',
+            'Mental',
+            'Potencial',
+        ]
+        context['score_values'] = [
+            self.object.technical_score,
+            self.object.physical_score,
+            self.object.tactical_score,
+            self.object.mental_score,
+            self.object.potential_score,
+        ]
+        return context
+
+
+class ScoutingReportUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Update an existing scouting report."""
+
+    model = ScoutingReport
+    form_class = ScoutingReportForm
+    template_name = 'scouting/scoutingreport_form.html'
+    success_message = 'Relatório de scouting atualizado com sucesso.'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_success_url(self):
+        return reverse('scouting:report_detail', args=[self.object.pk])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['score_fields'] = ScoutingReportForm.SCORE_FIELDS
+        return context
+
+
+class ScoutingReportDeleteView(LoginRequiredMixin, DeleteView):
+    """Delete a scouting report after confirmation."""
+
+    model = ScoutingReport
+    template_name = 'scouting/scoutingreport_confirm_delete.html'
+    login_url = reverse_lazy('accounts:login')
+
+    def get_success_url(self):
+        player_id = self.object.player_id
+        return reverse('scouting:player_detail', args=[player_id])
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Relatório de scouting removido com sucesso.')
         return super().delete(request, *args, **kwargs)
