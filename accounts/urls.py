@@ -3,6 +3,7 @@
 from django.urls import path
 
 from .views import (
+    AuditLogListView,
     DashboardView,
     LoginView,
     LogoutView,
@@ -20,4 +21,5 @@ urlpatterns = [
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('profile/editar/', ProfileUpdateView.as_view(), name='profile-edit'),
+    path('audit-logs/', AuditLogListView.as_view(), name='audit-logs'),
 ]

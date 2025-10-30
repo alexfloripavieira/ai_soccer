@@ -13,13 +13,13 @@
     <p class="text-slate-400">Gerencie os atletas cadastrados no sistema</p>
   </div>
   <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-3">
-    <a href="{% url 'performance:export_athletes' %}" class="inline-flex items-center px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+    <button id="export-btn" onclick="handleExport()" class="inline-flex items-center px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
       Exportar Excel
-    </a>
-    <a href="{% url 'performance:athlete_create' %}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+    </button>
+    <a href="{% url 'performance:athlete_create' %}" data-loading data-loading-text="Abrindo formulário..." class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
       </svg>
@@ -29,8 +29,8 @@
 </div>
 
 <!-- Search and Filter Section -->
-<div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6 mb-6">
-  <form method="get" action="" class="space-y-4 lg:space-y-0 lg:flex lg:items-end lg:space-x-4">
+<div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6 mb-6 animate-fade-in-down">
+  <form id="search-form" method="get" action="" class="space-y-4 lg:space-y-0 lg:flex lg:items-end lg:space-x-4">
     <!-- Search Input -->
     <div class="flex-1">
       <label for="search-input" class="block text-sm font-medium text-slate-300 mb-2">
@@ -69,6 +69,7 @@
     <!-- Action Buttons -->
     <div class="flex space-x-3">
       <button type="submit"
+              id="search-btn"
               class="flex-1 lg:flex-none px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
         <span class="flex items-center justify-center">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,7 +104,7 @@
   </div>
 
   <!-- Desktop Table View (hidden on mobile) -->
-  <div class="hidden lg:block bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden">
+  <div class="hidden lg:block bg-slate-800 border border-slate-700 rounded-xl shadow-lg overflow-hidden animate-fade-in-up">
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead>
@@ -119,7 +120,7 @@
         </thead>
         <tbody class="divide-y divide-slate-700">
           {% for athlete in athletes %}
-            <tr class="hover:bg-slate-700/30 transition-colors duration-150">
+            <tr class="table-row-hover table-row-animate">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center">
@@ -151,27 +152,27 @@
                 <div class="flex items-center justify-end space-x-2">
                   <!-- View Button -->
                   <a href="#"
-                     class="inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all duration-200 transform hover:scale-105"
+                     class="btn-animate inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg group"
                      title="Ver detalhes">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   </a>
                   <!-- Edit Button -->
                   <a href="#"
-                     class="inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all duration-200 transform hover:scale-105"
+                     class="btn-animate inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg group"
                      title="Editar">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </a>
                   <!-- Delete Button -->
                   <a href="#"
-                     class="inline-flex items-center px-3 py-2 bg-red-900/40 hover:bg-red-900/60 text-red-300 rounded-lg transition-all duration-200 transform hover:scale-105"
+                     class="btn-animate inline-flex items-center px-3 py-2 bg-red-900/40 hover:bg-red-900/60 text-red-300 rounded-lg group"
                      title="Excluir"
                      onclick="return confirm('Tem certeza que deseja excluir este atleta?')">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </a>
@@ -187,7 +188,7 @@
   <!-- Mobile Card View (visible only on mobile) -->
   <div class="lg:hidden space-y-4">
     {% for athlete in athletes %}
-      <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-200">
+      <div class="card-grid-item card-hover bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-6">
         <!-- Header -->
         <div class="flex items-center mb-4">
           <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center">
@@ -224,24 +225,24 @@
         <!-- Action Buttons -->
         <div class="flex space-x-2 pt-4 border-t border-slate-700">
           <a href="#"
-             class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all duration-200 text-sm font-medium">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             class="btn-animate flex-1 inline-flex items-center justify-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm font-medium group">
+            <svg class="w-4 h-4 mr-2 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
             Ver
           </a>
           <a href="#"
-             class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all duration-200 text-sm font-medium">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             class="btn-animate flex-1 inline-flex items-center justify-center px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm font-medium group">
+            <svg class="w-4 h-4 mr-2 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
             Editar
           </a>
           <a href="#"
-             class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-red-900/40 hover:bg-red-900/60 text-red-300 rounded-lg transition-all duration-200 text-sm font-medium"
+             class="btn-animate flex-1 inline-flex items-center justify-center px-4 py-2 bg-red-900/40 hover:bg-red-900/60 text-red-300 rounded-lg text-sm font-medium group"
              onclick="return confirm('Tem certeza que deseja excluir este atleta?')">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 mr-2 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             Excluir
@@ -347,10 +348,10 @@
 
 {% else %}
   <!-- Empty State -->
-  <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-12 text-center">
-    <div class="max-w-md mx-auto">
+  <div class="bg-slate-800 border border-slate-700 rounded-xl shadow-lg p-12 text-center animate-fade-in-up">
+    <div class="max-w-md mx-auto empty-state-content">
       <!-- Empty Icon -->
-      <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-slate-700/50 mb-6">
+      <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-slate-700/50 mb-6 empty-state-icon">
         <svg class="h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
@@ -389,3 +390,47 @@
 {% endif %}
 
 {% endblock %}
+
+{% block extra_js %}
+<script>
+  // Handle export button with loading state
+  function handleExport() {
+    const exportBtn = document.getElementById('export-btn');
+
+    // Show loading on button
+    Loading.button(exportBtn, true, 'Exportando...');
+
+    // Redirect to export URL
+    window.location.href = '{% url "performance:export_athletes" %}';
+
+    // Hide loading after a short delay (file download doesn't navigate away)
+    setTimeout(() => {
+      Loading.button(exportBtn, false);
+    }, 3000);
+  }
+
+  // Handle search form with loading
+  document.getElementById('search-form')?.addEventListener('submit', function(e) {
+    const searchBtn = document.getElementById('search-btn');
+
+    // Show button loading
+    Loading.button(searchBtn, true, 'Buscando...');
+
+    // Form will submit normally
+    // Loading will be hidden when page reloads
+  });
+
+  // Show loading skeleton while page is loading (on initial load)
+  document.addEventListener('DOMContentLoaded', function() {
+    // If we came from a search/filter, briefly show loading
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasFilters = urlParams.has('q') || urlParams.has('position') || urlParams.has('page');
+
+    if (hasFilters && document.referrer.includes(window.location.pathname)) {
+      // Coming from same page (pagination/filter), page loaded fast
+      // No need to show loading since it's already displayed
+    }
+  });
+</script>
+{% endblock %}
+

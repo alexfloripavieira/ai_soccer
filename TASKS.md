@@ -750,25 +750,25 @@
   - [X] 12.3.7: Testar busca
 
 - [ ] **Tarefa 12.4: Logs de Auditoria**
-  - [ ] 12.4.1: Instalar pacote `django-auditlog`
-  - [ ] 12.4.2: Adicionar ao INSTALLED_APPS
-  - [ ] 12.4.3: Executar migrações
-  - [ ] 12.4.4: Registrar modelos principais
-  - [ ] 12.4.5: Criar view `AuditLogListView`
-  - [ ] 12.4.6: Criar template de logs
-  - [ ] 12.4.7: Implementar filtros
-  - [ ] 12.4.8: Adicionar URL `/audit-logs/`
-  - [ ] 12.4.9: Restringir acesso a administradores
+  - [X] 12.4.1: Instalar pacote `django-auditlog`
+  - [X] 12.4.2: Adicionar ao INSTALLED_APPS
+  - [X] 12.4.3: Executar migrações
+  - [X] 12.4.4: Registrar modelos principais
+  - [X] 12.4.5: Criar view `AuditLogListView`
+  - [X] 12.4.6: Criar template de logs
+  - [X] 12.4.7: Implementar filtros
+  - [X] 12.4.8: Adicionar URL `/audit-logs/`
+  - [X] 12.4.9: Restringir acesso a administradores
   - [ ] 12.4.10: Testar logs
 
 - [ ] **Tarefa 12.5: Melhorias de UX**
-  - [ ] 12.5.1: Implementar loading spinners
+  - [X] 12.5.1: Implementar loading spinners
   - [ ] 12.5.2: Adicionar animações de transição
   - [ ] 12.5.3: Implementar confirmações de exclusão com modal
   - [ ] 12.5.4: Adicionar tooltips em campos
   - [ ] 12.5.5: Implementar mensagens toast
   - [ ] 12.5.6: Melhorar feedback visual de formulários
-  - [ ] 12.5.7: Adicionar dark mode toggle (opcional)
+  - [ ] 12.5.7: Adicionar dark mode toggle
   - [ ] 12.5.8: Testar em múltiplos navegadores
 
 ---

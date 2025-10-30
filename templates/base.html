@@ -13,22 +13,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  <link rel="stylesheet" href="{% static 'css/animations.css' %}">
 
   {% block extra_css %}{% endblock %}
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 antialiased" style="font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';">
-  <div class="relative min-h-screen bg-slate-900">
+  {# Global Page Loading Overlay #}
+  {% include 'components/loading.html' with loading_id='page-loading' loading_text='Carregando...' loading_subtitle='Por favor, aguarde' %}
+
+  <div class="relative min-h-screen bg-slate-900 animate-fade-in">
     <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-blue-500/10"></div>
     <div id="app" class="relative flex min-h-screen">
       {% block sidebar %}{% if request.user.is_authenticated %}{% include 'components/sidebar.html' %}{% endif %}{% endblock %}
       <div class="flex min-h-screen flex-1 flex-col">
         {% block header %}{% include 'components/navbar.html' %}{% endblock %}
-        <main class="flex-1">
+        <main class="flex-1 animate-fade-in-up">
           {% if messages %}
             <div class="mx-auto w-full max-w-4xl px-6 pt-8">
               <div class="space-y-3">
                 {% for message in messages %}
-                  <div class="rounded-2xl border border-green-400/40 bg-green-500/10 px-5 py-4 text-sm text-green-200 shadow-lg shadow-green-950/30">
+                  <div class="notification-enter rounded-2xl border border-green-400/40 bg-green-500/10 px-5 py-4 text-sm text-green-200 shadow-lg shadow-green-950/30 hover:shadow-xl transition-all duration-200">
                     {{ message }}
                   </div>
                 {% endfor %}
@@ -41,6 +45,9 @@
       </div>
     </div>
   </div>
+
+  {# Loading Helper Script #}
+  <script src="{% static 'js/loading.js' %}"></script>
 
   {% block extra_js %}{% endblock %}
 </body>

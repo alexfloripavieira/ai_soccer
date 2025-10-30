@@ -308,5 +308,76 @@
 <!-- Search Results Container (for future AJAX implementation) -->
 <div id="search-results"></div>
 
+{# Loading spinner for AJAX search #}
+{% include 'components/loading.html' with loading_id='search-loading-overlay' loading_text='Buscando...' loading_subtitle='Pesquisando no sistema' %}
+
 <script src="{% static 'js/global_search.js' %}"></script>
+
+{% block extra_js %}
+<script>
+  // Enhanced search with loading states
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('form[action*="search"]');
+    const searchInput = searchForm?.querySelector('input[name="q"]');
+    const searchButton = searchForm?.querySelector('button[type="submit"]');
+
+    if (searchForm) {
+      // Handle form submit with loading
+      searchForm.addEventListener('submit', function(e) {
+        const query = searchInput?.value?.trim();
+
+        // Don't show loading for empty searches
+        if (!query) {
+          e.preventDefault();
+          return;
+        }
+
+        // Show button loading
+        if (searchButton) {
+          Loading.button(searchButton, true, 'Buscando...');
+        }
+
+        // Show page loading overlay
+        Loading.show('search-loading-overlay', {
+          text: 'Buscando...',
+          subtitle: `Pesquisando por "${query}"`
+        });
+
+        // Form will submit normally, loading will be hidden on page load
+      });
+
+      // Optional: Implement debounced AJAX search
+      let searchTimeout;
+      searchInput?.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+
+        const query = this.value.trim();
+        if (query.length < 3) return; // Only search with 3+ characters
+
+        // Show inline loading indicator
+        const loadingIndicator = document.getElementById('search-loading');
+        if (loadingIndicator) {
+          loadingIndicator.classList.remove('hidden');
+        }
+
+        searchTimeout = setTimeout(() => {
+          // Here you would implement AJAX search
+          // For now, just hide the loading indicator
+          if (loadingIndicator) {
+            loadingIndicator.classList.add('hidden');
+          }
+        }, 500);
+      });
+    }
+
+    // Focus search input on '/' keypress (like GitHub)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        searchInput?.focus();
+      }
+    });
+  });
+</script>
+{% endblock %}
 {% endblock %}

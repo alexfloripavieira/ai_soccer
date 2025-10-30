@@ -1,0 +1,816 @@
+/*
+ * AI Soccer - Animations System
+ * Custom animations and transitions for enhanced UX
+ * Following design system principles: subtle, smooth, performant
+ */
+
+/* ============================================
+   1. PAGE TRANSITIONS
+   ============================================ */
+
+/* Fade in on page load */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale in (for modals) */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   2. UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-in {
+  animation: fadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-scale-in {
+  animation: scaleIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Delayed animations (for staggered effects) */
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* ============================================
+   3. COMPONENT-SPECIFIC ANIMATIONS
+   ============================================ */
+
+/* Card hover effects */
+.card-hover {
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Button animations */
+.btn-animate {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-animate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-animate:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Ripple effect for buttons */
+.btn-animate::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-animate:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Input focus animations */
+.input-animate {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-animate:focus {
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   4. MESSAGE ANIMATIONS
+   ============================================ */
+
+/* Success/Error messages */
+@keyframes slideInNotification {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideOutNotification {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+.notification-enter {
+  animation: slideInNotification 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-exit {
+  animation: slideOutNotification 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Progress bar animation */
+@keyframes progressBar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.progress-animate {
+  animation: progressBar 3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   5. DROPDOWN/MENU ANIMATIONS
+   ============================================ */
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-animate {
+  animation: dropdownSlide 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Menu item hover */
+.menu-item-hover {
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.menu-item-hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(to bottom, #10b981, #3b82f6);
+  transform: scaleY(0);
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-item-hover:hover::before {
+  transform: scaleY(1);
+}
+
+/* ============================================
+   6. MODAL ANIMATIONS
+   ============================================ */
+
+/* Backdrop fade */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdropFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.modal-backdrop-enter {
+  animation: backdropFadeIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-backdrop-exit {
+  animation: backdropFadeOut 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Modal content */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+}
+
+.modal-enter {
+  animation: modalSlideUp 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-exit {
+  animation: modalSlideDown 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   7. SIDEBAR ANIMATIONS (MOBILE)
+   ============================================ */
+
+@keyframes sidebarSlideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sidebarSlideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.sidebar-enter {
+  animation: sidebarSlideIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-exit {
+  animation: sidebarSlideOut 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   8. LOADING ANIMATIONS
+   ============================================ */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   9. HOVER EFFECTS
+   ============================================ */
+
+/* Smooth color transition */
+.hover-color-smooth {
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth background transition */
+.hover-bg-smooth {
+  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth border transition */
+.hover-border-smooth {
+  transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon scale on hover */
+.icon-hover {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-hover:hover {
+  transform: scale(1.1);
+}
+
+/* Arrow slide on hover */
+.arrow-slide {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arrow-slide:hover {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   10. ACCESSIBILITY: REDUCED MOTION
+   ============================================ */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   11. SKELETON LOADING
+   ============================================ */
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #1e293b 0%,
+    #334155 50%,
+    #1e293b 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   12. STAGGER ANIMATIONS
+   ============================================ */
+
+/* For lists and grids */
+.stagger-item {
+  opacity: 0;
+  animation: fadeInUp 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 50ms; }
+.stagger-item:nth-child(2) { animation-delay: 100ms; }
+.stagger-item:nth-child(3) { animation-delay: 150ms; }
+.stagger-item:nth-child(4) { animation-delay: 200ms; }
+.stagger-item:nth-child(5) { animation-delay: 250ms; }
+.stagger-item:nth-child(6) { animation-delay: 300ms; }
+.stagger-item:nth-child(7) { animation-delay: 350ms; }
+.stagger-item:nth-child(8) { animation-delay: 400ms; }
+
+/* ============================================
+   13. TABLE ROW ANIMATIONS
+   ============================================ */
+
+/* Table row hover with smooth transition */
+.table-row-hover {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.table-row-hover:hover {
+  background-color: rgba(51, 65, 85, 0.3);
+  transform: translateX(2px);
+}
+
+/* Fade in for table rows */
+@keyframes tableRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-row-animate {
+  opacity: 0;
+  animation: tableRowFadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.table-row-animate:nth-child(1) { animation-delay: 50ms; }
+.table-row-animate:nth-child(2) { animation-delay: 100ms; }
+.table-row-animate:nth-child(3) { animation-delay: 150ms; }
+.table-row-animate:nth-child(4) { animation-delay: 200ms; }
+.table-row-animate:nth-child(5) { animation-delay: 250ms; }
+.table-row-animate:nth-child(6) { animation-delay: 300ms; }
+.table-row-animate:nth-child(7) { animation-delay: 350ms; }
+.table-row-animate:nth-child(8) { animation-delay: 400ms; }
+
+/* ============================================
+   14. FORM ANIMATIONS
+   ============================================ */
+
+/* Form field focus animation */
+.form-field-animate {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.form-field-animate:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+/* Label float animation */
+@keyframes labelFloat {
+  from {
+    transform: translateY(0);
+    font-size: 1rem;
+    color: #94a3b8;
+  }
+  to {
+    transform: translateY(-20px);
+    font-size: 0.75rem;
+    color: #10b981;
+  }
+}
+
+.label-float {
+  animation: labelFloat 200ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Error shake animation */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.error-shake {
+  animation: shake 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Success check animation */
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 50;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.checkmark-animate {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: checkmark 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
+   15. BADGE AND PILL ANIMATIONS
+   ============================================ */
+
+/* Badge pulse */
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+}
+
+.badge-pulse {
+  animation: badgePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Badge pop in */
+@keyframes badgePopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.badge-pop-in {
+  animation: badgePopIn 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   16. CARD GRID ANIMATIONS
+   ============================================ */
+
+/* Card grid item entrance */
+@keyframes cardGridFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-grid-item {
+  opacity: 0;
+  animation: cardGridFadeIn 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.card-grid-item:nth-child(1) { animation-delay: 0ms; }
+.card-grid-item:nth-child(2) { animation-delay: 100ms; }
+.card-grid-item:nth-child(3) { animation-delay: 200ms; }
+.card-grid-item:nth-child(4) { animation-delay: 300ms; }
+.card-grid-item:nth-child(5) { animation-delay: 400ms; }
+.card-grid-item:nth-child(6) { animation-delay: 500ms; }
+
+/* ============================================
+   17. EMPTY STATE ANIMATIONS
+   ============================================ */
+
+/* Empty state icon animation */
+@keyframes emptyStateFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.empty-state-icon {
+  animation: emptyStateFloat 3s ease-in-out infinite;
+}
+
+/* Empty state content fade */
+@keyframes emptyStateFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-state-content {
+  animation: emptyStateFadeIn 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   18. SEARCH BAR ANIMATIONS
+   ============================================ */
+
+/* Search expand animation */
+@keyframes searchExpand {
+  from {
+    width: 200px;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.search-expand {
+  animation: searchExpand 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Search icon pulse */
+@keyframes searchPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.search-icon-pulse {
+  animation: searchPulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   19. TOOLTIP ANIMATIONS
+   ============================================ */
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-animate {
+  animation: tooltipFadeIn 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   20. CHART ANIMATIONS
+   ============================================ */
+
+/* Chart bar grow */
+@keyframes chartBarGrow {
+  from {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+.chart-bar-animate {
+  animation: chartBarGrow 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Chart line draw */
+@keyframes chartLineDraw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart-line-animate {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: chartLineDraw 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
+   21. PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Hardware acceleration for smooth 60fps animations */
+.gpu-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Apply to animated elements */
+.card-hover,
+.btn-animate,
+.modal-enter,
+.sidebar-enter,
+.table-row-hover {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

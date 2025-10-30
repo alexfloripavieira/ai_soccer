@@ -10,7 +10,7 @@ Cadastrar Atleta • AI Soccer
 
 {% block content %}
 <section class="mx-auto w-full max-w-5xl px-6 py-12">
-  <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between animate-fade-in-down">
     <div>
       <p class="text-sm font-medium uppercase tracking-widest text-green-400">
         Performance
@@ -32,14 +32,17 @@ Cadastrar Atleta • AI Soccer
     </div>
     <a
       href="{% url 'performance:athlete_list' %}"
-      class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700"
+      class="btn-animate inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 group"
     >
+      <svg class="w-4 h-4 mr-2 icon-hover transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
       Voltar para lista
     </a>
   </div>
 
-  <div class="mt-10 rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl shadow-slate-950/40 backdrop-blur">
-    <form method="post" class="space-y-8">
+  <div class="mt-10 rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-xl shadow-slate-950/40 backdrop-blur animate-fade-in-up">
+    <form id="athlete-form" method="post" class="space-y-8" data-loading data-loading-text="Salvando atleta..." data-loading-subtitle="Por favor, aguarde">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
@@ -50,8 +53,8 @@ Cadastrar Atleta • AI Soccer
 
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         {% for field in form %}
-        <div class="space-y-2 {% if field.name == 'name' or field.name == 'nationality' %}md:col-span-2{% endif %}">
-          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-300">
+        <div class="stagger-item space-y-2 {% if field.name == 'name' or field.name == 'nationality' %}md:col-span-2{% endif %}">
+          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-300 hover-color-smooth">
             {{ field.label }}
             {% if field.field.required %}
             <span class="text-red-400">*</span>
@@ -59,7 +62,7 @@ Cadastrar Atleta • AI Soccer
           </label>
           {{ field }}
           {% if field.errors %}
-          <p class="text-sm text-red-400">{{ field.errors|striptags }}</p>
+          <p class="text-sm text-red-400 error-shake">{{ field.errors|striptags }}</p>
           {% endif %}
           {% if field.help_text %}
           <p class="text-xs text-slate-500">{{ field.help_text }}</p>
@@ -68,17 +71,24 @@ Cadastrar Atleta • AI Soccer
         {% endfor %}
       </div>
 
-      <div class="flex flex-col gap-4 pt-4 md:flex-row md:items-center md:justify-end">
+      <div class="flex flex-col gap-4 pt-4 md:flex-row md:items-center md:justify-end animate-fade-in-up animate-delay-300">
         <a
           href="{% url 'performance:athlete_list' %}"
-          class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700"
+          class="btn-animate inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 group"
         >
+          <svg class="w-5 h-5 mr-2 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
           Cancelar
         </a>
         <button
           type="submit"
-          class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-200 hover:shadow-xl hover:shadow-green-500/30 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+          id="submit-btn"
+          class="btn-animate inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-500/20 hover:shadow-xl hover:shadow-green-500/30 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-slate-900 group"
         >
+          <svg class="w-5 h-5 mr-2 icon-hover" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
           {% if object %}
           Atualizar atleta
           {% else %}
@@ -89,4 +99,85 @@ Cadastrar Atleta • AI Soccer
     </form>
   </div>
 </section>
+
+{# Form validation loading #}
+{% include 'components/loading.html' with loading_id='form-validation' loading_text='Validando dados...' loading_subtitle='Verificando informações' %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('athlete-form');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        // Show button loading
+        if (submitBtn) {
+          Loading.button(submitBtn, true, '{% if object %}Atualizando...{% else %}Salvando...{% endif %}');
+        }
+
+        // Form will submit normally
+        // The data-loading attribute will automatically show page loading via Loading.init()
+      });
+
+      // Client-side validation before submit
+      form.addEventListener('submit', function(e) {
+        const requiredFields = form.querySelectorAll('[required]');
+        let hasErrors = false;
+
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            hasErrors = true;
+            field.classList.add('border-red-500');
+
+            // Show error message
+            const errorMsg = field.parentElement.querySelector('.text-red-400');
+            if (!errorMsg) {
+              const error = document.createElement('p');
+              error.className = 'text-sm text-red-400 mt-1';
+              error.textContent = 'Este campo é obrigatório';
+              field.parentElement.appendChild(error);
+            }
+          } else {
+            field.classList.remove('border-red-500');
+            const errorMsg = field.parentElement.querySelector('.text-red-400');
+            if (errorMsg && errorMsg.textContent === 'Este campo é obrigatório') {
+              errorMsg.remove();
+            }
+          }
+        });
+
+        if (hasErrors) {
+          e.preventDefault();
+
+          // Scroll to first error
+          const firstError = form.querySelector('.border-red-500');
+          if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstError.focus();
+          }
+
+          // Hide loading if shown
+          if (submitBtn) {
+            Loading.button(submitBtn, false);
+          }
+          Loading.hidePage();
+        }
+      });
+
+      // Remove error styling on input
+      form.querySelectorAll('input, select, textarea').forEach(field => {
+        field.addEventListener('input', function() {
+          this.classList.remove('border-red-500');
+          const errorMsg = this.parentElement.querySelector('.text-red-400');
+          if (errorMsg && errorMsg.textContent === 'Este campo é obrigatório') {
+            errorMsg.remove();
+          }
+        });
+      });
+    }
+  });
+</script>
 {% endblock %}

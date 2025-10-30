@@ -7,5 +7,6 @@ class ScoutingConfig(AppConfig):
     verbose_name = 'Scouting'
 
     def ready(self):
-        """Import signals when app is ready."""
+        """Import signals and auditlog registration when app is ready."""
         import scouting.signals  # noqa
+        import scouting.auditlog  # noqa

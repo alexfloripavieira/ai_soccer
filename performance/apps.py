@@ -7,5 +7,6 @@ class PerformanceConfig(AppConfig):
     verbose_name = 'Performance'
 
     def ready(self):
-        """Import signals when app is ready."""
+        """Import signals and auditlog registration when app is ready."""
         import performance.signals  # noqa
+        import performance.auditlog  # noqa

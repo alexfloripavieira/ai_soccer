@@ -3,29 +3,29 @@
 {% block title %}Entrar - AI Soccer{% endblock %}
 
 {% block content %}
-<section class="relative px-6 py-24 lg:px-8">
+<section class="relative px-6 py-24 lg:px-8 animate-fade-in">
   <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center">
-    <div>
-      <span class="inline-flex items-center rounded-full bg-slate-900/70 px-4 py-1 text-sm font-medium text-slate-300 ring-1 ring-slate-700/70">
+    <div class="animate-fade-in-up">
+      <span class="inline-flex items-center rounded-full bg-slate-900/70 px-4 py-1 text-sm font-medium text-slate-300 ring-1 ring-slate-700/70 animate-fade-in">
         Acesse sua conta
       </span>
-      <h1 class="mt-6 text-3xl font-semibold text-slate-100 sm:text-4xl">
+      <h1 class="mt-6 text-3xl font-semibold text-slate-100 sm:text-4xl animate-fade-in-up animate-delay-100">
         Centralize informações, decisões e comunicação em um só lugar
       </h1>
-      <p class="mt-4 text-base leading-7 text-slate-400">
+      <p class="mt-4 text-base leading-7 text-slate-400 animate-fade-in-up animate-delay-200">
         Faça login com seu e-mail corporativo e continue acompanhando desempenho, scouting e indicadores estratégicos de forma integrada e segura.
       </p>
       <ul class="mt-8 space-y-4 text-sm text-slate-300">
-        <li class="flex items-start gap-3">
-          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/20 text-blue-300">
+        <li class="stagger-item flex items-start gap-3">
+          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/20 text-blue-300 icon-hover">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6L21 6.75" />
             </svg>
           </span>
           Segurança com autenticação baseada em e-mail e senha forte.
         </li>
-        <li class="flex items-start gap-3">
-          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-green-500/20 text-green-300">
+        <li class="stagger-item flex items-start gap-3">
+          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-green-500/20 text-green-300 icon-hover">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 4.5H19.5v14.25" />
@@ -33,8 +33,8 @@
           </span>
           Acesso imediato aos dashboards de performance e scouting.
         </li>
-        <li class="flex items-start gap-3">
-          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/20 text-purple-300">
+        <li class="stagger-item flex items-start gap-3">
+          <span class="mt-1 flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/20 text-purple-300 icon-hover">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
@@ -44,11 +44,11 @@
       </ul>
     </div>
 
-    <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-8 shadow-2xl shadow-blue-900/30 backdrop-blur">
+    <div class="rounded-3xl border border-slate-800 bg-slate-950/80 p-8 shadow-2xl shadow-blue-900/30 backdrop-blur animate-scale-in gpu-accelerate">
       <form method="post" novalidate class="space-y-6">
         {% csrf_token %}
         {% if form.non_field_errors %}
-          <div class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+          <div class="notification-enter rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             <ul class="space-y-1">
               {% for error in form.non_field_errors %}
                 <li>{{ error }}</li>
@@ -58,20 +58,20 @@
         {% endif %}
 
         {% for field in form %}
-          <div>
+          <div class="stagger-item">
             <div class="flex items-center justify-between">
               <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-medium text-slate-200">
                 {{ field.label }}
               </label>
               {% if field.name == 'password' %}
-                <a href="#" class="text-xs font-medium text-green-300 transition-colors duration-150 hover:text-green-200">
+                <a href="#" class="text-xs font-medium text-green-300 transition-all duration-200 hover:text-green-200 hover:translate-x-1">
                   Esqueci minha senha
                 </a>
               {% endif %}
             </div>
             {{ field }}
             {% if field.errors %}
-              <ul class="mt-2 space-y-1 text-xs text-red-300">
+              <ul class="mt-2 space-y-1 text-xs text-red-300 notification-enter">
                 {% for error in field.errors %}
                   <li>{{ error }}</li>
                 {% endfor %}
@@ -82,14 +82,14 @@
 
         <input type="hidden" name="next" value="{{ next }}">
 
-        <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-200 hover:scale-[1.01] hover:shadow-xl">
+        <button type="submit" class="btn-animate w-full rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-green-500/20 transition-all duration-200 hover:shadow-xl gpu-accelerate">
           Entrar
         </button>
       </form>
 
-      <p class="mt-6 text-center text-sm text-slate-400">
+      <p class="mt-6 text-center text-sm text-slate-400 animate-fade-in animate-delay-300">
         Ainda não tem conta?
-        <a href="{% url 'accounts:signup' %}" class="font-semibold text-green-300 transition-colors duration-150 hover:text-green-200">
+        <a href="{% url 'accounts:signup' %}" class="font-semibold text-green-300 transition-all duration-200 hover:text-green-200 hover:underline">
           Cadastre-se
         </a>
       </p>
