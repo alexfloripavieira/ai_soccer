@@ -749,7 +749,7 @@
   - [X] 12.3.6: Adicionar URL `/search/`
   - [X] 12.3.7: Testar busca
 
-- [ ] **Tarefa 12.4: Logs de Auditoria**
+- [X] **Tarefa 12.4: Logs de Auditoria**
   - [X] 12.4.1: Instalar pacote `django-auditlog`
   - [X] 12.4.2: Adicionar ao INSTALLED_APPS
   - [X] 12.4.3: Executar migrações
@@ -759,17 +759,17 @@
   - [X] 12.4.7: Implementar filtros
   - [X] 12.4.8: Adicionar URL `/audit-logs/`
   - [X] 12.4.9: Restringir acesso a administradores
-  - [ ] 12.4.10: Testar logs
+  - [X] 12.4.10: Testar logs
 
 - [ ] **Tarefa 12.5: Melhorias de UX**
   - [X] 12.5.1: Implementar loading spinners
-  - [ ] 12.5.2: Adicionar animações de transição
-  - [ ] 12.5.3: Implementar confirmações de exclusão com modal
-  - [ ] 12.5.4: Adicionar tooltips em campos
+  - [X] 12.5.2: Adicionar animações de transição
+  - [X] 12.5.3: Implementar confirmações de exclusão com modal
+  - [X] 12.5.4: Adicionar tooltips em campos (CORRIGIDO)
   - [ ] 12.5.5: Implementar mensagens toast
   - [ ] 12.5.6: Melhorar feedback visual de formulários
   - [ ] 12.5.7: Adicionar dark mode toggle
-  - [ ] 12.5.8: Testar em múltiplos navegadores
+  - [X] 12.5.8: Testar em múltiplos navegadores
 
 ---
 
@@ -979,5 +979,131 @@
   - [ ] 15.6.5: Criar arquivo `requirements-production.txt`
   - [ ] 15.6.6: Preparar arquivos de configuração do servidor
   - [ ] 15.6.7: Documentar processo de deploy
+
+---
+
+### Sprint 16: Refatoração de Navegação e Dashboard UX
+**Duração**: 2 semanas
+**Objetivo**: Melhorar experiência do usuário na navegação e dashboards, corrigir problemas de acessibilidade e consolidar sistemas duplicados
+
+- [ ] **Tarefa 16.1: Correções Críticas de Acessibilidade (PRIORITY 1)**
+  - [ ] 16.1.1: Adicionar `aria-current="page"` em todos os links ativos (sidebar.html, navbar.html, base_dashboard.html)
+  - [ ] 16.1.2: Adicionar `aria-expanded="true/false"` aos submenus expansíveis (sidebar.html:50, base_dashboard.html)
+  - [ ] 16.1.3: Adicionar `aria-label` ao overlay mobile (sidebar.html:67, base_dashboard.html:218)
+  - [ ] 16.1.4: Implementar left border verde (border-l-4 border-green-500) no estado ativo além do gradiente
+  - [ ] 16.1.5: Adicionar bold font weight (font-semibold) em links ativos
+  - [ ] 16.1.6: Implementar `role="navigation"` e `aria-label="Menu principal"` nos componentes de navegação
+  - [ ] 16.1.7: Adicionar suporte a teclado (Enter/Space) para toggle de submenu
+  - [ ] 16.1.8: Testar com screen reader (NVDA ou VoiceOver)
+  - [ ] 16.1.9: Validar contraste de cores com WCAG 2.1 AA
+  - [ ] 16.1.10: Documentar melhorias de acessibilidade
+
+- [ ] **Tarefa 16.2: Consolidação de Sistemas de Navegação (PRIORITY 1)**
+  - [ ] 16.2.1: Analisar diferenças entre components/sidebar.html e dashboard/base_dashboard.html
+  - [ ] 16.2.2: Criar sidebar unificado que atenda ambos os contextos
+  - [ ] 16.2.3: Remover código duplicado de dashboard/base_dashboard.html (linhas 51-198)
+  - [ ] 16.2.4: Migrar dashboard/base_dashboard.html para usar components/sidebar.html
+  - [ ] 16.2.5: Unificar lógica de detecção de estado ativo em context_processors.py
+  - [ ] 16.2.6: Consolidar funções toggleMobileSidebar() em um único lugar
+  - [ ] 16.2.7: Testar navegação em todas as páginas (dashboard, performance, scouting, business)
+  - [ ] 16.2.8: Verificar que estado ativo funciona corretamente em todas as rotas
+  - [ ] 16.2.9: Remover código obsoleto e comentários desnecessários
+  - [ ] 16.2.10: Documentar estrutura de navegação unificada
+
+- [ ] **Tarefa 16.3: Melhorias de Responsividade (PRIORITY 2)**
+  - [ ] 16.3.1: Alterar sidebar para aparecer em `lg:flex` (1024px) ao invés de `xl:flex` (1280px)
+  - [ ] 16.3.2: Tornar navbar.html links visíveis em tablets (remover `hidden` até `md:`)
+  - [ ] 16.3.3: Implementar width adaptável para sidebar em telas intermediárias (lg: w-64, xl: w-72)
+  - [ ] 16.3.4: Melhorar grid responsivo dos dashboards (grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4)
+  - [ ] 16.3.5: Testar sidebar em iPad (1024x768) e iPad Pro (1366x1024)
+  - [ ] 16.3.6: Testar overlay mobile em diferentes resoluções
+  - [ ] 16.3.7: Implementar scroll suave no sidebar quando menu é longo
+  - [ ] 16.3.8: Testar em Chrome, Firefox, Safari mobile
+  - [ ] 16.3.9: Validar touch targets (mínimo 44x44px)
+  - [ ] 16.3.10: Documentar breakpoints e estratégia responsiva
+
+- [ ] **Tarefa 16.4: Implementação de Navegação por Abas nos Dashboards (PRIORITY 2)**
+  - [ ] 16.4.1: Criar componente components/dashboard_tabs.html reutilizável
+  - [ ] 16.4.2: Implementar lógica de detecção de dashboard ativo
+  - [ ] 16.4.3: Adicionar abas no topo de dashboard/home.html (Overview | Performance | Scouting | Business)
+  - [ ] 16.4.4: Integrar tabs em performance/performance_dashboard.html
+  - [ ] 16.4.5: Integrar tabs em scouting/scouting_dashboard.html
+  - [ ] 16.4.6: Integrar tabs em business/financial_dashboard.html
+  - [ ] 16.4.7: Implementar estado ativo com border-b-2 border-green-500
+  - [ ] 16.4.8: Adicionar ícones aos tabs (lucide icons)
+  - [ ] 16.4.9: Tornar tabs responsivos (scroll horizontal em mobile)
+  - [ ] 16.4.10: Testar navegação entre dashboards com tabs
+
+- [ ] **Tarefa 16.5: Reorganização da Arquitetura de Menu (PRIORITY 2)**
+  - [ ] 16.5.1: Remover itens "Novo/Criar" do menu principal (sidebar)
+  - [ ] 16.5.2: Adicionar botões "+ Novo" nas páginas de listagem (athlete_list.html, etc)
+  - [ ] 16.5.3: Reorganizar menu Business para reduzir de 8 para 4 itens principais
+  - [ ] 16.5.4: Adicionar links diretos para dashboards no menu principal
+  - [ ] 16.5.5: Criar estrutura consistente: Dashboard → Listagens → Ações
+  - [ ] 16.5.6: Atualizar context_processors.py com nova estrutura de menu
+  - [ ] 16.5.7: Padronizar naming: usar sempre português nos labels
+  - [ ] 16.5.8: Agrupar itens relacionados com dividers visuais
+  - [ ] 16.5.9: Testar hierarquia em diferentes níveis de profundidade
+  - [ ] 16.5.10: Documentar nova arquitetura de informação
+
+- [ ] **Tarefa 16.6: Implementação de Breadcrumbs (PRIORITY 3)**
+  - [ ] 16.6.1: Criar componente components/breadcrumbs.html
+  - [ ] 16.6.2: Implementar lógica de geração automática de breadcrumbs
+  - [ ] 16.6.3: Adicionar breadcrumbs em base.html ou dashboard/base_dashboard.html
+  - [ ] 16.6.4: Integrar em todas as páginas de dashboard
+  - [ ] 16.6.5: Integrar em páginas de listagem (athletes, players, clubs)
+  - [ ] 16.6.6: Integrar em páginas de detalhes
+  - [ ] 16.6.7: Integrar em formulários de create/edit
+  - [ ] 16.6.8: Estilizar breadcrumbs com separadores (/) e hover states
+  - [ ] 16.6.9: Adicionar structured data (schema.org/BreadcrumbList)
+  - [ ] 16.6.10: Testar navegação back com breadcrumbs
+
+- [ ] **Tarefa 16.7: Melhorias Visuais de Estado Ativo (PRIORITY 3)**
+  - [ ] 16.7.1: Implementar animação de transição no estado ativo (transition-all duration-200)
+  - [ ] 16.7.2: Adicionar subtle shadow em itens ativos (shadow-lg)
+  - [ ] 16.7.3: Implementar pulse animation em badges de notificação
+  - [ ] 16.7.4: Melhorar contrast ratio entre hover e active (bg-slate-700 vs bg-slate-600)
+  - [ ] 16.7.5: Adicionar ícone indicador (chevron ou dot) ao lado de itens ativos
+  - [ ] 16.7.6: Implementar parent highlight quando child está ativo
+  - [ ] 16.7.7: Testar states: default, hover, active, focus, disabled
+  - [ ] 16.7.8: Validar cores com simulador de daltonismo
+  - [ ] 16.7.9: Implementar dark mode toggle (se ainda não existir)
+  - [ ] 16.7.10: Documentar sistema de estados visuais
+
+- [ ] **Tarefa 16.8: Gerenciamento de Foco e Interações Mobile (PRIORITY 3)**
+  - [ ] 16.8.1: Implementar focus trap quando sidebar mobile está aberto
+  - [ ] 16.8.2: Mover foco para primeiro item do menu ao abrir sidebar mobile
+  - [ ] 16.8.3: Restaurar foco ao botão toggle ao fechar sidebar
+  - [ ] 16.8.4: Adicionar suporte a tecla Escape para fechar sidebar
+  - [ ] 16.8.5: Implementar navegação por setas (↑↓) no menu
+  - [ ] 16.8.6: Adicionar anúncio de screen reader ao abrir/fechar menu
+  - [ ] 16.8.7: Implementar swipe gesture para fechar sidebar mobile
+  - [ ] 16.8.8: Adicionar haptic feedback em mobile (se suportado)
+  - [ ] 16.8.9: Testar com teclado (Tab, Enter, Escape, Arrows)
+  - [ ] 16.8.10: Documentar padrões de interação
+
+- [ ] **Tarefa 16.9: Otimizações de Espaçamento e Hierarquia Visual (PRIORITY 3)**
+  - [ ] 16.9.1: Padronizar spacing entre itens do menu (py-3 para todos)
+  - [ ] 16.9.2: Adicionar section dividers (border-t border-slate-800) entre grupos
+  - [ ] 16.9.3: Implementar visual grouping com background sutil em seções
+  - [ ] 16.9.4: Aumentar padding de submenus para melhor hierarquia (pl-8 ao invés de pl-6)
+  - [ ] 16.9.5: Padronizar tamanho de ícones (20x20px consistentemente)
+  - [ ] 16.9.6: Melhorar spacing de cards nos dashboards (gap-6 ao invés de gap-4)
+  - [ ] 16.9.7: Implementar consistent padding em todos os cards (p-6)
+  - [ ] 16.9.8: Adicionar visual breathing room (aumentar margin-top do conteúdo)
+  - [ ] 16.9.9: Testar em diferentes tamanhos de tela
+  - [ ] 16.9.10: Documentar sistema de espaçamento
+
+- [ ] **Tarefa 16.10: Testes de Qualidade e Documentação (PRIORITY 4)**
+  - [ ] 16.10.1: Executar testes de acessibilidade com axe DevTools
+  - [ ] 16.10.2: Testar com NVDA screen reader (Windows)
+  - [ ] 16.10.3: Testar com VoiceOver (macOS/iOS)
+  - [ ] 16.10.4: Validar navegação por teclado em todos os fluxos
+  - [ ] 16.10.5: Testar performance de navegação (Lighthouse)
+  - [ ] 16.10.6: Validar responsive em Chrome DevTools (10+ devices)
+  - [ ] 16.10.7: Testar cross-browser (Chrome, Firefox, Safari, Edge)
+  - [ ] 16.10.8: Criar documentação de padrões de navegação (docs/navigation-patterns.md)
+  - [ ] 16.10.9: Documentar componentes reutilizáveis criados
+  - [ ] 16.10.10: Criar guia de acessibilidade para futuros desenvolvimentos
 
 ---

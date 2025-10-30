@@ -1,4 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
 
 {% block title %}{% if object %}Editar Relatório{% else %}Novo Relatório de Scouting{% endif %} - AI Soccer{% endblock %}
 
@@ -41,6 +42,30 @@
               {{ field.label }}
               {% if field.field.required %}
                 <span class="text-red-400">*</span>
+              {% endif %}
+              {# Tooltips for specific fields #}
+              {% if field.name == 'player' %}
+              {% include 'components/tooltip.html' with tooltip_text='Selecione o jogador observado para este relatório. Use o campo de busca para localizar rapidamente.' tooltip_id='tooltip-report-player' %}
+              {% elif field.name == 'report_date' %}
+              {% include 'components/tooltip.html' with tooltip_text='Data em que a observação foi realizada. Formato: DD/MM/AAAA' tooltip_id='tooltip-report-date' %}
+              {% elif field.name == 'match_or_event' %}
+              {% include 'components/tooltip.html' with tooltip_text='Identifique a partida ou evento observado. Exemplo: Flamengo vs Palmeiras - Brasileirão 2024' tooltip_id='tooltip-match-event' %}
+              {% elif field.name == 'technical_score' %}
+              {% include 'components/tooltip.html' with tooltip_text='Avalie as habilidades técnicas do jogador (controle de bola, passes, finalizações, dribles). Escala de 0 a 10.' tooltip_id='tooltip-technical' %}
+              {% elif field.name == 'physical_score' %}
+              {% include 'components/tooltip.html' with tooltip_text='Avalie os aspectos físicos (velocidade, resistência, força, coordenação motora). Escala de 0 a 10.' tooltip_id='tooltip-physical' %}
+              {% elif field.name == 'tactical_score' %}
+              {% include 'components/tooltip.html' with tooltip_text='Avalie a inteligência tática (posicionamento, leitura de jogo, tomada de decisões). Escala de 0 a 10.' tooltip_id='tooltip-tactical' %}
+              {% elif field.name == 'mental_score' %}
+              {% include 'components/tooltip.html' with tooltip_text='Avalie aspectos mentais (concentração, liderança, controle emocional, mentalidade competitiva). Escala de 0 a 10.' tooltip_id='tooltip-mental' %}
+              {% elif field.name == 'potential_score' %}
+              {% include 'components/tooltip.html' with tooltip_text='Avalie o potencial de desenvolvimento futuro do jogador. Escala de 0 a 10.' tooltip_id='tooltip-potential' %}
+              {% elif field.name == 'strengths' %}
+              {% include 'components/tooltip.html' with tooltip_text='Descreva os principais pontos fortes observados. Seja específico e detalhado. Exemplo: Excelente visão de jogo, passes precisos em profundidade, boa leitura defensiva.' tooltip_id='tooltip-strengths' %}
+              {% elif field.name == 'weaknesses' %}
+              {% include 'components/tooltip.html' with tooltip_text='Identifique os pontos que precisam ser desenvolvidos. Exemplo: Precisa melhorar a finalização com a perna esquerda, pode ser mais incisivo nos duelos aéreos.' tooltip_id='tooltip-weaknesses' %}
+              {% elif field.name == 'recommendation' %}
+              {% include 'components/tooltip.html' with tooltip_text='Forneça uma recomendação final sobre o jogador. Indique se vale a pena continuar acompanhando, iniciar negociações, ou arquivar o perfil. Justifique sua decisão.' tooltip_id='tooltip-recommendation' %}
               {% endif %}
             </label>
 
@@ -89,6 +114,9 @@
 
 {% block extra_js %}
 {{ block.super }}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
+
 <script>
   (function() {
     const sliderFields = {{ score_fields|safe }};

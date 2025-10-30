@@ -21,6 +21,9 @@
   {# Global Page Loading Overlay #}
   {% include 'components/loading.html' with loading_id='page-loading' loading_text='Carregando...' loading_subtitle='Por favor, aguarde' %}
 
+  {# Toast Notifications Container #}
+  {% include 'components/toast.html' %}
+
   <div class="relative min-h-screen bg-slate-900 animate-fade-in">
     <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/10 via-transparent to-blue-500/10"></div>
     <div id="app" class="relative flex min-h-screen">
@@ -28,15 +31,12 @@
       <div class="flex min-h-screen flex-1 flex-col">
         {% block header %}{% include 'components/navbar.html' %}{% endblock %}
         <main class="flex-1 animate-fade-in-up">
+          {# Django Messages - Processados via JavaScript como toasts #}
           {% if messages %}
-            <div class="mx-auto w-full max-w-4xl px-6 pt-8">
-              <div class="space-y-3">
-                {% for message in messages %}
-                  <div class="notification-enter rounded-2xl border border-green-400/40 bg-green-500/10 px-5 py-4 text-sm text-green-200 shadow-lg shadow-green-950/30 hover:shadow-xl transition-all duration-200">
-                    {{ message }}
-                  </div>
-                {% endfor %}
-              </div>
+            <div id="django-messages" style="display: none;">
+              {% for message in messages %}
+                <div class="django-message" data-type="{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
             </div>
           {% endif %}
           {% block content %}{% endblock %}
@@ -48,6 +48,9 @@
 
   {# Loading Helper Script #}
   <script src="{% static 'js/loading.js' %}"></script>
+
+  {# Toast Notification System #}
+  <script src="{% static 'js/toast.js' %}"></script>
 
   {% block extra_js %}{% endblock %}
 </body>

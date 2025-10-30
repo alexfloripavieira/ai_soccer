@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}
@@ -52,6 +53,24 @@ Registrar Lesão • AI Soccer
             {% if field.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {# Tooltips for specific fields #}
+            {% if field.name == 'athlete' %}
+            {% include 'components/tooltip.html' with tooltip_text='Selecione o atleta que sofreu a lesão. Use a busca para localizar rapidamente.' tooltip_id='tooltip-injury-athlete' %}
+            {% elif field.name == 'injury_date' %}
+            {% include 'components/tooltip.html' with tooltip_text='Data em que a lesão ocorreu. Formato: DD/MM/AAAA' tooltip_id='tooltip-injury-date' %}
+            {% elif field.name == 'injury_type' %}
+            {% include 'components/tooltip.html' with tooltip_text='Tipo de lesão segundo classificação médica: Muscular, Articular, Óssea, Ligamentar ou Tendínea' tooltip_id='tooltip-injury-type' %}
+            {% elif field.name == 'body_part' %}
+            {% include 'components/tooltip.html' with tooltip_text='Parte do corpo afetada pela lesão. Esta informação é importante para análise de padrões de lesão.' tooltip_id='tooltip-body-part' %}
+            {% elif field.name == 'severity_level' %}
+            {% include 'components/tooltip.html' with tooltip_text='Gravidade da lesão: Leve (até 7 dias), Moderada (7-21 dias), Grave (mais de 21 dias)' tooltip_id='tooltip-severity' %}
+            {% elif field.name == 'description' %}
+            {% include 'components/tooltip.html' with tooltip_text='Descrição detalhada da lesão, incluindo circunstâncias, diagnóstico médico e tratamento proposto. Campo opcional.' tooltip_id='tooltip-description' %}
+            {% elif field.name == 'expected_return' %}
+            {% include 'components/tooltip.html' with tooltip_text='Data prevista para retorno aos treinos, conforme avaliação médica. Campo opcional.' tooltip_id='tooltip-expected-return' %}
+            {% elif field.name == 'actual_return' %}
+            {% include 'components/tooltip.html' with tooltip_text='Data real do retorno aos treinos. Preencha quando o atleta estiver recuperado. Campo opcional.' tooltip_id='tooltip-actual-return' %}
+            {% endif %}
           </label>
           {{ field }}
           {% if field.help_text %}
@@ -85,4 +104,9 @@ Registrar Lesão • AI Soccer
     </form>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
 {% endblock %}

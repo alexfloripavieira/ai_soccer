@@ -1,4 +1,5 @@
 {% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
 
 {% block title %}{% if object %}Editar Jogador{% else %}Novo Jogador Observado{% endif %} - AI Soccer{% endblock %}
 
@@ -42,6 +43,28 @@
               {% if field.field.required %}
                 <span class="text-red-400">*</span>
               {% endif %}
+              {# Tooltips for specific fields #}
+              {% if field.name == 'name' %}
+              {% include 'components/tooltip.html' with tooltip_text='Nome completo do jogador observado. Exemplo: Carlos Eduardo Souza' tooltip_id='tooltip-scouted-name' %}
+              {% elif field.name == 'birth_date' %}
+              {% include 'components/tooltip.html' with tooltip_text='Data de nascimento do jogador. Formato: DD/MM/AAAA. A idade será calculada automaticamente.' tooltip_id='tooltip-scouted-birth' %}
+              {% elif field.name == 'nationality' %}
+              {% include 'components/tooltip.html' with tooltip_text='Nacionalidade do jogador. Exemplo: Brasil, Uruguai, Colômbia' tooltip_id='tooltip-scouted-nationality' %}
+              {% elif field.name == 'position' %}
+              {% include 'components/tooltip.html' with tooltip_text='Posição principal do jogador em campo. Esta informação é fundamental para análise de perfil.' tooltip_id='tooltip-scouted-position' %}
+              {% elif field.name == 'current_club' %}
+              {% include 'components/tooltip.html' with tooltip_text='Clube atual do jogador. Campo opcional. Exemplo: Palmeiras, River Plate' tooltip_id='tooltip-current-club' %}
+              {% elif field.name == 'market_value' %}
+              {% include 'components/tooltip.html' with tooltip_text='Valor estimado de mercado em Reais (R$). Campo opcional. Use para jogadores com valor conhecido.' tooltip_id='tooltip-scouted-value' %}
+              {% elif field.name == 'status' %}
+              {% include 'components/tooltip.html' with tooltip_text='Status do processo de prospecção: Monitorando (observação inicial), Interessado (potencial contratação), Negociando (em tratativas), Contratado (processo concluído)' tooltip_id='tooltip-scouted-status' %}
+              {% elif field.name == 'hire_date' %}
+              {% include 'components/tooltip.html' with tooltip_text='Data de contratação do jogador. Preencha apenas quando o status for "Contratado".' tooltip_id='tooltip-hire-date' %}
+              {% elif field.name == 'notes' %}
+              {% include 'components/tooltip.html' with tooltip_text='Observações gerais sobre o jogador. Use para registrar informações importantes, contatos, histórico de negociação, etc.' tooltip_id='tooltip-scouted-notes' %}
+              {% elif field.name == 'photo' %}
+              {% include 'components/tooltip.html' with tooltip_text='Foto do jogador (opcional). Formatos aceitos: JPG, PNG. Tamanho máximo recomendado: 5MB.' tooltip_id='tooltip-scouted-photo' %}
+              {% endif %}
             </label>
             {{ field }}
             {% if field.help_text %}
@@ -75,4 +98,10 @@
     </div>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
 {% endblock %}

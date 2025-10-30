@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}
@@ -59,6 +60,22 @@ Cadastrar Atleta • AI Soccer
             {% if field.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {# Tooltips for specific fields #}
+            {% if field.name == 'name' %}
+            {% include 'components/tooltip.html' with tooltip_text='Digite o nome completo do atleta. Exemplo: João Silva Santos' tooltip_id='tooltip-name' %}
+            {% elif field.name == 'birth_date' %}
+            {% include 'components/tooltip.html' with tooltip_text='Data de nascimento no formato DD/MM/AAAA. A idade será calculada automaticamente.' tooltip_id='tooltip-birth-date' %}
+            {% elif field.name == 'position' %}
+            {% include 'components/tooltip.html' with tooltip_text='Posição principal do atleta em campo. Esta informação é usada para análises táticas.' tooltip_id='tooltip-position' %}
+            {% elif field.name == 'nationality' %}
+            {% include 'components/tooltip.html' with tooltip_text='País de origem do atleta. Exemplo: Brasil, Argentina, Portugal' tooltip_id='tooltip-nationality' %}
+            {% elif field.name == 'height' %}
+            {% include 'components/tooltip.html' with tooltip_text='Altura do atleta em centímetros. Exemplo: 180 (para 1,80m)' tooltip_id='tooltip-height' %}
+            {% elif field.name == 'weight' %}
+            {% include 'components/tooltip.html' with tooltip_text='Peso do atleta em quilogramas. Exemplo: 75.5' tooltip_id='tooltip-weight' %}
+            {% elif field.name == 'market_value' %}
+            {% include 'components/tooltip.html' with tooltip_text='Valor estimado de mercado do atleta em Reais (R$). Este campo é opcional e pode ser atualizado posteriormente.' tooltip_id='tooltip-market-value' %}
+            {% endif %}
           </label>
           {{ field }}
           {% if field.errors %}
@@ -106,6 +123,9 @@ Cadastrar Atleta • AI Soccer
 {% endblock %}
 
 {% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('athlete-form');
@@ -151,6 +171,9 @@ Cadastrar Atleta • AI Soccer
 
         if (hasErrors) {
           e.preventDefault();
+
+          // Show error toast
+          toastError('Por favor, preencha todos os campos obrigatórios');
 
           // Scroll to first error
           const firstError = form.querySelector('.border-red-500');

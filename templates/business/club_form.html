@@ -40,6 +40,7 @@
             {% if form.name.field.required %}
               <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Nome oficial do clube. Exemplo: Sport Club Corinthians Paulista' tooltip_id='tooltip-club-name' %}
           </label>
           <input type="text"
                  name="{{ form.name.name }}"
@@ -64,6 +65,7 @@
             {% if form.country.field.required %}
               <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='País onde o clube está localizado. Exemplo: Brasil, Argentina, Uruguai' tooltip_id='tooltip-club-country' %}
           </label>
           <input type="text"
                  name="{{ form.country.name }}"
@@ -88,6 +90,7 @@
             {% if form.city.field.required %}
               <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Cidade sede do clube. Exemplo: São Paulo, Rio de Janeiro, Belo Horizonte' tooltip_id='tooltip-club-city' %}
           </label>
           <input type="text"
                  name="{{ form.city.name }}"
@@ -112,6 +115,7 @@
             {% if form.division.field.required %}
               <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Divisão em que o clube compete atualmente. Esta informação ajuda na análise comparativa de desempenho e valorização.' tooltip_id='tooltip-club-division' %}
           </label>
           <select name="{{ form.division.name }}"
                   id="{{ form.division.id_for_label }}"
@@ -138,6 +142,7 @@
             {% if form.logo.field.required %}
               <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Logo oficial do clube (opcional). Formatos aceitos: JPG, PNG, SVG. Recomenda-se imagens quadradas com fundo transparente.' tooltip_id='tooltip-club-logo' %}
           </label>
 
           {# Logo Preview (if editing and logo exists) #}
@@ -199,6 +204,9 @@
 {% endblock %}
 
 {% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
+
 <script>
 // Preview logo function
 function previewLogo(event) {

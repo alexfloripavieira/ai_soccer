@@ -814,3 +814,203 @@
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+
+/* ============================================
+   22. ENHANCED CARD ANIMATIONS
+   ============================================ */
+
+/* Card grid with smooth entrance */
+.card-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.card-grid-fade {
+  opacity: 0;
+  animation: fadeInUp 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Badge transitions */
+.badge-transition {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.badge-transition:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* ============================================
+   23. SMOOTH TRANSITIONS FOR UI ELEMENTS
+   ============================================ */
+
+/* Universal smooth transition */
+.transition-smooth {
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Specific property transitions */
+.transition-opacity {
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-transform {
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-colors {
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   24. INTERACTIVE FEEDBACK ANIMATIONS
+   ============================================ */
+
+/* Subtle bounce on click */
+@keyframes clickBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+}
+
+.click-bounce:active {
+  animation: clickBounce 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow effect on hover */
+.glow-hover {
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4),
+              0 0 40px rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================
+   25. LIST ITEM ANIMATIONS
+   ============================================ */
+
+/* Smooth list item entrance */
+@keyframes listItemSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.list-item-animate {
+  animation: listItemSlide 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* List item hover effect */
+.list-item-hover {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.list-item-hover:hover {
+  background-color: rgba(51, 65, 85, 0.4);
+  transform: translateX(4px);
+  border-left-color: #10b981;
+}
+
+/* ============================================
+   26. PAGE LOADING ANIMATIONS
+   ============================================ */
+
+/* Page content fade in on load */
+@keyframes pageLoad {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-load-animate {
+  animation: pageLoad 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth section reveal */
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-reveal {
+  opacity: 0;
+  animation: sectionReveal 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ============================================
+   27. ENHANCED STAGGER ANIMATIONS
+   ============================================ */
+
+/* Extended stagger delays for larger lists */
+.stagger-item:nth-child(9) { animation-delay: 450ms; }
+.stagger-item:nth-child(10) { animation-delay: 500ms; }
+.stagger-item:nth-child(11) { animation-delay: 550ms; }
+.stagger-item:nth-child(12) { animation-delay: 600ms; }
+
+/* ============================================
+   28. MICRO-INTERACTIONS
+   ============================================ */
+
+/* Icon rotate on hover */
+.icon-rotate-hover {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-rotate-hover:hover {
+  transform: rotate(90deg);
+}
+
+/* Icon flip on hover */
+.icon-flip-hover {
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-flip-hover:hover {
+  transform: rotateY(180deg);
+}
+
+/* Text shimmer effect */
+@keyframes textShimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(241, 245, 249, 0.1) 0%,
+    rgba(241, 245, 249, 0.8) 50%,
+    rgba(241, 245, 249, 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textShimmer 3s infinite;
+}

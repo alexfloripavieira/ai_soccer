@@ -52,6 +52,7 @@
               {% if form.club.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Selecione o clube para o qual está registrando as receitas mensais.' tooltip_id='tooltip-rev-club' %}
             </label>
             {{ form.club }}
             {% if form.club.errors %}
@@ -69,6 +70,7 @@
               {% if form.year.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Ano de referência da receita. Exemplo: 2024' tooltip_id='tooltip-rev-year' %}
             </label>
             {{ form.year }}
             {% if form.year.errors %}
@@ -86,6 +88,7 @@
               {% if form.month.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Mês de referência da receita. Selecione o mês para o qual está registrando os valores.' tooltip_id='tooltip-rev-month' %}
             </label>
             {{ form.month }}
             {% if form.month.errors %}
@@ -111,6 +114,7 @@
               {% if form.ticketing.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Receita total com venda de ingressos para jogos em casa no mês (bilheteria). Inclui vendas online e presenciais. Valor em Reais (R$).' tooltip_id='tooltip-ticketing' %}
             </label>
             {{ form.ticketing }}
             {% if form.ticketing.errors %}
@@ -128,6 +132,7 @@
               {% if form.sponsorship.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Receita com patrocínios no mês. Inclui patrocínio master, de camisa, naming rights e demais parceiros. Valor em Reais (R$).' tooltip_id='tooltip-sponsorship' %}
             </label>
             {{ form.sponsorship }}
             {% if form.sponsorship.errors %}
@@ -145,6 +150,7 @@
               {% if form.broadcasting.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Receita com direitos de transmissão no mês. Inclui TV aberta, TV fechada e streaming (ex: Globo, SporTV, Premiere). Valor em Reais (R$).' tooltip_id='tooltip-broadcasting' %}
             </label>
             {{ form.broadcasting }}
             {% if form.broadcasting.errors %}
@@ -162,6 +168,7 @@
               {% if form.merchandising.field.required %}
               <span class="text-red-400">*</span>
               {% endif %}
+              {% include 'components/tooltip.html' with tooltip_text='Receita com produtos oficiais no mês. Inclui camisas, uniformes, acessórios e demais itens de merchandising vendidos. Valor em Reais (R$).' tooltip_id='tooltip-merchandising' %}
             </label>
             {{ form.merchandising }}
             {% if form.merchandising.errors %}
@@ -191,4 +198,9 @@
     </form>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 {% if object %}
@@ -52,6 +53,22 @@ Registrar Carga de Treino • AI Soccer
             {% if field.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {# Tooltips for specific fields #}
+            {% if field.name == 'athlete' %}
+            {% include 'components/tooltip.html' with tooltip_text='Selecione o atleta que realizou o treino. Use o campo de busca para encontrar rapidamente.' tooltip_id='tooltip-athlete' %}
+            {% elif field.name == 'training_date' %}
+            {% include 'components/tooltip.html' with tooltip_text='Data em que o treino foi realizado. Formato: DD/MM/AAAA' tooltip_id='tooltip-training-date' %}
+            {% elif field.name == 'duration_minutes' %}
+            {% include 'components/tooltip.html' with tooltip_text='Duração total do treino em minutos. Exemplo: 90 para uma hora e meia de treino' tooltip_id='tooltip-duration' %}
+            {% elif field.name == 'distance_km' %}
+            {% include 'components/tooltip.html' with tooltip_text='Distância total percorrida durante o treino em quilômetros. Exemplo: 8.5 para 8,5 km' tooltip_id='tooltip-distance' %}
+            {% elif field.name == 'heart_rate_avg' %}
+            {% include 'components/tooltip.html' with tooltip_text='Frequência cardíaca média durante o treino em bpm (batimentos por minuto). Campo opcional.' tooltip_id='tooltip-hr-avg' %}
+            {% elif field.name == 'heart_rate_max' %}
+            {% include 'components/tooltip.html' with tooltip_text='Frequência cardíaca máxima atingida durante o treino em bpm. Campo opcional.' tooltip_id='tooltip-hr-max' %}
+            {% elif field.name == 'intensity_level' %}
+            {% include 'components/tooltip.html' with tooltip_text='Nível de intensidade do treino baseado na percepção de esforço. Use como referência: Baixa (recuperação), Média (aeróbico), Alta (limiar), Muito Alta (máximo esforço)' tooltip_id='tooltip-intensity' %}
+            {% endif %}
           </label>
           {{ field }}
           {% if field.help_text %}
@@ -85,4 +102,9 @@ Registrar Carga de Treino • AI Soccer
     </form>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
 {% endblock %}

@@ -69,13 +69,14 @@ class AthleteListView(LoginRequiredMixin, ListView):
         return context
 
 
-class AthleteCreateView(LoginRequiredMixin, CreateView):
+class AthleteCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """Create new athletes and bind them to the current user."""
 
     model = Athlete
     form_class = AthleteForm
     template_name = 'performance/athlete_form.html'
     success_url = reverse_lazy('performance:athlete_list')
+    success_message = 'Atleta %(name)s cadastrado com sucesso!'
     login_url = reverse_lazy('accounts:login')
 
     def form_valid(self, form):
@@ -152,12 +153,13 @@ class AthleteDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class AthleteUpdateView(LoginRequiredMixin, UpdateView):
+class AthleteUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """Allow editing of existing athlete records."""
 
     model = Athlete
     form_class = AthleteForm
     template_name = 'performance/athlete_form.html'
+    success_message = 'Atleta %(name)s atualizado com sucesso!'
     login_url = reverse_lazy('accounts:login')
 
     def get_success_url(self):
@@ -171,6 +173,11 @@ class AthleteDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'performance/athlete_confirm_delete.html'
     login_url = reverse_lazy('accounts:login')
     success_url = reverse_lazy('performance:athlete_list')
+
+    def delete(self, request, *args, **kwargs):
+        athlete_name = self.get_object().name
+        messages.success(request, f'Atleta {athlete_name} excluído com sucesso!')
+        return super().delete(request, *args, **kwargs)
 
 
 class TrainingLoadListView(LoginRequiredMixin, ListView):

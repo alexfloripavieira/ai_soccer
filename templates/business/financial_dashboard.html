@@ -28,7 +28,7 @@
   {# Summary Cards Section (Task 10.5.9) #}
   <div class="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
     {# Total Receitas Card #}
-    <div class="rounded-2xl border border-green-500/40 bg-green-500/10 p-6 shadow-lg shadow-green-900/20">
+    <div class="stagger-item rounded-2xl border border-green-500/40 bg-green-500/10 p-6 shadow-lg shadow-green-900/20 card-hover gpu-accelerate">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-green-200">Total Receitas</p>
         <svg class="h-5 w-5 flex-shrink-0 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +42,7 @@
     </div>
 
     {# Total Despesas Card #}
-    <div class="rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20">
+    <div class="stagger-item rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20 card-hover gpu-accelerate">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-red-200">Total Despesas</p>
         <svg class="h-5 w-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@
 
     {# Saldo Líquido Card #}
     {% if net_balance >= 0 %}
-      <div class="rounded-2xl border border-blue-500/40 bg-gradient-to-br from-green-500/10 to-blue-500/10 p-6 shadow-lg shadow-blue-900/20">
+      <div class="stagger-item rounded-2xl border border-blue-500/40 bg-gradient-to-br from-green-500/10 to-blue-500/10 p-6 shadow-lg shadow-blue-900/20 card-hover gpu-accelerate">
         <div class="flex items-center justify-between">
           <p class="text-xs font-semibold uppercase tracking-widest text-blue-200">Saldo Líquido</p>
           <svg class="h-5 w-5 flex-shrink-0 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,7 +70,7 @@
         <p class="mt-1 text-xs text-blue-200/80">Receitas - Despesas</p>
       </div>
     {% else %}
-      <div class="rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20">
+      <div class="stagger-item rounded-2xl border border-red-500/40 bg-red-500/10 p-6 shadow-lg shadow-red-900/20 card-hover gpu-accelerate">
         <div class="flex items-center justify-between">
           <p class="text-xs font-semibold uppercase tracking-widest text-red-200">Saldo Líquido</p>
           <svg class="h-5 w-5 flex-shrink-0 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,7 +85,7 @@
     {% endif %}
 
     {# Valor de Mercado do Elenco Card (Integração Performance -> Business) #}
-    <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 shadow-lg shadow-emerald-900/20">
+    <div class="stagger-item rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 shadow-lg shadow-emerald-900/20 card-hover gpu-accelerate">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-emerald-200">Valor do Elenco</p>
         <svg class="h-5 w-5 flex-shrink-0 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,7 +101,7 @@
     </div>
 
     {# Total de Clubes Card #}
-    <div class="rounded-2xl border border-purple-500/40 bg-purple-500/10 p-6 shadow-lg shadow-purple-900/20">
+    <div class="stagger-item rounded-2xl border border-purple-500/40 bg-purple-500/10 p-6 shadow-lg shadow-purple-900/20 card-hover gpu-accelerate">
       <div class="flex items-center justify-between">
         <p class="text-xs font-semibold uppercase tracking-widest text-purple-200">Total de Clubes</p>
         <svg class="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,7 +118,7 @@
   {# Revenue Charts Section (Tasks 10.5.7, 10.5.8) #}
   <div class="mb-8 grid gap-6 lg:grid-cols-3">
     {# Monthly Revenue Bar Chart #}
-    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/40">
+    <div class="animate-fade-in-up rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/40 card-hover">
       <div class="mb-6">
         <h2 class="text-xl font-semibold text-slate-100">Receitas Mensais</h2>
         <p class="mt-1 text-xs text-slate-400">Últimos 12 meses cadastrados</p>
@@ -140,7 +140,7 @@
     </div>
 
     {# Revenue by Category Pie Chart #}
-    <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/40">
+    <div class="animate-fade-in-up animate-delay-100 rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/40 card-hover">
       <div class="mb-6">
         <h2 class="text-xl font-semibold text-slate-100">Receitas por Categoria</h2>
         <p class="mt-1 text-xs text-slate-400">Distribuição dos tipos de receita</p>
@@ -162,7 +162,7 @@
       {% endif %}
     </div>
     {# Top Valued Athletes Panel (Integration with Performance) #}
-    <div class="rounded-2xl border border-emerald-500/30 bg-slate-900/70 p-6 shadow-xl shadow-emerald-900/20">
+    <div class="animate-fade-in-up animate-delay-200 rounded-2xl border border-emerald-500/30 bg-slate-900/70 p-6 shadow-xl shadow-emerald-900/20 card-hover">
       <div class="mb-6 flex items-center justify-between">
         <div>
           <h2 class="text-xl font-semibold text-slate-100">Atletas mais valiosos</h2>
@@ -178,7 +178,7 @@
       {% if top_valued_athletes %}
         <ul class="space-y-3">
           {% for athlete in top_valued_athletes %}
-            <li class="flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-900/70 px-4 py-3 transition-all duration-150 hover:border-emerald-500/30 hover:bg-slate-900/90">
+            <li class="stagger-item flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-900/70 px-4 py-3 transition-all duration-200 hover:border-emerald-500/30 hover:bg-slate-900/90 hover:translate-x-1">
               <div>
                 <p class="text-sm font-semibold text-slate-100">
                   {{ athlete.name }}

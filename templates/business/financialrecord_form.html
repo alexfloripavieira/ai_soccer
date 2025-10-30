@@ -47,6 +47,7 @@
             {% if form.club.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Selecione o clube relacionado a esta transação financeira. Use o campo de busca para localizar rapidamente.' tooltip_id='tooltip-fin-club' %}
           </label>
           {{ form.club }}
           {% if form.club.errors %}
@@ -64,6 +65,7 @@
             {% if form.record_date.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Data em que a transação financeira ocorreu. Formato: DD/MM/AAAA. Use a data efetiva da operação, não a data de registro no sistema.' tooltip_id='tooltip-fin-date' %}
           </label>
           {{ form.record_date }}
           {% if form.record_date.errors %}
@@ -81,6 +83,7 @@
             {% if form.amount.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Valor da transação em Reais (R$). Digite apenas números, incluindo centavos se houver. Exemplo: 15000.50 para R$ 15.000,50' tooltip_id='tooltip-fin-amount' %}
           </label>
           {{ form.amount }}
           {% if form.amount.errors %}
@@ -98,6 +101,7 @@
             {% if form.category.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Categoria da transação: Salários (folha de pagamento), Transferências (compra/venda de atletas), Infraestrutura (instalações e equipamentos), Marketing (publicidade e eventos), Outros (demais operações)' tooltip_id='tooltip-fin-category' %}
           </label>
           {{ form.category }}
           {% if form.category.errors %}
@@ -115,6 +119,7 @@
             {% if form.transaction_type.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Tipo de transação: Receita (entrada de dinheiro) ou Despesa (saída de dinheiro). Esta informação é essencial para análise de fluxo de caixa.' tooltip_id='tooltip-fin-type' %}
           </label>
           {{ form.transaction_type }}
           {% if form.transaction_type.errors %}
@@ -132,6 +137,7 @@
             {% if form.description.field.required %}
             <span class="text-red-400">*</span>
             {% endif %}
+            {% include 'components/tooltip.html' with tooltip_text='Descrição detalhada da transação. Inclua informações relevantes como: finalidade, beneficiário, número de nota fiscal, centro de custo, etc. Seja específico para facilitar auditoria futura.' tooltip_id='tooltip-fin-description' %}
           </label>
           {{ form.description }}
           {% if form.description.errors %}
@@ -160,4 +166,9 @@
     </form>
   </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+{# Load tooltip functionality #}
+<script src="{% static 'js/tooltip.js' %}"></script>
 {% endblock %}

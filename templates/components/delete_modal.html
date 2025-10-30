@@ -1,12 +1,30 @@
-{% extends 'base.html' %}
-{% load static formatting %}
+{#
+  Delete Confirmation Modal Component
 
-{% block title %}Excluir Registro Financeiro - AI Soccer{% endblock %}
+  Usage:
+  {% include 'components/delete_modal.html' with
+     modal_title="Confirmar exclusão"
+     modal_description="Esta ação é permanente e não pode ser desfeita."
+     item_name=object.name
+     details_list=details
+     form_action=request.path
+     cancel_url="namespace:view_name"
+  %}
 
-{% block content %}
-{# Modal Overlay #}
+  Parameters:
+  - modal_title: Modal header text (required)
+  - modal_description: Warning message text (required)
+  - item_name: Name of the item being deleted (required)
+  - details_list: List of dicts with 'label' and 'value' keys for displaying item details (optional)
+  - form_action: Form submission URL (defaults to current path)
+  - cancel_url: URL name for cancel button (required)
+  - badge_text: Text for the badge (defaults to "Atenção")
+  - additional_warnings: List of warning strings to display (optional)
+#}
+
+{# Modal Overlay - Hidden by default #}
 <div id="deleteModal"
-     class="fixed inset-0 z-50 overflow-y-auto"
+     class="fixed inset-0 z-50 hidden overflow-y-auto"
      aria-labelledby="modal-title"
      role="dialog"
      aria-modal="true">
@@ -38,14 +56,16 @@
           {# Title and Badge #}
           <div class="ml-4 flex-1">
             <span class="inline-flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-red-200">
-              Atenção
+              {{ badge_text|default:"Atenção" }}
             </span>
             <h2 id="modal-title" class="mt-3 text-2xl font-bold text-slate-100 sm:text-3xl">
-              Deseja realmente excluir este registro financeiro?
+              {{ modal_title }}
             </h2>
             <p class="mt-2 text-sm text-slate-300 sm:text-base">
-              Esta ação é permanente e removerá o registro financeiro do clube
-              <strong class="text-red-300">{{ financial_record.club.name }}</strong> do sistema.
+              {{ modal_description }}
+              {% if item_name %}
+                <strong class="text-red-300">{{ item_name }}</strong>
+              {% endif %}
             </p>
           </div>
 
@@ -64,61 +84,43 @@
       <div class="px-6 py-6 sm:px-8">
 
         {# Details Grid #}
-        <dl class="grid grid-cols-1 gap-4 rounded-xl border border-red-500/30 bg-slate-950/60 p-6 sm:grid-cols-2">
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Clube</dt>
-            <dd class="mt-1 text-base font-semibold text-slate-100 sm:text-lg">{{ financial_record.club.name }}</dd>
+        {% if details_list %}
+          <dl class="grid grid-cols-1 gap-4 rounded-xl border border-red-500/30 bg-slate-950/60 p-6 sm:grid-cols-2">
+            {% for detail in details_list %}
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">
+                  {{ detail.label }}
+                </dt>
+                <dd class="mt-1 text-base font-semibold text-slate-100 sm:text-lg">
+                  {{ detail.value }}
+                </dd>
+              </div>
+            {% endfor %}
+          </dl>
+        {% endif %}
+
+        {# Additional Warnings #}
+        {% if additional_warnings %}
+          <div class="mt-6 space-y-3">
+            {% for warning in additional_warnings %}
+              <div class="flex items-start rounded-lg border border-yellow-800/50 bg-yellow-900/20 p-4">
+                <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <p class="ml-3 text-sm text-yellow-200">{{ warning }}</p>
+              </div>
+            {% endfor %}
           </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Data</dt>
-            <dd class="mt-1 text-base font-semibold text-slate-100 sm:text-lg">
-              {{ financial_record.record_date|date:'d/m/Y' }}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Tipo de Transação</dt>
-            <dd class="mt-1">
-              {% if financial_record.transaction_type == 'RECEITA' %}
-                <span class="inline-flex items-center rounded-full bg-green-900/40 px-3 py-1 text-xs font-medium text-green-300">
-                  {{ financial_record.get_transaction_type_display }}
-                </span>
-              {% else %}
-                <span class="inline-flex items-center rounded-full bg-red-900/40 px-3 py-1 text-xs font-medium text-red-300">
-                  {{ financial_record.get_transaction_type_display }}
-                </span>
-              {% endif %}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Valor</dt>
-            <dd class="mt-1 text-lg font-bold tabular-nums {% if financial_record.transaction_type == 'RECEITA' %}text-green-400{% else %}text-red-400{% endif %}">
-              R$ {{ financial_record.amount|currency_ptbr }}
-            </dd>
-          </div>
-          <div class="sm:col-span-2">
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Categoria</dt>
-            <dd class="mt-1 text-base font-semibold text-slate-100 sm:text-lg">
-              {{ financial_record.get_category_display }}
-            </dd>
-          </div>
-          {% if financial_record.description %}
-          <div class="sm:col-span-2">
-            <dt class="text-xs font-semibold uppercase tracking-widest text-slate-500">Descrição</dt>
-            <dd class="mt-1 text-sm text-slate-300">
-              {{ financial_record.description }}
-            </dd>
-          </div>
-          {% endif %}
-        </dl>
+        {% endif %}
 
         {# Form #}
-        <form method="post" class="mt-8">
+        <form method="post" action="{{ form_action|default:'' }}" id="deleteForm" class="mt-8">
           {% csrf_token %}
 
           {# Action Buttons #}
           <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             {# Cancel Button #}
-            <a href="{% url 'business:financialrecord_list' %}"
+            <a href="{% url cancel_url %}"
                class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500">
               Cancelar
             </a>
@@ -138,9 +140,8 @@
     </div>
   </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
+{# Modal Control JavaScript #}
 <script>
   (function() {
     'use strict';
@@ -152,6 +153,7 @@
 
     // Open modal with animation
     function openModal() {
+      modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden'; // Prevent body scroll
 
       // Trigger animation after a small delay to ensure CSS transition works
@@ -160,6 +162,9 @@
         modalContent.style.opacity = '1';
         modalContent.style.transform = 'scale(1)';
       });
+
+      // Focus trap
+      modalContent.focus();
     }
 
     // Close modal with animation
@@ -169,7 +174,8 @@
       modalContent.style.transform = 'scale(0.95)';
 
       setTimeout(() => {
-        window.location.href = '{% url "business:financialrecord_list" %}';
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore body scroll
       }, 300); // Match transition duration
     }
 
@@ -184,7 +190,7 @@
 
     // Close on ESC key
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
         closeModal();
       }
     });
@@ -196,4 +202,3 @@
 
   })();
 </script>
-{% endblock %}

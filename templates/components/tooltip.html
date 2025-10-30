@@ -1,0 +1,27 @@
+<div class="tooltip-wrapper inline-block relative">
+  <button
+    type="button"
+    class="tooltip-trigger ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200"
+    aria-describedby="tooltip-{{ tooltip_id }}"
+    data-tooltip-id="tooltip-{{ tooltip_id }}"
+  >
+    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span class="sr-only">Informação sobre o campo</span>
+  </button>
+
+  {# Tooltip content - hidden by default #}
+  <div
+    id="tooltip-{{ tooltip_id }}"
+    class="tooltip-content absolute z-50 hidden w-64 rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-xs text-slate-200 shadow-xl animate-fade-in"
+    role="tooltip"
+    style="bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);"
+  >
+    <div class="relative">
+      {{ tooltip_text }}
+      {# Arrow pointing down to the icon #}
+      <div class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-8 border-transparent border-t-slate-800" style="margin-top: -1px;"></div>
+    </div>
+  </div>
+</div>

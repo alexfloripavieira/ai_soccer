@@ -4,133 +4,206 @@
 {% block title %}Confirmar Exclusão - {{ club.name }} - AI Soccer{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8 max-w-2xl">
-  {# Back Button #}
-  <div class="mb-8">
-    <a href="{% url 'business:club_detail' club.pk %}"
-       class="inline-flex items-center text-slate-400 hover:text-slate-300 transition-colors duration-200">
-      <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      Voltar aos detalhes
-    </a>
-  </div>
+{# Modal Overlay #}
+<div id="deleteModal"
+     class="fixed inset-0 z-50 overflow-y-auto"
+     aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true">
 
-  {# Warning Card #}
-  <div class="bg-slate-800 border-2 border-red-700 rounded-xl shadow-2xl overflow-hidden">
-    {# Header with Icon #}
-    <div class="bg-red-900/30 border-b-2 border-red-700 px-6 py-6">
-      <div class="flex items-center">
-        <div class="flex-shrink-0">
-          <div class="h-16 w-16 bg-red-600 rounded-full flex items-center justify-center">
-            <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-        </div>
-        <div class="ml-4">
-          <h2 class="text-2xl font-bold text-white">Confirmar Exclusão</h2>
-          <p class="mt-1 text-red-200">Esta ação não pode ser desfeita</p>
-        </div>
-      </div>
-    </div>
+  {# Background Overlay with blur #}
+  <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity duration-300 ease-out"
+       id="modalBackdrop"></div>
 
-    {# Content #}
-    <div class="p-6 md:p-8">
-      {# Club Info #}
-      <div class="mb-6 bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-        <div class="flex items-center">
-          {% if club.logo %}
-            <img src="{{ club.logo.url }}"
-                 alt="Logo {{ club.name }}"
-                 class="h-16 w-16 rounded-lg object-cover border border-slate-600">
-          {% else %}
-            <div class="h-16 w-16 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center">
-              <span class="text-slate-400 text-lg font-bold">{{ club.name|slice:":2"|upper }}</span>
-            </div>
-          {% endif %}
-          <div class="ml-4">
-            <h3 class="text-xl font-bold text-slate-100">{{ club.name }}</h3>
-            <p class="text-sm text-slate-400">{{ club.city }}, {{ club.country }}</p>
-            <span class="inline-flex mt-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-900/40 text-blue-300 border border-blue-700/50">
-              {{ club.get_division_display }}
-            </span>
-          </div>
-        </div>
-      </div>
+  {# Modal Container #}
+  <div class="flex min-h-screen items-center justify-center p-4">
 
-      {# Warning Message #}
-      <div class="mb-6 bg-red-900/20 border border-red-800 rounded-lg p-4">
-        <div class="flex">
+    {# Modal Content #}
+    <div id="modalContent"
+         class="relative w-full max-w-2xl transform overflow-hidden rounded-2xl border border-red-500/40 bg-gradient-to-br from-slate-800 to-slate-900 shadow-2xl shadow-red-500/20 transition-all duration-300 ease-out"
+         style="opacity: 0; transform: scale(0.95);">
+
+      {# Header #}
+      <div class="border-b border-red-500/30 bg-red-500/10 px-6 py-6 sm:px-8">
+        <div class="flex items-start">
+          {# Warning Icon #}
           <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm font-medium text-red-300">
-              Tem certeza que deseja excluir o clube <strong>{{ club.name }}</strong>?
-            </p>
-            <p class="mt-2 text-sm text-red-200">
-              Ao confirmar a exclusão, as seguintes ações serão realizadas:
-            </p>
-            <ul class="mt-2 text-sm text-red-200 list-disc list-inside space-y-1">
-              <li>O clube será removido permanentemente do sistema</li>
-              <li>Todos os registros financeiros associados serão excluídos</li>
-              <li>Esta ação é <strong class="font-semibold">irreversível</strong></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {# Related Data Warning #}
-      {% if club.financial_records.count > 0 %}
-        <div class="mb-6 bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-600 shadow-lg shadow-red-500/50">
+              <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <div class="ml-3">
-              <p class="text-sm font-medium text-yellow-300">
-                <strong>Atenção:</strong> Este clube possui {{ club.financial_records.count }} registro(s) financeiro(s).
-              </p>
-              <p class="mt-1 text-sm text-yellow-200">
-                Todos os registros financeiros associados também serão excluídos.
-              </p>
-            </div>
           </div>
-        </div>
-      {% endif %}
 
-      {# Confirmation Form #}
-      <form method="post">
-        {% csrf_token %}
-        <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
-          <a href="{% url 'business:club_detail' club.pk %}"
-             class="px-6 py-3 bg-slate-700 text-slate-100 font-semibold rounded-lg border border-slate-600 hover:bg-slate-600 transition-all duration-200 text-center">
-            Cancelar
-          </a>
-          <button type="submit"
-                  class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-lg hover:bg-red-700 hover:shadow-xl transform hover:scale-105 transition-all duration-200">
-            <span class="inline-flex items-center">
-              <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              Confirmar Exclusão
+          {# Title and Badge #}
+          <div class="ml-4 flex-1">
+            <span class="inline-flex items-center gap-2 rounded-full border border-red-500/40 bg-red-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-red-200">
+              Atenção
             </span>
+            <h2 id="modal-title" class="mt-3 text-2xl font-bold text-slate-100 sm:text-3xl">
+              Confirmar Exclusão
+            </h2>
+            <p class="mt-2 text-sm text-slate-300 sm:text-base">
+              Tem certeza que deseja excluir o clube
+              <strong class="text-red-300">{{ club.name }}</strong>?
+              Esta ação não pode ser desfeita.
+            </p>
+          </div>
+
+          {# Close Button #}
+          <button type="button"
+                  id="modalCloseBtn"
+                  class="ml-4 flex-shrink-0 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-red-500">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
-      </form>
+      </div>
+
+      {# Body #}
+      <div class="px-6 py-6 sm:px-8">
+
+        {# Club Info Card #}
+        <div class="mb-6 rounded-lg border border-slate-700 bg-slate-800/50 p-4">
+          <div class="flex items-center">
+            {% if club.logo %}
+              <img src="{{ club.logo.url }}"
+                   alt="Logo {{ club.name }}"
+                   class="h-16 w-16 rounded-lg border border-slate-600 object-cover">
+            {% else %}
+              <div class="flex h-16 w-16 items-center justify-center rounded-lg border border-slate-600 bg-slate-700">
+                <span class="text-lg font-bold text-slate-400">{{ club.name|slice:":2"|upper }}</span>
+              </div>
+            {% endif %}
+            <div class="ml-4">
+              <h3 class="text-xl font-bold text-slate-100">{{ club.name }}</h3>
+              <p class="text-sm text-slate-400">{{ club.city }}, {{ club.country }}</p>
+              <span class="mt-1 inline-flex items-center rounded-full border border-blue-700/50 bg-blue-900/40 px-2 py-1 text-xs font-semibold text-blue-300">
+                {{ club.get_division_display }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {# Warning Messages #}
+        <div class="space-y-3">
+          <div class="flex items-start rounded-lg border border-red-800 bg-red-900/20 p-4">
+            <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-300">
+                Ao confirmar a exclusão, as seguintes ações serão realizadas:
+              </p>
+              <ul class="mt-2 space-y-1 text-sm text-red-200">
+                <li>• O clube será removido permanentemente do sistema</li>
+                <li>• Todos os registros financeiros associados serão excluídos</li>
+                <li>• Esta ação é <strong class="font-semibold">irreversível</strong></li>
+              </ul>
+            </div>
+          </div>
+
+          {% if club.financial_records.count > 0 %}
+            <div class="flex items-start rounded-lg border border-yellow-800/50 bg-yellow-900/20 p-4">
+              <svg class="mt-0.5 h-5 w-5 flex-shrink-0 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-yellow-300">
+                  <strong>Atenção:</strong> Este clube possui {{ club.financial_records.count }} registro(s) financeiro(s).
+                </p>
+                <p class="mt-1 text-sm text-yellow-200">
+                  Todos os registros financeiros associados também serão excluídos.
+                </p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {# Form #}
+        <form method="post" class="mt-8">
+          {% csrf_token %}
+
+          {# Action Buttons #}
+          <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            {# Cancel Button #}
+            <a href="{% url 'business:club_detail' club.pk %}"
+               class="inline-flex items-center justify-center rounded-lg border border-slate-700 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:border-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500">
+              Cancelar
+            </a>
+
+            {# Delete Button #}
+            <button type="submit"
+                    class="inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-500/30 transition-all duration-200 hover:bg-red-500 hover:shadow-red-400/40 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-slate-900">
+              <svg class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Confirmar Exclusão
+            </button>
+          </div>
+        </form>
+      </div>
+
     </div>
   </div>
-
-  {# Additional Warning at Bottom #}
-  <div class="mt-6 text-center">
-    <p class="text-sm text-slate-400">
-      Esta ação é permanente e não pode ser revertida. Considere fazer um backup antes de prosseguir.
-    </p>
-  </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function() {
+    'use strict';
+
+    const modal = document.getElementById('deleteModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const closeBtn = document.getElementById('modalCloseBtn');
+
+    // Open modal with animation
+    function openModal() {
+      document.body.style.overflow = 'hidden'; // Prevent body scroll
+
+      // Trigger animation after a small delay to ensure CSS transition works
+      requestAnimationFrame(() => {
+        modalBackdrop.style.opacity = '1';
+        modalContent.style.opacity = '1';
+        modalContent.style.transform = 'scale(1)';
+      });
+    }
+
+    // Close modal with animation
+    function closeModal() {
+      modalBackdrop.style.opacity = '0';
+      modalContent.style.opacity = '0';
+      modalContent.style.transform = 'scale(0.95)';
+
+      setTimeout(() => {
+        window.location.href = '{% url "business:club_detail" club.pk %}';
+      }, 300); // Match transition duration
+    }
+
+    // Open modal on page load
+    openModal();
+
+    // Close on backdrop click
+    modalBackdrop.addEventListener('click', closeModal);
+
+    // Close on close button click
+    closeBtn.addEventListener('click', closeModal);
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Prevent closing when clicking inside modal content
+    modalContent.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+
+  })();
+</script>
 {% endblock %}
