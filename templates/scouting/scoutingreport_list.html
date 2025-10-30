@@ -13,13 +13,22 @@
         Analise e gerencie os relatórios produzidos pela equipe de scouting
       </p>
     </div>
-    <a href="{% url 'scouting:report_create' %}"
-       class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-900/50 transition-all duration-200 hover:shadow-xl">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12M6 12h12" />
-      </svg>
-      Novo relatório
-    </a>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <a href="{% url 'scouting:export_reports' %}"
+         class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-150 hover:border-slate-600 hover:bg-slate-700">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Exportar Excel
+      </a>
+      <a href="{% url 'scouting:report_create' %}"
+         class="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-green-900/50 transition-all duration-200 hover:shadow-xl">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12M6 12h12" />
+        </svg>
+        Novo relatório
+      </a>
+    </div>
   </div>
 
   <form method="get" class="grid gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-slate-950/40 md:grid-cols-12 md:items-end">

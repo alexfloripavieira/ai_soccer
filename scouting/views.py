@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -5,9 +7,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Count, ExpressionWrapper, F, FloatField, Max, Q, Value
 from django.db.models import Prefetch
 from django.db.models.functions import Coalesce
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.views import View
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -17,6 +21,10 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
 
 from ml_models.potential_evaluator import evaluate_player_potential
 from performance.forms import AthleteForm
@@ -687,3 +695,101 @@ class ScoutingReportDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Relatório de scouting removido com sucesso.')
         return super().delete(request, *args, **kwargs)
+
+
+class ExportScoutingReportsView(LoginRequiredMixin, View):
+    """Export scouting reports data to Excel format."""
+
+    login_url = reverse_lazy('accounts:login')
+
+    def get(self, request, *args, **kwargs):
+        """Generate and return Excel file with scouting reports data."""
+        # Create workbook
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Relatórios de Scouting'
+
+        # Define header style
+        header_fill = PatternFill(start_color='ec4899', end_color='ec4899', fill_type='solid')
+        header_font = Font(bold=True, color='FFFFFF', size=12)
+        header_alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define headers (Portuguese as per UI convention)
+        headers = [
+            'ID',
+            'Jogador',
+            'Clube Atual',
+            'Posição',
+            'Status',
+            'Data do Relatório',
+            'Partida/Evento',
+            'Avaliação Técnica',
+            'Avaliação Física',
+            'Avaliação Tática',
+            'Avaliação Mental',
+            'Potencial',
+            'Nota Geral',
+            'Pontos Fortes',
+            'Pontos a Desenvolver',
+            'Recomendação',
+            'Observador',
+            'Criado em',
+            'Atualizado em',
+        ]
+
+        # Write headers
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = header_alignment
+
+        # Fetch scouting reports data
+        reports = (
+            ScoutingReport.objects
+            .select_related('player', 'created_by')
+            .order_by('-report_date', 'player__name')
+        )
+
+        # Write data rows
+        for row_num, report in enumerate(reports, 2):
+            ws.cell(row=row_num, column=1, value=report.id)
+            ws.cell(row=row_num, column=2, value=report.player.name)
+            ws.cell(row=row_num, column=3, value=report.player.current_club)
+            ws.cell(row=row_num, column=4, value=report.player.get_position_display())
+            ws.cell(row=row_num, column=5, value=report.player.get_status_display())
+            ws.cell(row=row_num, column=6, value=report.report_date.strftime('%d/%m/%Y'))
+            ws.cell(row=row_num, column=7, value=report.match_or_event)
+            ws.cell(row=row_num, column=8, value=report.technical_score)
+            ws.cell(row=row_num, column=9, value=report.physical_score)
+            ws.cell(row=row_num, column=10, value=report.tactical_score)
+            ws.cell(row=row_num, column=11, value=report.mental_score)
+            ws.cell(row=row_num, column=12, value=report.potential_score)
+            ws.cell(row=row_num, column=13, value=round(report.overall_score(), 2))
+            ws.cell(row=row_num, column=14, value=report.strengths)
+            ws.cell(row=row_num, column=15, value=report.weaknesses)
+            ws.cell(row=row_num, column=16, value=report.recommendation)
+            ws.cell(row=row_num, column=17, value=report.created_by.email)
+            ws.cell(row=row_num, column=18, value=report.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+            ws.cell(row=row_num, column=19, value=report.updated_at.strftime('%d/%m/%Y %H:%M:%S'))
+
+        # Adjust column widths
+        column_widths = [8, 30, 25, 20, 18, 18, 35, 18, 18, 18, 18, 15, 15, 40, 40, 40, 30, 22, 22]
+        for col_num, width in enumerate(column_widths, 1):
+            ws.column_dimensions[get_column_letter(col_num)].width = width
+
+        # Generate filename with timestamp
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        filename = f'relatorios_scouting_{timestamp}.xlsx'
+
+        # Prepare response
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
+        # Save workbook to response
+        wb.save(response)
+
+        return response

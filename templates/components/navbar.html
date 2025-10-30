@@ -12,9 +12,29 @@
 
     <div class="flex items-center gap-3">
       {% if request.user.is_authenticated %}
+        <!-- Search Button -->
+        <a href="{% url 'search' %}" class="rounded-lg border border-slate-800 bg-slate-900/60 p-2.5 text-slate-300 transition-all duration-150 hover:border-green-500/60 hover:text-green-300" title="Busca Global">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </a>
+
         <a href="/dashboard/" class="hidden rounded-lg border border-slate-800 px-3 py-2 text-xs font-semibold uppercase tracking-widest text-slate-300 transition-all duration-150 hover:border-green-500/60 hover:text-green-300 md:inline-flex">
           Dashboard
         </a>
+
+        <!-- Notification Icon with Badge -->
+        <a href="{% url 'notifications' %}" class="relative rounded-lg border border-slate-800 bg-slate-900/60 p-2.5 text-slate-300 transition-all duration-150 hover:border-green-500/60 hover:text-green-300">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          {% if unread_notifications_count > 0 %}
+            <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-600 text-[10px] font-bold text-white shadow-lg shadow-red-500/50">
+              {{ unread_notifications_count|slice:":99" }}{% if unread_notifications_count > 99 %}+{% endif %}
+            </span>
+          {% endif %}
+        </a>
+
         <details class="relative">
           <summary class="flex cursor-pointer list-none items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2 text-sm text-slate-200 transition-all duration-150 hover:border-green-500/60 hover:text-green-200">
             <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-blue-500 text-sm font-semibold text-white shadow-lg shadow-green-500/30">

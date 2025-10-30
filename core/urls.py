@@ -21,6 +21,12 @@ from django.contrib import admin
 from django.urls import include, path
 
 from accounts.views import HomeView
+from core.views import (
+    GlobalSearchView,
+    NotificationListView,
+    NotificationMarkAllAsReadView,
+    NotificationMarkAsReadView,
+)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -28,6 +34,10 @@ urlpatterns = [
     path('performance/', include('performance.urls')),
     path('scouting/', include('scouting.urls')),
     path('business/', include('business.urls')),
+    path('search/', GlobalSearchView.as_view(), name='search'),
+    path('notifications/', NotificationListView.as_view(), name='notifications'),
+    path('notifications/<int:pk>/mark-read/', NotificationMarkAsReadView.as_view(), name='notification_mark_read'),
+    path('notifications/mark-all-read/', NotificationMarkAllAsReadView.as_view(), name='notifications_mark_all_read'),
     path('admin/', admin.site.urls),
 ]
 

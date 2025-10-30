@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Busca Global - AI Soccer{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <!-- Search Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-100 mb-2">Busca Global</h1>
+    <p class="text-slate-400">
+      {% if query %}
+        Resultados para: <span class="text-green-400 font-semibold">"{{ query }}"</span>
+      {% else %}
+        Digite algo no campo de busca acima para começar
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- Search Form -->
+  <form method="get" action="{% url 'search' %}" class="mb-8">
+    <div class="relative">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Buscar atletas, jogadores, clubes, relatórios... (Tecla '/' para focar)"
+        class="w-full px-6 py-4 pl-14 pr-32 bg-slate-800 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+        autofocus
+      >
+      <svg class="absolute left-5 top-1/2 -translate-y-1/2 h-6 w-6 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+
+      <!-- Loading Indicator -->
+      <div id="search-loading" class="absolute right-28 top-1/2 -translate-y-1/2 hidden">
+        <svg class="animate-spin h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+
+      <button
+        type="submit"
+        class="absolute right-3 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+      >
+        Buscar
+      </button>
+    </div>
+  </form>
+
+  {% if query %}
+    <!-- Results Summary -->
+    <div class="mb-8 p-6 bg-slate-800/50 border border-slate-700 rounded-xl">
+      <p class="text-slate-200 text-lg">
+        {% if total_results > 0 %}
+          Encontrados <span class="font-bold text-green-400">{{ total_results }}</span> resultado{{ total_results|pluralize }} em {{ results|length }} categoria{{ results|length|pluralize }}
+        {% else %}
+          <span class="text-amber-400">Nenhum resultado encontrado</span> para sua busca
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Athletes Results -->
+    {% if results.athletes %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-blue-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </span>
+          Atletas
+          <span class="text-sm font-normal text-slate-400">({{ results.athletes|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {% for athlete in results.athletes %}
+            <a href="{% url 'performance:athlete_detail' athlete.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/10 transition-all duration-200">
+              <h3 class="text-lg font-semibold text-slate-100 mb-2">{{ athlete.name }}</h3>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Posição:</span> {{ athlete.get_position_display }}</p>
+                <p><span class="text-slate-500">Nacionalidade:</span> {{ athlete.nationality }}</p>
+                <p><span class="text-slate-500">Idade:</span> {{ athlete.age }} anos</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Scouted Players Results -->
+    {% if results.scouted_players %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </span>
+          Jogadores Observados
+          <span class="text-sm font-normal text-slate-400">({{ results.scouted_players|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {% for player in results.scouted_players %}
+            <a href="{% url 'scouting:player_detail' player.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-200">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-semibold text-slate-100">{{ player.name }}</h3>
+                <span class="px-2 py-1 text-xs font-semibold rounded-md border {{ player.status_badge_class }}">
+                  {{ player.get_status_display }}
+                </span>
+              </div>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Posição:</span> {{ player.get_position_display }}</p>
+                {% if player.current_club %}<p><span class="text-slate-500">Clube:</span> {{ player.current_club }}</p>{% endif %}
+                <p><span class="text-slate-500">Nacionalidade:</span> {{ player.nationality }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Clubs Results -->
+    {% if results.clubs %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+            </svg>
+          </span>
+          Clubes
+          <span class="text-sm font-normal text-slate-400">({{ results.clubs|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {% for club in results.clubs %}
+            <a href="{% url 'business:club_detail' club.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-amber-500/60 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-200">
+              <h3 class="text-lg font-semibold text-slate-100 mb-2">{{ club.name }}</h3>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">País:</span> {{ club.country }}</p>
+                <p><span class="text-slate-500">Divisão:</span> {{ club.get_division_display }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Injury Records Results -->
+    {% if results.injury_records %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-red-500 to-pink-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </span>
+          Registros de Lesões
+          <span class="text-sm font-normal text-slate-400">({{ results.injury_records|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {% for injury in results.injury_records %}
+            <a href="{% url 'performance:injury_detail' injury.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/10 transition-all duration-200">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-semibold text-slate-100">{{ injury.athlete.name }}</h3>
+                <span class="px-2 py-1 text-xs font-semibold rounded-md border {{ injury.severity_badge_class }}">
+                  {{ injury.get_severity_level_display }}
+                </span>
+              </div>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Tipo:</span> {{ injury.get_injury_type_display }}</p>
+                <p><span class="text-slate-500">Local:</span> {{ injury.get_body_part_display }}</p>
+                <p><span class="text-slate-500">Data:</span> {{ injury.injury_date|date:'d/m/Y' }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Training Loads Results -->
+    {% if results.training_loads %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+          </span>
+          Cargas de Treino
+          <span class="text-sm font-normal text-slate-400">({{ results.training_loads|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {% for load in results.training_loads %}
+            <a href="{% url 'performance:training_load_detail' load.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-200">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-semibold text-slate-100">{{ load.athlete.name }}</h3>
+                <span class="px-2 py-1 text-xs font-semibold rounded-md border {{ load.intensity_badge_class }}">
+                  {{ load.get_intensity_level_display }}
+                </span>
+              </div>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Data:</span> {{ load.training_date|date:'d/m/Y' }}</p>
+                <p><span class="text-slate-500">Duração:</span> {{ load.duration_minutes }} min</p>
+                <p><span class="text-slate-500">Distância:</span> {{ load.distance_km }} km</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Scouting Reports Results -->
+    {% if results.scouting_reports %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+          </span>
+          Relatórios de Scouting
+          <span class="text-sm font-normal text-slate-400">({{ results.scouting_reports|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {% for report in results.scouting_reports %}
+            <a href="{% url 'scouting:report_detail' report.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-indigo-500/60 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-200">
+              <h3 class="text-lg font-semibold text-slate-100 mb-2">{{ report.player.name }}</h3>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Data:</span> {{ report.report_date|date:'d/m/Y' }}</p>
+                <p><span class="text-slate-500">Evento:</span> {{ report.match_or_event }}</p>
+                <p><span class="text-slate-500">Nota Geral:</span> <span class="font-semibold text-green-400">{{ report.overall_score|floatformat:1 }}/10</span></p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Financial Records Results -->
+    {% if results.financial_records %}
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-100 mb-4 flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </span>
+          Registros Financeiros
+          <span class="text-sm font-normal text-slate-400">({{ results.financial_records|length }})</span>
+        </h2>
+        <div class="grid gap-4 md:grid-cols-2">
+          {% for record in results.financial_records %}
+            <a href="{% url 'business:financial_record_detail' record.pk %}" class="block bg-slate-800 border border-slate-700 rounded-xl p-6 hover:border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-200">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="text-lg font-semibold text-slate-100">{{ record.club.name }}</h3>
+                <span class="px-2 py-1 text-xs font-semibold rounded-md border {% if record.transaction_type == 'RECEITA' %}border-green-400/40 bg-green-500/15 text-green-200{% else %}border-red-400/40 bg-red-500/15 text-red-200{% endif %}">
+                  {{ record.get_transaction_type_display }}
+                </span>
+              </div>
+              <div class="space-y-1 text-sm text-slate-400">
+                <p><span class="text-slate-500">Categoria:</span> {{ record.get_category_display }}</p>
+                <p><span class="text-slate-500">Valor:</span> <span class="font-semibold">R$ {{ record.amount|floatformat:2 }}</span></p>
+                <p><span class="text-slate-500">Data:</span> {{ record.record_date|date:'d/m/Y' }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- No Results Message -->
+    {% if total_results == 0 %}
+      <div class="text-center py-16">
+        <svg class="mx-auto h-16 w-16 text-slate-600 mb-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <h3 class="text-xl font-semibold text-slate-300 mb-2">Nenhum resultado encontrado</h3>
+        <p class="text-slate-500 mb-6">Tente usar outras palavras-chave ou termos de busca</p>
+        <div class="text-left max-w-md mx-auto bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+          <p class="text-sm font-semibold text-slate-200 mb-3">Dicas de busca:</p>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li class="flex items-start gap-2">
+              <svg class="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              Use nomes completos ou parciais de atletas e jogadores
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              Busque por países, clubes ou categorias
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              Tente termos como "goleiro", "atacante", "lesão muscular"
+            </li>
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+
+<!-- Search Results Container (for future AJAX implementation) -->
+<div id="search-results"></div>
+
+<script src="{% static 'js/global_search.js' %}"></script>
+{% endblock %}

@@ -6,6 +6,8 @@ from typing import Any, Dict, List
 
 from django.urls import reverse
 
+from core.models import Notification
+
 
 def navigation(request):
     """Provide navigation items for sidebar and navbar components."""
@@ -149,6 +151,15 @@ def navigation(request):
         if any(child['active'] for child in item_children):
             item['active'] = True
 
+    # Get unread notifications count for authenticated users
+    unread_notifications_count = 0
+    if request.user.is_authenticated:
+        unread_notifications_count = Notification.objects.filter(
+            recipient=request.user,
+            is_read=False,
+        ).count()
+
     return {
         'sidebar_items': sidebar_items,
+        'unread_notifications_count': unread_notifications_count,
     }

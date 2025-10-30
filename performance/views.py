@@ -1,12 +1,18 @@
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Count, Max, Sum
+from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
 
 from ml_models.injury_predictor import (
     MINIMUM_SAMPLES,
@@ -576,3 +582,167 @@ class AthleteValuationView(LoginRequiredMixin, ListView):
         )
 
         return context
+
+
+class ExportAthletesView(LoginRequiredMixin, View):
+    """Export athletes data to Excel format."""
+
+    login_url = reverse_lazy('accounts:login')
+
+    def get(self, request, *args, **kwargs):
+        """Generate and return Excel file with athletes data."""
+        # Create workbook
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Atletas'
+
+        # Define header style
+        header_fill = PatternFill(start_color='10b981', end_color='10b981', fill_type='solid')
+        header_font = Font(bold=True, color='FFFFFF', size=12)
+        header_alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define headers (Portuguese as per UI convention)
+        headers = [
+            'ID',
+            'Nome',
+            'Data de Nascimento',
+            'Idade',
+            'Posição',
+            'Nacionalidade',
+            'Altura (cm)',
+            'Peso (kg)',
+            'Valor de Mercado (R$)',
+            'Criado por',
+            'Criado em',
+            'Atualizado em',
+        ]
+
+        # Write headers
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = header_alignment
+
+        # Fetch athletes data
+        athletes = Athlete.objects.select_related('created_by').order_by('name')
+
+        # Write data rows
+        for row_num, athlete in enumerate(athletes, 2):
+            ws.cell(row=row_num, column=1, value=athlete.id)
+            ws.cell(row=row_num, column=2, value=athlete.name)
+            ws.cell(row=row_num, column=3, value=athlete.birth_date.strftime('%d/%m/%Y'))
+            ws.cell(row=row_num, column=4, value=athlete.age())
+            ws.cell(row=row_num, column=5, value=athlete.get_position_display())
+            ws.cell(row=row_num, column=6, value=athlete.nationality)
+            ws.cell(row=row_num, column=7, value=athlete.height)
+            ws.cell(row=row_num, column=8, value=athlete.weight)
+            ws.cell(row=row_num, column=9, value=float(athlete.market_value) if athlete.market_value else '')
+            ws.cell(row=row_num, column=10, value=athlete.created_by.email)
+            ws.cell(row=row_num, column=11, value=athlete.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+            ws.cell(row=row_num, column=12, value=athlete.updated_at.strftime('%d/%m/%Y %H:%M:%S'))
+
+        # Adjust column widths
+        column_widths = [8, 30, 20, 10, 20, 20, 15, 15, 25, 30, 22, 22]
+        for col_num, width in enumerate(column_widths, 1):
+            ws.column_dimensions[get_column_letter(col_num)].width = width
+
+        # Generate filename with timestamp
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        filename = f'atletas_{timestamp}.xlsx'
+
+        # Prepare response
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
+        # Save workbook to response
+        wb.save(response)
+
+        return response
+
+
+class ExportTrainingLoadsView(LoginRequiredMixin, View):
+    """Export training loads data to Excel format."""
+
+    login_url = reverse_lazy('accounts:login')
+
+    def get(self, request, *args, **kwargs):
+        """Generate and return Excel file with training loads data."""
+        # Create workbook
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'Cargas de Treino'
+
+        # Define header style
+        header_fill = PatternFill(start_color='3b82f6', end_color='3b82f6', fill_type='solid')
+        header_font = Font(bold=True, color='FFFFFF', size=12)
+        header_alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define headers (Portuguese as per UI convention)
+        headers = [
+            'ID',
+            'Atleta',
+            'Data do Treino',
+            'Duração (min)',
+            'Distância (km)',
+            'FC Média',
+            'FC Máxima',
+            'Intensidade',
+            'Índice de Fadiga',
+            'Criado por',
+            'Criado em',
+            'Atualizado em',
+        ]
+
+        # Write headers
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = header_alignment
+
+        # Fetch training loads data
+        training_loads = (
+            TrainingLoad.objects
+            .select_related('athlete', 'created_by')
+            .order_by('-training_date', 'athlete__name')
+        )
+
+        # Write data rows
+        for row_num, load in enumerate(training_loads, 2):
+            ws.cell(row=row_num, column=1, value=load.id)
+            ws.cell(row=row_num, column=2, value=load.athlete.name)
+            ws.cell(row=row_num, column=3, value=load.training_date.strftime('%d/%m/%Y'))
+            ws.cell(row=row_num, column=4, value=load.duration_minutes)
+            ws.cell(row=row_num, column=5, value=float(load.distance_km))
+            ws.cell(row=row_num, column=6, value=load.heart_rate_avg if load.heart_rate_avg else '')
+            ws.cell(row=row_num, column=7, value=load.heart_rate_max if load.heart_rate_max else '')
+            ws.cell(row=row_num, column=8, value=load.get_intensity_level_display())
+            ws.cell(row=row_num, column=9, value=round(load.fatigue_index(), 2))
+            ws.cell(row=row_num, column=10, value=load.created_by.email)
+            ws.cell(row=row_num, column=11, value=load.created_at.strftime('%d/%m/%Y %H:%M:%S'))
+            ws.cell(row=row_num, column=12, value=load.updated_at.strftime('%d/%m/%Y %H:%M:%S'))
+
+        # Adjust column widths
+        column_widths = [8, 30, 18, 15, 18, 12, 12, 18, 20, 30, 22, 22]
+        for col_num, width in enumerate(column_widths, 1):
+            ws.column_dimensions[get_column_letter(col_num)].width = width
+
+        # Generate filename with timestamp
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        filename = f'cargas_treino_{timestamp}.xlsx'
+
+        # Prepare response
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename={filename}'
+
+        # Save workbook to response
+        wb.save(response)
+
+        return response

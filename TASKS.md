@@ -717,37 +717,37 @@
 ### Sprint 12: Recursos Adicionais e Melhorias
 **Duração**: 2 semanas
 
-- [ ] **Tarefa 12.1: Sistema de Notificações**
-  - [ ] 12.1.1: Instalar pacote `django-notifications-hq`
-  - [ ] 12.1.2: Adicionar ao INSTALLED_APPS
-  - [ ] 12.1.3: Executar migrações
-  - [ ] 12.1.4: Criar notificação ao cadastrar lesão
-  - [ ] 12.1.5: Criar notificação ao completar relatório de scouting
-  - [ ] 12.1.6: Criar view `NotificationListView`
-  - [ ] 12.1.7: Criar template de notificações
-  - [ ] 12.1.8: Adicionar ícone de notificações no navbar
-  - [ ] 12.1.9: Implementar badge com contador
-  - [ ] 12.1.10: Adicionar URL `/notifications/`
-  - [ ] 12.1.11: Testar notificações
+- [X] **Tarefa 12.1: Sistema de Notificações**
+  - [X] 12.1.1: Instalar pacote `django-notifications-hq`
+  - [X] 12.1.2: Adicionar ao INSTALLED_APPS
+  - [X] 12.1.3: Executar migrações
+  - [X] 12.1.4: Criar notificação ao cadastrar lesão
+  - [X] 12.1.5: Criar notificação ao completar relatório de scouting
+  - [X] 12.1.6: Criar view `NotificationListView`
+  - [X] 12.1.7: Criar template de notificações
+  - [X] 12.1.8: Adicionar ícone de notificações no navbar
+  - [X] 12.1.9: Implementar badge com contador
+  - [X] 12.1.10: Adicionar URL `/notifications/`
+  - [X] 12.1.11: Testar notificações
 
-- [ ] **Tarefa 12.2: Exportação de Dados**
-  - [ ] 12.2.1: Instalar pacote `openpyxl` para Excel
-  - [ ] 12.2.2: Criar view `ExportAthletesView`
-  - [ ] 12.2.3: Gerar arquivo Excel com dados de atletas
-  - [ ] 12.2.4: Adicionar botão "Exportar" na listagem
-  - [ ] 12.2.5: Criar view `ExportTrainingLoadsView`
-  - [ ] 12.2.6: Criar view `ExportScoutingReportsView`
-  - [ ] 12.2.7: Adicionar URLs de exportação
-  - [ ] 12.2.8: Testar downloads
+- [X] **Tarefa 12.2: Exportação de Dados**
+  - [X] 12.2.1: Instalar pacote `openpyxl` para Excel
+  - [X] 12.2.2: Criar view `ExportAthletesView`
+  - [X] 12.2.3: Gerar arquivo Excel com dados de atletas
+  - [X] 12.2.4: Adicionar botão "Exportar" na listagem
+  - [X] 12.2.5: Criar view `ExportTrainingLoadsView`
+  - [X] 12.2.6: Criar view `ExportScoutingReportsView`
+  - [X] 12.2.7: Adicionar URLs de exportação
+  - [X] 12.2.8: Testar downloads
 
-- [ ] **Tarefa 12.3: Busca Global**
-  - [ ] 12.3.1: Criar view `GlobalSearchView`
-  - [ ] 12.3.2: Implementar busca em múltiplos modelos
-  - [ ] 12.3.3: Criar template de resultados
-  - [ ] 12.3.4: Adicionar campo de busca no navbar
-  - [ ] 12.3.5: Implementar AJAX para busca dinâmica
-  - [ ] 12.3.6: Adicionar URL `/search/`
-  - [ ] 12.3.7: Testar busca
+- [X] **Tarefa 12.3: Busca Global**
+  - [X] 12.3.1: Criar view `GlobalSearchView`
+  - [X] 12.3.2: Implementar busca em múltiplos modelos
+  - [X] 12.3.3: Criar template de resultados
+  - [X] 12.3.4: Adicionar campo de busca no navbar
+  - [X] 12.3.5: Implementar AJAX para busca dinâmica
+  - [X] 12.3.6: Adicionar URL `/search/`
+  - [X] 12.3.7: Testar busca
 
 - [ ] **Tarefa 12.4: Logs de Auditoria**
   - [ ] 12.4.1: Instalar pacote `django-auditlog`

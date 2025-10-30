@@ -4,6 +4,7 @@ from django.urls import path
 
 from scouting.views import (
     ConvertToAthleteView,
+    ExportScoutingReportsView,
     PlayerComparisonView,
     ScoutedPlayerCreateView,
     ScoutedPlayerDeleteView,
@@ -31,6 +32,7 @@ urlpatterns = [
     path('jogadores/<int:pk>/excluir/', ScoutedPlayerDeleteView.as_view(), name='player_delete'),
     path('relatorios/', ScoutingReportListView.as_view(), name='report_list'),
     path('relatorios/novo/', ScoutingReportCreateView.as_view(), name='report_create'),
+    path('relatorios/exportar/', ExportScoutingReportsView.as_view(), name='export_reports'),
     path('relatorios/<int:pk>/', ScoutingReportDetailView.as_view(), name='report_detail'),
     path('relatorios/<int:pk>/editar/', ScoutingReportUpdateView.as_view(), name='report_update'),
     path('relatorios/<int:pk>/excluir/', ScoutingReportDeleteView.as_view(), name='report_delete'),
